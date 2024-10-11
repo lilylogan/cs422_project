@@ -7,4 +7,5 @@ Description: A web application with login capabilities, made for those who are t
 * Ellison Largent - Documentation 
 * Lily Logan - Project Manager
 
-
+## Initial Project Proposal
+* [Project Plan](./Documentation/Project%20Plan.pdf)
