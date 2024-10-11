@@ -9,8 +9,8 @@ Description: A web application with login capabilities, made for those who are t
 
 ## Initial Project Proposal
 * [Project Plan](./Documentation/Project%20Plan.pdf)
-* [SRS]()
-* [SDS]()
+* [SRS](./Documentation/SRS.pdf)
+* [SDS](./Documentation/SDS.pdf)
 
 ## Additional Documentation
 * [Technologies Used](./Documentation/Technologies%20Used.pdf)
