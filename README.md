@@ -11,3 +11,6 @@ Description: A web application with login capabilities, made for those who are t
 * [Project Plan](./Documentation/Project%20Plan.pdf)
 * [SRS]()
 * [SDS]()
+
+## Additional Documentation
+* [Technologies Used](./Documentation/Technologies%20Used.pdf)
