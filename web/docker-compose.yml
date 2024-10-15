@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    command: python -u app.py
+    ports:
+      - "9050:5000"
+    volumes:
+      - .:/todo
+    links:
+      - db
+  db:
+    image: mongo:latest
