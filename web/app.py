@@ -1,7 +1,17 @@
 from flask import Flask, render_template, abort
 import os
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] = 'asdsSDfsdaf csac'  
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://user:password@db/letscook'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# Import models after initializing db to avoid circular imports
+from models import User, Recipe, FavoriteRecipe, DislikedRecipe, MealPlan, Tag, ShoppingList, Filter
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
