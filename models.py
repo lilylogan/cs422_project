@@ -1,62 +1,92 @@
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from sqlalchemy import create_engine, Column, Integer, String, Text, Decimal, ForeignKey, Enum
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-db = SQLAlchemy()
+Base = declarative_base()
 
-class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    favorite_recipes = db.relationship('Recipe', secondary='favorite_recipe')
-    disliked_recipes = db.relationship('Recipe', secondary='disliked_recipe')
-    meal_plans = db.relationship('MealPlan', backref='user', lazy='dynamic')
-    shopping_lists = db.relationship('ShoppingList', backref='user', lazy='dynamic')
-    filters = db.relationship('Filter', backref='user', lazy='dynamic')
+class User(Base):
+    __tablename__ = 'users'
 
-class Recipe(db.Model):
-    recipe_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
-    ingredients = db.Column(db.Text)
-    instructions = db.Column(db.Text)
-    external_id = db.Column(db.String(100), unique=True)  # ID from external recipe API
+    userID = Column(Integer, primary_key=True)
+    hashedPassword = Column(String(255), nullable=False)
+    fname = Column(String(50), nullable=False)
+    lname = Column(String(50), nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
 
-class FavoriteRecipe(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.recipe_id', ondelete='CASCADE'), primary_key=True)
-    added_at = db.Column(db.DateTime, default=datetime.utcnow)
+    shopping_list = relationship("ShoppingList", uselist=False, back_populates="user", cascade="all, delete-orphan")
+    liked_recipes = relationship("Liked", back_populates="user", cascade="all, delete-orphan")
+    disliked_recipes = relationship("Disliked", back_populates="user", cascade="all, delete-orphan")
+    meal_plans = relationship("MealInPlan", back_populates="user", cascade="all, delete-orphan")
 
-class DislikedRecipe(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.recipe_id', ondelete='CASCADE'), primary_key=True)
-    added_at = db.Column(db.DateTime, default=datetime.utcnow)
+class ShoppingList(Base):
+    __tablename__ = 'shopping_lists'
 
-class MealPlan(db.Model):
-    meal_plan_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
-    week_start_date = db.Column(db.Date, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    tags = db.relationship('Tag', backref='meal_plan', lazy='dynamic')
+    listID = Column(Integer, primary_key=True)
+    userID = Column(Integer, ForeignKey('users.userID', ondelete='CASCADE'), unique=True)
 
-class Tag(db.Model):
-    tag_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    meal_plan_id = db.Column(db.Integer, db.ForeignKey('meal_plan.meal_plan_id', ondelete='CASCADE'))
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.recipe_id', ondelete='CASCADE'))
-    day_of_week = db.Column(db.String(10))
-    meal_type = db.Column(db.String(20))  # e.g., 'breakfast', 'lunch', 'dinner'
+    user = relationship("User", back_populates="shopping_list")
+    ingredients = relationship("ShoppingListIngredient", back_populates="shopping_list", cascade="all, delete-orphan")
 
-class ShoppingList(db.Model):
-    shopping_list_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
-    item = db.Column(db.String(255), nullable=False)
-    quantity = db.Column(db.Float)
-    unit = db.Column(db.String(50))
-    is_checked = db.Column(db.Boolean, default=False)
+class Ingredient(Base):
+    __tablename__ = 'ingredients'
 
-class Filter(db.Model):
-    filter_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
-    filter_name = db.Column(db.String(100))
-    filter_value = db.Column(db.String(100))
+    ingredientID = Column(Integer, primary_key=True)
+    name = Column(String(100), unique=True, nullable=False)
+
+    shopping_list_items = relationship("ShoppingListIngredient", back_populates="ingredient")
+
+class Recipe(Base):
+    __tablename__ = 'recipes'
+
+    recipeID = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False)
+    ingredients = Column(Text, nullable=False)
+    prepTime = Column(Integer)
+    cookTime = Column(Integer)
+    servings = Column(Integer)
+    ratings = Column(Decimal(3, 2))
+    URL = Column(String(255))
+    nutrition = Column(Text)
+
+    liked_by = relationship("Liked", back_populates="recipe", cascade="all, delete-orphan")
+    disliked_by = relationship("Disliked", back_populates="recipe", cascade="all, delete-orphan")
+    meal_plans = relationship("MealInPlan", back_populates="recipe", cascade="all, delete-orphan")
+
+class Liked(Base):
+    __tablename__ = 'liked'
+
+    userID = Column(Integer, ForeignKey('users.userID', ondelete='CASCADE'), primary_key=True)
+    recipeID = Column(Integer, ForeignKey('recipes.recipeID', ondelete='CASCADE'), primary_key=True)
+
+    user = relationship("User", back_populates="liked_recipes")
+    recipe = relationship("Recipe", back_populates="liked_by")
+
+class Disliked(Base):
+    __tablename__ = 'disliked'
+
+    userID = Column(Integer, ForeignKey('users.userID', ondelete='CASCADE'), primary_key=True)
+    recipeID = Column(Integer, ForeignKey('recipes.recipeID', ondelete='CASCADE'), primary_key=True)
+
+    user = relationship("User", back_populates="disliked_recipes")
+    recipe = relationship("Recipe", back_populates="disliked_by")
+
+class MealInPlan(Base):
+    __tablename__ = 'meal_in_plan'
+
+    userID = Column(Integer, ForeignKey('users.userID', ondelete='CASCADE'), primary_key=True)
+    recipeID = Column(Integer, ForeignKey('recipes.recipeID', ondelete='CASCADE'), primary_key=True)
+    dayOfWeek = Column(Enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), primary_key=True)
+
+    user = relationship("User", back_populates="meal_plans")
+    recipe = relationship("Recipe", back_populates="meal_plans")
+
+class ShoppingListIngredient(Base):
+    __tablename__ = 'shopping_list_ingredients'
+
+    listID = Column(Integer, ForeignKey('shopping_lists.listID', ondelete='CASCADE'), primary_key=True)
+    ingredientID = Column(Integer, ForeignKey('ingredients.ingredientID', ondelete='CASCADE'), primary_key=True)
+    quantity = Column(Decimal(10, 2))
+    unit = Column(String(50))
+
+    shopping_list = relationship("ShoppingList", back_populates="ingredients")
+    ingredient = relationship("Ingredient", back_populates="shopping_list_items")
