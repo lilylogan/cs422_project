@@ -19,6 +19,7 @@ RUN npm run build
 EXPOSE 3000
 
 # Start React
+# change to serve once done with dev
 CMD ["npm", "run", "start"]
 
 
