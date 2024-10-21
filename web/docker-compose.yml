@@ -1,21 +1,31 @@
 services:
-  web:
-    build: .
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.backend
     command: python -u app.py
+    environment:
+      - MSSQL_SA_PASSWORD=Password1*
     ports:
       - "9050:5000"
     volumes:
-      - .:/app
-    links:
-      - db
-    
+      - ./backend:/todo
   db:
-    image: mongo:latest
+    container_name: db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password1*
+    ports:
+      - "1433:1433"
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     command: npm start
