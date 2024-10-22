@@ -7,19 +7,19 @@ function NavBar() {
                 <li>
                     <NavLink className={({ isActive }) => isActive ? 'active' : 'navElement'} to="/settings">Settings</NavLink>
                 </li>
-                <li>
+                <li className="filler">
                     ~
                 </li>
                 <li>
                     <NavLink className={({ isActive }) => isActive ? 'active' : 'navElement'} to="/liked">Liked</NavLink>
                 </li>
-                <li>
+                <li className="filler">
                     ~
                 </li>
                 <li>
                     <NavLink className={({ isActive }) => isActive ? 'active' : 'navElement'} to="/">Home</NavLink>
                 </li>
-                <li>
+                <li className="filler">
                     ~
                 </li>
                 <li>

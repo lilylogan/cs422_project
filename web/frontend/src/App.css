@@ -27,20 +27,31 @@ body {
 .navList {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 4%;
   text-align: center;
   justify-content: center;
   text-align: center;
+  margin-top: 0px;
+  padding: 20px;
+  border: 2px solid #3B2A1D;
 }
 
 .navBar {
   background-color: #FFFBF3;
 }
 
+.filler {
+  display: inLine;
+  text-decoration:none;
+  color: #3B2A1D;
+  font-size: 25px;
+}
+
 .navElement {
   display: inLine;
   text-decoration:none;
   color: #3B2A1D;
+  font-size: 25px;
 }
 
 .navList .active {
@@ -49,8 +60,23 @@ body {
   display: inLine;
   text-decoration:none;
   color: #3B2A1D;
+  font-size: 25px;
 }
 
 .navElement:hover {
   color:#C65E42;
+}
+
+.card {
+  border: 1px solid #3B2A1D;
+  justify-content: center;
+  width: 60%;
+  text-align: center;
+  height: 60%;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  height: 500px;
 }
