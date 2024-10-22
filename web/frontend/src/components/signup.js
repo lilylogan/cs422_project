@@ -55,8 +55,8 @@ const styles = {
     borderRadius: '4px',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     fontSize: '1rem',
-    marginLeft:'auto',
-    marginRight:'auto'
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   signupButton: {
     width: '50%',
@@ -64,16 +64,22 @@ const styles = {
     padding: '0.75rem 1rem',
     fontSize: '1.125rem',
     fontWeight: '600',
-    color: 'black',
-    backgroundColor: 'white',
-    border: 'none',
+    color: 'white',
+    background: 'linear-gradient(45deg, #4caf50, #81c784)', // Green gradient background
+    border: '2px solid transparent',
     borderRadius: '4px',
     cursor: 'pointer',
-    transition: 'background-color 0.2s',
+    transition: 'background-color 0.2s, transform 0.2s, box-shadow 0.2s, border 0.2s',
     marginTop: '1rem',
-    display:'block',
-    marginLeft:'auto',
-    marginRight:'auto'
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  signupButtonHover: {
+    background: 'linear-gradient(45deg, #81c784, #4caf50)', // Lighter green on hover
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+    transform: 'scale(1.05)',
+    border: '2px solid #ccc'
   },
   loginLink: {
     color: 'white',
@@ -103,6 +109,7 @@ const SignUp = ({ onSignUp }) => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -179,9 +186,10 @@ const SignUp = ({ onSignUp }) => {
             type="submit" 
             style={{
               ...styles.signupButton,
-              '&:hover': styles.signupButton['&:hover'],
-              '&:active': styles.signupButton['&:active']
+              ...(isHovered ? styles.signupButtonHover : {}),
             }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
             Start Cooking!
           </button>

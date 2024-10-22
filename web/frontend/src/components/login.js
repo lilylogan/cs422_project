@@ -55,8 +55,8 @@ const styles = {
     borderRadius: '4px',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     fontSize: '1rem',
-    marginLeft:'auto',
-    marginRight:'auto'
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   loginButton: {
     width: '50%',
@@ -64,16 +64,21 @@ const styles = {
     padding: '0.75rem 1rem',
     fontSize: '1.125rem',
     fontWeight: '600',
-    color: 'black',
-    backgroundColor: 'white',
+    color: 'white',
+    background: 'linear-gradient(45deg, #4caf50, #81c784)', // Green gradient background
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
-    transition: 'background-color 0.2s',
+    transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
     marginTop: '1rem',
-    display:'block',
-    marginLeft:'auto',
-    marginRight:'auto'
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  loginButtonHover: {
+    background: 'linear-gradient(45deg, #81c784, #4caf50)', // Lighter green on hover
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+    transform: 'scale(1.05)'
   },
   signupLink: {
     width: '100%',
@@ -92,6 +97,7 @@ const LoginPage = ({ onLogin, onSignUp }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -139,7 +145,15 @@ const LoginPage = ({ onLogin, onSignUp }) => {
             />
           </div>
 
-          <button type="submit" style={styles.loginButton}>
+          <button 
+            type="submit" 
+            style={{
+              ...styles.loginButton,
+              ...(isHovered ? styles.loginButtonHover : {}),
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             Login
           </button>
         </form>
