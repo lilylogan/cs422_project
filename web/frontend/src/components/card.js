@@ -5,10 +5,10 @@ import LearnMoreContainer from '../containers/learnMoreContainer';
 function RecipeCard({ title }) {
     return (
         <div>
-            <h3>
+            <h3 className="recipeNameCard">
                 Recipe {title}
+                <HeartContainer />
             </h3>
-            <HeartContainer />
             <p>Image of Recipe</p>
             <LearnMoreContainer />
         </div>

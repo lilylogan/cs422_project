@@ -4,7 +4,7 @@ function LearnMore({ onClick }) {
 
     return (
         <div>
-            <button onClick={onClick}>Learn More</button>
+            <button onClick={onClick} className="learnMore">Learn More</button>
         </div>
     );
 }
