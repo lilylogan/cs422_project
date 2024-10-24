@@ -142,6 +142,7 @@ border: 1px solid #3B2A1D;
   transition: transform 0.2s ease-in-out;
 }
 
+
 .heart:hover {
   cursor: pointer;
   transform: scale(1.1);
@@ -202,4 +203,111 @@ border: 1px solid #3B2A1D;
 
 .slider.toggled .circle {
   transform: translateX(30px);
+}
+
+.searchBar {
+  float: right;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  max-width: 400px;
+  position: relative;
+}
+
+.searchBar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  flex: 1; /* Allow the input to take up the remaining space */
+}
+
+.searchBarContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 7vw;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+
+}
+
+.recipeListContainer {
+  display: flex;
+  gap: 6vw;
+  align-items: center;
+  border: 1px solid #3B2A1D;
+  background-color: #FFFBF3;
+  margin-top: 20px;
+}
+
+.listHeart {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 60px;
+  background-color: none;
+  color: #C65E42;
+  transition: transform 0.2s ease-in-out;
+  margin-left: 15px;
+}
+
+.listHeart:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.listName {
+  font-size: 30px;
+}
+
+.time {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #9BA777, #55732B);
+  border-radius: 35px;
+  font-size: 25px;
+  padding: 5px 20px;
+  border: 1px solid #3B2A1D;
+}
+
+.raiting {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #C65E42, #E5B1A1);
+  border-radius: 35px;
+  font-size: 25px;
+  padding: 5px 20px;
+  border: 1px solid #3B2A1D;
+}
+
+.listLearnMore {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #E5B1A1, #C65E42);
+  border-radius: 35px;
+  font-size: 25px;
+  padding: 5px 20px;
+  border: 1px solid #3B2A1D;
+  transition: transform 0.2s ease-in-out;
+}
+
+.listLearnMore:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.add {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #55732B, #9BA777);
+  border-radius: 35px;
+  font-size: 25px;
+  padding: 5px 30px;
+  border: 1px solid #3B2A1D;
+  transition: transform 0.2s ease-in-out;
+}
+
+.add:hover {
+  cursor: pointer;
+  transform: scale(1.1);
 }

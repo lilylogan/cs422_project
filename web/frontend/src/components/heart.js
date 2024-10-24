@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Heart({ onClick, liked }) {
+function Heart({ onClick, liked, cname }) {
     return (
-        <button onClick={onClick} className={`heart ${liked ? 'liked' : ''}`}>♥</button>
+        <button onClick={onClick} className={`${cname} ${liked ? 'liked' : ''}`}>♥</button>
     )
 }
 

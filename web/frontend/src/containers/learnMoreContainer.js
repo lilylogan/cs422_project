@@ -1,14 +1,14 @@
 import React from 'react'
 import LearnMore from '../components/learnMore'
 
-function LearnMoreContainer() {
+function LearnMoreContainer({ cname }) {
 
     const clickHandler = () => {
         alert("recipe information will be displayed here")
     }
 
     return (
-        <LearnMore onClick={clickHandler} />
+        <LearnMore onClick={clickHandler} cname={cname} />
     )
 }
 

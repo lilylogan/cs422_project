@@ -7,10 +7,10 @@ function RecipeCard({ title }) {
         <div>
             <h3 className="recipeNameCard">
                 Recipe {title}
-                <HeartContainer />
+                <HeartContainer cname="heart"/>
             </h3>
             <p>Image of Recipe</p>
-            <LearnMoreContainer />
+            <LearnMoreContainer cname="learnMore"/>
         </div>
     );
 }

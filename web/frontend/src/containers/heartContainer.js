@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Heart from '../components/heart'
 
-function HeartContainer() {
+function HeartContainer({ cname }) {
 
     const[liked, setLiked] = useState(false);
 
@@ -12,7 +12,7 @@ function HeartContainer() {
     }
 
     return (
-        <Heart onClick={handleClick} liked={liked}/>
+        <Heart onClick={handleClick} liked={liked} cname={cname} />
     )
 }
 
