@@ -1,18 +1,18 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import Heart from '../components/heart'
 
 function HeartContainer() {
 
-    const[fill, setFill] = useState(false);
+    const[liked, setLiked] = useState(false);
 
     const handleClick = () => {
-        setFill(!fill);
+        setLiked(!liked);
 
         // add to liked recipe list
     }
 
     return (
-        <Heart onClick={handleClick} fill={fill}/>
+        <Heart onClick={handleClick} liked={liked}/>
     )
 }
 

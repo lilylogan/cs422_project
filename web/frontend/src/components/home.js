@@ -1,12 +1,11 @@
 import React from 'react'
-import DeckSwap from "./deckSwap"
+import DeckSwapContainer from '../containers/deckSwapContainer';
 import RecipeCardContainer from '../containers/cardConatiner';
 
 function Home() {
     return (
         <div>
-            <h1>Home Page</h1>
-            <DeckSwap />
+            <DeckSwapContainer />
             <RecipeCardContainer />
         </div>
     )

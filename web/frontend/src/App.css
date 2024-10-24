@@ -1,4 +1,11 @@
-/*@import url('https://fonts.googleapis.com/css2?family=Brightwall&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Baskervville&display=swap');
+
+
+/* use vh and vw to scale height and width with screen size */
+
+* {
+  font-family: 'Baskervville', serif;
+}
 
 html, body {
   /* stops whitespace flicker */
@@ -76,15 +83,122 @@ html, body {
 }
 
 .card {
+  margin-top: 15px;
   border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #C65E42,
+              0 0 0 11px #3B2A1D;  
   justify-content: center;
-  width: 60%;
+  width: 55%;
   text-align: center;
   height: 60%;
+  background-color: #FFFBF3;
+}
+
+.frame {
+border: 5px solid #C65E42;
+}
+
+.outerBorder {
+border: 1px solid #3B2A1D;
 }
 
 .cardContainer {
   display: flex;
   justify-content: center;
   height: 500px;
+}
+
+.learnMore {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #C65E42, #E5B1A1);
+  border-radius: 35px;
+  font-size: 25px;
+  padding: 5px 35px;
+  border: 1px solid #3B2A1D;
+  margin-top: 80px;
+}
+
+.learnMore:hover {
+  cursor: pointer;
+  color:#3B2A1D;
+}
+
+.recipeNameCard {
+  color: #3B2A1D;
+  font-size: 25px;
+}
+
+.heart {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 55px;
+  position: absolute;
+  bottom: 214px;
+  right: 20px;
+  background-color: none;
+  color: #3B2A1D;
+  transition: transform 0.2s ease-in-out;
+}
+
+.heart:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.liked {
+  animation: pulse 0.3s ease-in-out;
+  color: #C65E42
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(.80);
+  }
+  50% {
+    transform: scale(1.5); 
+  }
+  100% {
+    transform: scale(1); 
+  }
+}
+
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10vh;
+  gap: 3vw;
+}
+
+.slider {
+  width: 60px;
+  height: 30px;
+  background-image: linear-gradient(to right, #C65E42, #E5B1A1);
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid #3B2A1D;
+}
+
+.circle {
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  background-color: #FFFBF3;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+  border: 3px solid #3B2A1D;
+}
+
+.slider.toggled {
+  background-image: linear-gradient(to right, #9BA777, #55732B);
+}
+
+.slider.toggled .circle {
+  transform: translateX(30px);
 }
