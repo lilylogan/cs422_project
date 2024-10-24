@@ -29,3 +29,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     command: npm start
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:9050
+    depends_on:
+      - backend

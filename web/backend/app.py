@@ -1,8 +1,11 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, jsonify
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app) # Allows backend to talk to frontend
 
 app.config['SECRET_KEY'] = 'asdsSDfsdaf csac'  
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://user:password@db/letscook'
@@ -41,6 +44,20 @@ def error_404(e):
 def error_403(e):
     #return a template with error code
     return render_template('403.html'), 403
+
+# Example route for seeing data
+@app.route('/data')
+def get_time():
+
+    # This would be a query from the database
+    array = {
+        'Name':"Lily", 
+        "Age":"22",
+        "programming":"python"
+        }
+    
+    return jsonify(array=array)
+
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
