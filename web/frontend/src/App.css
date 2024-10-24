@@ -116,11 +116,12 @@ border: 1px solid #3B2A1D;
   padding: 5px 35px;
   border: 1px solid #3B2A1D;
   margin-top: 80px;
+  transition: transform 0.2s ease-in-out;
 }
 
 .learnMore:hover {
   cursor: pointer;
-  color:#3B2A1D;
+  transform: scale(1.1);
 }
 
 .recipeNameCard {
