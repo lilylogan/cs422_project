@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import Home from "./components/home"
 import Liked from "./components/liked"
-import MealPlan from "./components/mealPlan"
+import MealPlanner from "./components/mealPlanner/index"
 import Settings from './components/settings'
 import SignUp from './components/signup'
 import Login from './components/login'
@@ -25,7 +25,7 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="liked" element={<Liked />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="mealPlan" element={<MealPlan />} />
+          <Route path="mealPlanner" element={<MealPlanner />} />
         </Route>
       </Routes>
     </Router>
