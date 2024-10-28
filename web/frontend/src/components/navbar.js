@@ -23,7 +23,7 @@ function NavBar() {
                     ~
                 </li>
                 <li>
-                    <NavLink className={({ isActive }) => isActive ? 'active' : 'navElement'} to="mealPlan">Meal Planner & Shopping List</NavLink>
+                    <NavLink className={({ isActive }) => isActive ? 'active' : 'navElement'} to="mealPlanner">Meal Planner & Shopping List</NavLink>
                 </li>
             </ul>
         </nav>
