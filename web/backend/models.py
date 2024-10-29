@@ -18,10 +18,15 @@ class User(db.Model):
 class Recipe(db.Model):
     recipe_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
     ingredients = db.Column(db.Text)
     instructions = db.Column(db.Text)
-    external_id = db.Column(db.String(100), unique=True)  # ID from external recipe API
+    prepTime = db.Column(db.Text)
+    cookTime = db.Column(db.Text)
+    servings = db.Column(db.Text)
+    url = db.Column(db.Text)
+    nutrition = db.Column(db.Text)
+    cuisine = db.Column(db.Text)
+    imgage_path = db.Column(db.Text)
 
 class FavoriteRecipe(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'), primary_key=True)
