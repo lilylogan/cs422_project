@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from SQLAlchemy import Enum
+from sqlalchemy import Enum
 
 db = SQLAlchemy()
 

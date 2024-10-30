@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Import models after initializing db to avoid circular imports
-from models import User, Recipe, FavoriteRecipe, DislikedRecipe, MealPlan, Tag, ShoppingList, Filter
+from models import User, Recipe,ShoppingList, ShoppingListContents, ShoppingListIngredient, RecipeContents, Disliked, MealInPlan
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
