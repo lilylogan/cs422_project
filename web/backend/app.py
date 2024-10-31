@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Import models after initializing db to avoid circular imports
-from models import User, Recipe, FavoriteRecipe, DislikedRecipe, MealPlan, Tag, ShoppingList, Filter
+from models import User, Recipe,ShoppingList, ShoppingListContents, ShoppingListIngredient, RecipeContents, Disliked, MealInPlan
 
 with app.app_context():
     try:
@@ -93,5 +93,4 @@ def error_403(e):
     # return jsonify(array=array)
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
-
+    app.run(debug=True,host='0.0.0.0')
