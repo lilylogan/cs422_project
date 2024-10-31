@@ -2,7 +2,11 @@ from flask import Flask, render_template, abort, jsonify, request
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db
+import re
+import time
+from sqlalchemy.exc import OperationalError
 
 app = Flask(__name__)
 
@@ -16,16 +20,35 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'asdsSDfsdaf csac')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 # Import models after initializing db to avoid circular imports
 from models import User, Recipe,ShoppingList, ShoppingListContents, ShoppingListIngredient, RecipeContents, Disliked, MealInPlan
 
-with app.app_context():
-    try:
-        db.create_all()
-    except Exception as e:
-        print(f"Error creating database tables: {e}")
+def wait_for_db(retries=5, delay=5):
+    """Retry database connection with exponential backoff"""
+    for attempt in range(retries):
+        try:
+            # Attempt to connect to the database
+            with app.app_context():
+                db.create_all()
+                print("Successfully connected to the database!")
+                return True
+        except OperationalError as e:
+            if attempt == retries - 1:  # Last attempt
+                print(f"Failed to connect to the database after {retries} attempts: {e}")
+                raise
+            wait_time = delay * (2 ** attempt)  # Exponential backoff
+            print(f"Database connection attempt {attempt + 1} failed. Retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+    return False
+
+# Initialize database with retry logic
+try:
+    wait_for_db()
+except Exception as e:
+    print(f"Fatal error: Could not connect to database: {e}")
+    raise
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -73,6 +96,99 @@ def add_user_profile():
         db.session.rollback()
         return jsonify({"error": f"Error creating user profile: {str(e)}"}), 500
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    try:
+        data = request.get_json()
+        
+        # Extract data from request
+        email = data.get('email')
+        password = data.get('password')
+        # Basic validation
+        if not email or not password:
+            return jsonify({
+                'error': 'Email and password are required'
+            }), 400
+            
+        # Validate email format
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, email):
+            return jsonify({
+                'error': 'Invalid email format'
+            }), 400
+        print("\n Successfully recieved data from frontend input.\n")
+
+        # Check if user already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            return jsonify({
+                'error': 'An account with this email already exists'
+            }), 409
+        # Validate password strength
+        if len(password) < 8:
+            return jsonify({
+                'error': 'Password must be at least 8 characters long'
+            }), 400
+        
+        # Create new user
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        new_user = User(
+            email=email,
+            hashedPassword=hashed_password,
+            fname='',  # These can be updated later by user if we want
+            lname=''   # These can be updated later by user if we want
+        )
+        
+        # Save to database
+        db.session.add(new_user)
+        db.session.commit()
+        
+        # Initialize shopping list for the user
+        from models import ShoppingList
+        shopping_list = ShoppingList(userID=new_user.userID)
+        db.session.add(shopping_list)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'User registered successfully',
+            'userID': new_user.userID
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error in signup: {str(e)}")  # For debugging
+        return jsonify({
+            'error': 'An error occurred during registration'
+        }), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+        
+        # Find user by email
+        user = User.query.filter_by(email=email).first()
+        
+        # Check if user exists and password is correct
+        if user and check_password_hash(user.hashedPassword, password):
+            # TODO: Need to create session state token here
+            return jsonify({
+                'message': 'Login successful',
+                'userID': user.userID
+            }), 200
+        else:
+            return jsonify({
+                'error': 'Invalid email or password'
+            }), 401
+            
+    except Exception as e:
+        print(f"Error in login: {str(e)}")  # For debugging
+        return jsonify({
+            'error': 'An error occurred during login'
+        }), 500
+    
 # Custom error handlers
 @app.errorhandler(404)
 def error_404(e):
