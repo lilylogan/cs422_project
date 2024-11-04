@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
+from flask_login import UserMixin
+
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     
     userID = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -17,7 +19,9 @@ class User(db.Model):
     liked_recipes = db.relationship("Recipe", secondary="liked", back_populates="liked_by")
     disliked_recipes = db.relationship("Recipe", secondary="disliked", back_populates="disliked_by")
     meal_plans = db.relationship("MealInPlan", back_populates="user")
-
+    def get_id(self):
+        return str(self.userID)
+    
 class ShoppingList(db.Model):
     __tablename__ = 'shopping_list'
     

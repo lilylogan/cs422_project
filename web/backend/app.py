@@ -8,6 +8,12 @@ import re
 import time
 from sqlalchemy.exc import OperationalError
 
+# For authentication
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from datetime import timedelta
+
+
+
 app = Flask(__name__)
 
 CORS(app)  # Load environment variables
@@ -21,6 +27,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+# Initialize LoginManager
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 # Import models after initializing db to avoid circular imports
 from models import User, Recipe,ShoppingList, ShoppingListContents, ShoppingListIngredient, RecipeContents, Disliked, MealInPlan
@@ -148,7 +159,9 @@ def signup():
         shopping_list = ShoppingList(userID=new_user.userID)
         db.session.add(shopping_list)
         db.session.commit()
-        
+
+        login_user(new_user)
+
         return jsonify({
             'message': 'User registered successfully',
             'userID': new_user.userID
@@ -168,12 +181,10 @@ def login():
         email = data.get('email')
         password = data.get('password')
         
-        # Find user by email
         user = User.query.filter_by(email=email).first()
         
-        # Check if user exists and password is correct
         if user and check_password_hash(user.hashedPassword, password):
-            # TODO: Need to create session state token here
+            login_user(user, remember=True, duration=timedelta(days=7))
             return jsonify({
                 'message': 'Login successful',
                 'userID': user.userID
@@ -184,11 +195,27 @@ def login():
             }), 401
             
     except Exception as e:
-        print(f"Error in login: {str(e)}")  # For debugging
+        print(f"Error in login: {str(e)}")
         return jsonify({
             'error': 'An error occurred during login'
         }), 500
+
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'message': 'Logged out successfully'}), 200
+
     
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/api/protected-route', methods=['GET'])
+@login_required
+def protected_route():
+    return jsonify({'message': 'This is a protected route'})
+
 # Custom error handlers
 @app.errorhandler(404)
 def error_404(e):
