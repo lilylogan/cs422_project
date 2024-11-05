@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import loginImage from '../assets/loginimage.jpg';
 import { useNavigate } from 'react-router-dom';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const styles = {
   container: {
     minHeight: '100vh',
@@ -90,23 +92,76 @@ const styles = {
     marginTop: '1rem',
     textDecoration: 'none',
     textAlign: 'center'
+  },
+  error: {
+    color: '#ff6b6b',
+    fontSize: '0.875rem',
+    textAlign: 'center',
+    marginTop: '1rem'
   }
 };
 
-const LoginPage = ({ onLogin, onSignUp }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  const [isHovered, setIsHovered] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    onLogin?.(email, password);
-    navigate('/main/home');
+const LoginPage = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(''); // Clear any previous errors when user types
   };
 
-  const handleSignUp = () => {
-    onSignUp?.();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      setError('Please enter both email and password');
+      return;
+    }
+    
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+      
+      // Login successful
+      // Store the userID in localStorage
+      localStorage.setItem('userID', data.userID);
+      
+      // Redirect to main dashboard
+      navigate('/main/home');
+      
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignUpRedirect = () => {
     navigate('/signup');
   };
 
@@ -123,12 +178,13 @@ const LoginPage = ({ onLogin, onSignUp }) => {
             <label htmlFor="email" style={styles.label}>Email</label>
             <input
               id="email"
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
               required
               style={styles.input}
-              placeholder="Enter text here"
+              placeholder="Enter your email"
             />
           </div>
 
@@ -136,12 +192,13 @@ const LoginPage = ({ onLogin, onSignUp }) => {
             <label htmlFor="password" style={styles.label}>Password</label>
             <input
               id="password"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
               required
               style={styles.input}
-              placeholder="Enter text here"
+              placeholder="Enter your password"
             />
           </div>
 
@@ -150,16 +207,20 @@ const LoginPage = ({ onLogin, onSignUp }) => {
             style={{
               ...styles.loginButton,
               ...(isHovered ? styles.loginButtonHover : {}),
+              ...(isLoading ? { opacity: 0.7, cursor: 'not-allowed' } : {})
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? 'Logging in...' : 'Login'}
           </button>
+          
+          {error && <div style={styles.error}>{error}</div>}
         </form>
 
         <button 
-          onClick={handleSignUp} 
+          onClick={handleSignUpRedirect} 
           style={styles.signupLink}
           onMouseOver={e => e.target.style.textDecoration = 'underline'}
           onMouseOut={e => e.target.style.textDecoration = 'none'}

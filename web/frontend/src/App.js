@@ -8,20 +8,26 @@ import Settings from './components/settings'
 import SignUp from './components/signup'
 import Login from './components/login'
 import MainApp from './components/mainapp';
+import PrivateRoute from './components/PrivateRoute';
 
 
 
 function App() {
-  // This is the container for all the pages
   return (
     <Router>
       <Routes>
-        {/* may need some changing around */}
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/main" element={<MainApp />}>
-          <Route index element={<Navigate to="/login" />} />
+        <Route
+          path="/main"
+          element={
+            <PrivateRoute>
+              <MainApp />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Navigate to="home" />} />
           <Route path="home" element={<Home />} />
           <Route path="liked" element={<Liked />} />
           <Route path="settings" element={<Settings />} />

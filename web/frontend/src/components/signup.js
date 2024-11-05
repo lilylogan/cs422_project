@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import loginImage from '../assets/loginimage.jpg';
 import { useNavigate } from 'react-router-dom';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const styles = {
   container: {
     minHeight: '100vh',
@@ -100,28 +102,69 @@ const styles = {
     marginTop: '1rem'
   }
 };
-
-const SignUp = ({ onSignUp }) => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(''); // Clear any previous errors when user types
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Password confirmation check
     if (formData.password !== formData.confirmPassword) {
       setError("Oops! Your passwords don't match. Let's try that again!");
-    } else {
-      setError('');
-      onSignUp?.(formData.email, formData.password);
+      return;
+    }
+    
+    // Basic password validation
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+    
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+      
+      // Registration successful
+      // Store the userID in localStorage
+      localStorage.setItem('userID', data.userID);
+      
+      // Redirect to login or dashboard
+      navigate('/main/home');
+      
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -183,16 +226,18 @@ const SignUp = ({ onSignUp }) => {
           </div>
 
           <button 
-            type="submit" 
-            style={{
-              ...styles.signupButton,
-              ...(isHovered ? styles.signupButtonHover : {}),
-            }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+          type="submit" 
+          style={{
+            ...styles.signupButton,
+            ...(isHovered ? styles.signupButtonHover : {}),
+            ...(isLoading ? { opacity: 0.7, cursor: 'not-allowed' } : {})
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          disabled={isLoading}
           >
-            Start Cooking!
-          </button>
+          {isLoading ? 'Creating Account...' : 'Start Cooking!'}
+        </button>
           
           {error && <div style={styles.error}>{error}</div>}
         </form>
@@ -207,6 +252,8 @@ const SignUp = ({ onSignUp }) => {
         </button>
       </div>
     </div>
+
+    
   );
 };
 
