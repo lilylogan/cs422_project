@@ -1,15 +1,27 @@
 import React from 'react'
 import HeartContainer from '../containers/heartContainer';
 import LearnMoreContainer from '../containers/learnMoreContainer';
+import Tag from './tag';
+import wallyWale from '../assets/wally_wale.jpg'
 
-function RecipeCard({ title }) {
+function RecipeCard({ title, cookTime, prepTime, servings, cuisine }) {
     return (
         <div>
             <h3 className="recipeNameCard">
-                Recipe {title}
+                Fried Whale {title}
                 <HeartContainer cname="heart"/>
             </h3>
-            <p>Image of Recipe</p>
+            <div className="frameContainer">
+                <div className="imageFrame">
+                    <img src={wallyWale} alt="Recipe Name" className="cardImage"/>
+                </div>
+            </div>
+            <div className = "tagContainer">
+                <Tag className="tagCard" text={cookTime} />
+                <Tag className="tagCard" text={prepTime} />
+                <Tag className="tagCard" text={servings} />
+                <Tag className="tagCard" text={cuisine} />
+            </div>
             <LearnMoreContainer cname="learnMore"/>
         </div>
     );

@@ -3,6 +3,10 @@
 
 /* use vh and vw to scale height and width with screen size */
 
+/* orange: #C65E42;
+ gradient option: B3683E
+ or Do dark border color
+*/
 * {
   font-family: 'Baskervville', serif;
 }
@@ -30,7 +34,7 @@ html, body {
 
 .banner {
   font-family: 'brightwall', sans-serif;
-  background-color: #C65E42;
+  background-color: #95340A;
   color: white;
   text-align: center;
   font-size: 20px;
@@ -79,23 +83,36 @@ html, body {
 }
 
 .navElement:hover {
-  color:#C65E42;
+  color:#95340A;
 }
 
 .card {
   margin-top: 15px;
   border: 1px solid #3B2A1D;
-  box-shadow: 0 0 0 10px #C65E42,
+  box-shadow: 0 0 0 10px #95340A,
               0 0 0 11px #3B2A1D;  
   justify-content: center;
   width: 55%;
   text-align: center;
-  height: 60%;
+  height: 90%;
   background-color: #FFFBF3;
 }
 
+.card-swiping {
+  margin-top: 15px;
+  border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #95340A,
+              0 0 0 11px #3B2A1D;  
+  justify-content: center;
+  width: 55%;
+  text-align: center;
+  height: 90%;
+  background-color: #FFFBF3;
+  pointer-events: none;
+}
+
 .frame {
-border: 5px solid #C65E42;
+border: 5px solid #95340A;
 }
 
 .outerBorder {
@@ -105,17 +122,18 @@ border: 1px solid #3B2A1D;
 .cardContainer {
   display: flex;
   justify-content: center;
-  height: 500px;
+  height: 700px;
+  user-select: none;
 }
 
 .learnMore {
   color: #FFFBF3;
-  background-image: linear-gradient(to right, #C65E42, #E5B1A1);
+  background-image: linear-gradient(to right, #431730, #8b5771);
   border-radius: 35px;
-  font-size: 25px;
+  font-size: 30px;
   padding: 5px 35px;
   border: 1px solid #3B2A1D;
-  margin-top: 80px;
+  margin-top: 70px;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -126,19 +144,19 @@ border: 1px solid #3B2A1D;
 
 .recipeNameCard {
   color: #3B2A1D;
-  font-size: 25px;
+  font-size: 30px;
 }
 
 .heart {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 55px;
+  font-size: 70px;
   position: absolute;
-  bottom: 214px;
+  bottom: 520px;
   right: 20px;
   background-color: none;
-  color: #3B2A1D;
+  color: #E5C6BD;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -168,7 +186,7 @@ border: 1px solid #3B2A1D;
 
 .liked {
   animation: pulse 0.3s ease-in-out;
-  color: #C65E42
+  color: #661A1D;
 }
 
 @keyframes pulse {
@@ -328,4 +346,100 @@ border: 1px solid #3B2A1D;
 .add:hover {
   cursor: pointer;
   transform: scale(1.1);
+}
+
+.tagContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:1.5vw;
+  margin-top: 35px;
+}
+
+.tagCard {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #DC8855, #C65E42);
+  border-radius: 35px;
+  font-size: 18px;
+  padding: 5px 12px;
+  border: 1px solid #3B2A1D;
+  margin-top: 5px;
+}
+
+.swipeButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 100px;
+  gap: 3vw;
+}
+
+.dislike{
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #C63D19, #96240C);
+  border-radius: 35px;
+  font-size: 30px;
+  padding: 5px 30px;
+  border: 1px solid #3B2A1D;
+  transition: transform 0.2s ease-in-out;
+}
+
+.dislike:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.pass {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #FFDF6A, #F5B342);
+  border-radius: 35px;
+  font-size: 30px;
+  padding: 5px 35px;
+  border: 1px solid #3B2A1D;
+  transition: transform 0.2s ease-in-out;
+}
+
+.pass:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.addHome {
+  color: #FFFBF3;
+  background-image: linear-gradient(to right, #55732B, #9BA777);
+  border-radius: 35px;
+  font-size: 30px;
+  padding: 5px 45px;
+  border: 1px solid #3B2A1D;
+  transition: transform 0.2s ease-in-out;
+}
+
+.addHome:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.imageFrame {
+  width: 35vw;
+  height: 300px;
+  border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #95340A,
+              0 0 0 11px #3B2A1D;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImage {
+  width: 100%;
+  height: auto; 
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.frameContainer {
+  display: flex;
+  justify-content: center;
 }
