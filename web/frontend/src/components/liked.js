@@ -7,7 +7,7 @@ import RecipeList from './likedRecipeList'
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Fetches data from the backend
-export const fetchData = async () => {
+const fetchData = async () => {
   try {
     const response = await fetch(`${BACKEND_URL}/getRandRecipe`);
     const data = await response.json();
@@ -26,14 +26,13 @@ function Liked() {
 
     // The useEffect is where the data is fetched from
     useEffect(() => {
-        console.log("fetching data!");
-        const getData = async () => {
-        const fetchedData = await fetchData();
-        setData(fetchedData);
-        };
-
-    getData();
-  }, []);
+      console.log("fetching data!")
+      const getData = async () => {
+          const fetchedData = await fetchData();
+          setData(fetchedData);
+      };
+      getData()
+  }, [])
 
   // Jsonified on the page
   return (

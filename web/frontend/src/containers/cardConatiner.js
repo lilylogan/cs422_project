@@ -1,13 +1,41 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import RecipeCard from '../components/card';
 import TinderCard from 'react-tinder-card'
 import SwipingButton from '../components/swipingButtons';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+// fetch function
+const fetchData = async () => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/getRandRecipe`)
+        const data = await response.json();
+        return data;
+    }
+    catch(error) {
+        console.error("Error fetching data from the backend:", error);
+    }
+}
 
 function RecipeCardContainer() {
 
     const [index, setIndex] = useState(1);
     const cardRef = useRef(null);
     const [swiping, setSwiping] = useState(false);
+    const [data, setData] = useState(null);
+    const [generate, setGenerate] = useState(false);
+
+    useEffect(() => {
+        if (generate == true) {
+            setGenerate(false);
+            console.log("fetching data!");
+            const getData = async () => {
+                const fetchedData = await fetchData();
+                setData(fetchedData);
+            };
+            getData();
+        }
+    }, [generate]);
 
 
     const onSwipe = (direction) => {
@@ -24,6 +52,7 @@ function RecipeCardContainer() {
     }
 
     const onCardLeftScreen = (direction) => {
+        setGenerate(true);
         setSwiping(false)
         setIndex((prev)=> {
             return prev + 1;
