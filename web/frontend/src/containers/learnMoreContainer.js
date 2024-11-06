@@ -18,13 +18,13 @@ function LearnMoreContainer({ cname, data }) {
                     </div>
                 </div>
                 <div class="timeContainer">
-                    <h5>Cook Time: 20 mins</h5>
-                    <h5>Total Time: 50 mins</h5>
-                    <h5>Prep Time: ${data.prep_time}</h5>
+                    <h5 class="alertTime">Cook Time: 20 mins</h5>
+                    <h5 class="alertTime">Total Time: 50 mins</h5>
+                    <h5 class="alertTime">Prep Time: ${data.prep_time}</h5>
                 </div>
-                <div>
-                    <h5>Servings: ${data.servings}</h5>
-                    <h5>Cuisine: WALE</h5>
+                <div class="detailsContainer">
+                    <h5 class="alertDetails">Servings: ${data.servings}</h5>
+                    <h5 class="alertDetails">Cuisine: WALE</h5>
                 </div>
                 <h4>Ingredients</h4>
                 <ul>
