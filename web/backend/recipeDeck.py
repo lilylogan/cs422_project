@@ -10,6 +10,8 @@ class recipeDeck:
         #with current_app.app_context():
         first_recipe = RecipeModel.query.first()
         self.first_recipe_name = first_recipe.name if first_recipe else None
+        self.first_prepTime = first_recipe.prepTime if first_recipe else None
+        self.first_servings = first_recipe.servings if first_recipe else None
         print(f"The name of the first recipe is: {self.first_recipe_name}")
 
 
@@ -18,7 +20,7 @@ class recipeDeck:
         is not in the user's liked recipes, disliked recipes,
         or the user's seen recipes in the current session and
         return the recipe database entry."""
-        recipe = {"recipe_name": self.first_recipe_name, "prep_time": self.first_recipe.prepTime, "servings": self.first_recipe.servings}
+        recipe = {"recipe_name": self.first_recipe_name, "prep_time": self.first_prepTime, "servings": self.first_servings}
         return recipe
 
     def genLikedRecipe(self):

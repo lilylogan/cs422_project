@@ -19,6 +19,7 @@ from recipeDeck import recipeDeck
 app = Flask(__name__)
 
 CORS(app)  # Load environment variables
+
 DB_USER = os.getenv("DB_USER", "default_user")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "default_password")
 DB_HOST = os.getenv("DB_HOST", "db")

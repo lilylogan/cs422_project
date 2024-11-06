@@ -9,9 +9,11 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // Fetches data from the backend
 export const fetchData = async () => {
   try {
-    const response = await fetch(`${BACKEND_URL}/data`);
+    const response = await fetch(`${BACKEND_URL}/getRandRecipe`);
     const data = await response.json();
+    console.log(data);
     return data;
+    
   } catch (error) {
     console.error("Error fetching data from the backend:", error);
   }
