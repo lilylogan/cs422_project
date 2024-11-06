@@ -7,10 +7,12 @@ from models import db
 import re
 import time
 from sqlalchemy.exc import OperationalError
+import pandas as pd
 
 # For authentication
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from datetime import timedelta
+from recipeDeck import recipeDeck
 
 
 
@@ -61,15 +63,53 @@ except Exception as e:
     print(f"Fatal error: Could not connect to database: {e}")
     raise
 
+def load_data_from_csv():
+    """Load data from CSV and insert into the Recipe table."""
+    df = pd.read_csv("fr_final_recipe.csv")
+    with app.app_context():
+        for _, row in df.iterrows():
+            recipe = Recipe(
+                name=row['recipe_name'],
+                instructions=row['directions'],
+                prepTime=row['prep_time'],
+                cookTime=row['cook_time'],
+                servings=str(row['servings']),
+                nutrition=row['nutrition'],
+                URL=row['url'],
+                cuisine=row['cuisine_path'],
+                image_path=row['image_path']
+            )
+            db.session.add(recipe)
+        db.session.commit()
+    print("Data successfully inserted into the recipe database!")
+
+def initialize_recipe_database():
+    """Check if the database is empty and load data if necessary."""
+    with app.app_context():
+        # Check if there are any rows in the Recipe table
+        if db.session.query(Recipe).first() is None:
+            print("Recipe table is empty. Loading data from CSV...")
+            load_data_from_csv()
+        else:
+            print("Recipe table already populated. Skipping CSV load.")
+        
+        
+
+# Initialize the database on app startup
+initialize_recipe_database()
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def hello(path):
-# return a simple template
+    """return a simple template"""
     # Checking that file path is not forbidden
     if (".." in path) or ("//" in path) or ("~" in path):
         abort(403) # Forbidden error
+
     # Ony proceeding if file has correct extension
     ext = os.path.splitext(path)[1] # getting the file e
+
     if (ext == ".html") or (ext == ".css"):
         # Checking that the file exists
         if os.path.exists("templates/" + path):
@@ -79,36 +119,21 @@ def hello(path):
     else:
         abort(404) # Not found error
 
-# Route to add a new user profile
-@app.route('/data', methods=['POST'])
+
+@app.route('/getRandRecipe', methods=['GET'])
 def add_user_profile():
+    """Route to add a new user profile"""
     #data = request.get_json()
-    data = {
-        "password" : "example1", 
-        "username" : "exampleProfile",
-        "email" : "example@gmail.com"
-    }
+    new_Recipe = recipeDeck(Recipe)
+
+    # Just generating the first recipe
+    exRecipe = new_Recipe.genRecipe()
     
-    # Validate required fields
-    if not data or not all(k in data for k in ("username", "email", "password")):
-        return jsonify({"error": "Missing data"}), 400
-    
-    # Hash the password
-    hashed_password = generate_password_hash(data["password"], method="sha256")
-    
-    # Create new user instance
-    new_user = User(username=data["username"], email=data["email"], password=hashed_password)
-    
-    try:
-        db.session.add(new_user)
-        db.session.commit()
-        return jsonify({"message": "User profile created successfully!"}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": f"Error creating user profile: {str(e)}"}), 500
+    return jsonify(exRecipe)
 
 @app.route('/signup', methods=['POST'])
 def signup():
+    """Route to handle user sign-up"""
     try:
         data = request.get_json()
         
@@ -176,6 +201,7 @@ def signup():
 
 @app.route('/login', methods=['POST'])
 def login():
+    """Route to handle user log in"""
     try:
         data = request.get_json()
         email = data.get('email')
@@ -224,6 +250,13 @@ def error_404(e):
 @app.errorhandler(403)
 def error_403(e):
     return render_template('403.html'), 403
+
+@app.route('/getNewRecipe', methods=['GET'])
+def getNewRecipe():
+    """Return recipe information of random recipe from Recipe database"""
+    
+
+
 
 # Example route for viewing static data
 #@app.route('/data')

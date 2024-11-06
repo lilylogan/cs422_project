@@ -4,3 +4,4 @@ pymysql
 flask-cors
 cryptography
 Flask-Login
+pandas
