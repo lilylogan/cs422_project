@@ -2,18 +2,13 @@ from flask import Flask, render_template, abort, jsonify, request
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from werkzeug.security import generate_password_hash, check_password_hash
 from models import db
-import re
 import time
 from sqlalchemy.exc import OperationalError
 import pandas as pd
-
-# For authentication
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from datetime import timedelta
+from auth import check_login, create_account, check_signup
 from recipeDeck import recipeDeck
-
+from flask_login import LoginManager, login_required, logout_user, current_user
 
 
 app = Flask(__name__)
@@ -137,95 +132,41 @@ def signup():
     """Route to handle user sign-up"""
     try:
         data = request.get_json()
-        
-        # Extract data from request
-        email = data.get('email')
-        password = data.get('password')
-        # Basic validation
-        if not email or not password:
-            return jsonify({
-                'error': 'Email and password are required'
-            }), 400
-            
-        # Validate email format
-        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if not re.match(email_pattern, email):
-            return jsonify({
-                'error': 'Invalid email format'
-            }), 400
-        print("\n Successfully recieved data from frontend input.\n")
+        valid_signup = check_signup(data, User)
 
-        # Check if user already exists
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            return jsonify({
-                'error': 'An account with this email already exists'
-            }), 409
-        # Validate password strength
-        if len(password) < 8:
-            return jsonify({
-                'error': 'Password must be at least 8 characters long'
-            }), 400
-        
-        # Create new user
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(
-            email=email,
-            hashedPassword=hashed_password,
-            fname='',  # These can be updated later by user if we want
-            lname=''   # These can be updated later by user if we want
-        )
-        
-        # Save to database
-        db.session.add(new_user)
-        db.session.commit()
-        
-        # Initialize shopping list for the user
-        from models import ShoppingList
-        shopping_list = ShoppingList(userID=new_user.userID)
-        db.session.add(shopping_list)
-        db.session.commit()
-
-        login_user(new_user)
-
-        return jsonify({
-            'message': 'User registered successfully',
-            'userID': new_user.userID
-        }), 201
+        if valid_signup == 0:
+            return jsonify({ 'error': 'Email and password are required'}), 400
+        elif valid_signup == 1:
+            return jsonify({'error': 'Invalid email format'}), 400
+        elif valid_signup == 2:
+            return jsonify({'error': 'An account with this email already exists'}), 409
+        elif valid_signup == 3:
+            return jsonify({'error': 'Password must be at least 8 characters long'}), 400
+        elif valid_signup == 4:
+            from models import ShoppingList
+            userID = create_account(data, User, db, ShoppingList)            
+            if userID:
+                return jsonify({'message': 'User registered successfully', 'userID': userID}), 201
         
     except Exception as e:
         db.session.rollback()
         print(f"Error in signup: {str(e)}")  # For debugging
-        return jsonify({
-            'error': 'An error occurred during registration'
-        }), 500
+        return jsonify({ 'error': 'An error occurred during registration'}), 500
 
 @app.route('/login', methods=['POST'])
 def login():
     """Route to handle user log in"""
-    try:
+    try: 
         data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
-        
-        user = User.query.filter_by(email=email).first()
-        
-        if user and check_password_hash(user.hashedPassword, password):
-            login_user(user, remember=True, duration=timedelta(days=7))
-            return jsonify({
-                'message': 'Login successful',
-                'userID': user.userID
-            }), 200
+        valid_request = check_login(data, User)
+        if valid_request:
+            return jsonify({'message': 'Login successful'}), 200
         else:
-            return jsonify({
-                'error': 'Invalid email or password'
-            }), 401
+            return jsonify({'error': 'Invalid email or password'}), 401
             
     except Exception as e:
         print(f"Error in login: {str(e)}")
-        return jsonify({
-            'error': 'An error occurred during login'
-        }), 500
+        return jsonify({'error': 'An error occurred during login'}), 500
 
 @app.route('/logout', methods=['POST'])
 @login_required
@@ -256,9 +197,6 @@ def error_403(e):
 def getNewRecipe():
     """Return recipe information of random recipe from Recipe database"""
     
-
-
-
 # Example route for viewing static data
 #@app.route('/data')
 #def get_static_data():
