@@ -4,11 +4,11 @@ import LearnMoreContainer from '../containers/learnMoreContainer';
 import Tag from './tag';
 import wallyWale from '../assets/wally_wale.jpg'
 
-function RecipeCard({ title, cookTime, prepTime, servings, cuisine }) {
+function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data }) {
     return (
         <div>
             <h3 className="recipeNameCard">
-                Fried Whale {title}
+                {title}
                 <HeartContainer cname="heart"/>
             </h3>
             <div className="frameContainer">
@@ -22,7 +22,7 @@ function RecipeCard({ title, cookTime, prepTime, servings, cuisine }) {
                 <Tag className="tagCard" text={servings} />
                 <Tag className="tagCard" text={cuisine} />
             </div>
-            <LearnMoreContainer cname="learnMore"/>
+            <LearnMoreContainer cname="learnMore" data={data} />
         </div>
     );
 }

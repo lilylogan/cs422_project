@@ -23,7 +23,8 @@ function RecipeCardContainer() {
     const cardRef = useRef(null);
     const [swiping, setSwiping] = useState(false);
     const [data, setData] = useState(null);
-    const [generate, setGenerate] = useState(false);
+    const [generate, setGenerate] = useState(true);
+    const [swipe, setSwipe] = useState('');
 
     useEffect(() => {
         if (generate == true) {
@@ -43,10 +44,16 @@ function RecipeCardContainer() {
         if (!swiping) {
             setSwiping(true)
             if (direction === 'left') {
+                setSwipe('left')
                 console.log("adding to disliked")
             }
             else if (direction === 'right') {
+                setSwipe('right')
                 console.log("adding to meal plan")
+            }
+            else if (direction == 'down') {
+                setSwipe('down')
+                console.log("Passing on Card")
             }
         }
     }
@@ -77,16 +84,20 @@ function RecipeCardContainer() {
         }
     }
 
+    const handleSubmit = async (event) => {
+        // need the backend to be set up to accept the swipe
+    }
+
 
     return (
         <div>
             <div className="cardContainer">
-            {index > 0 ? (
+            {data ? (
             <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''}`}>
-                <RecipeCard title={index} cookTime="cookTime: 20min" prepTime="prepTime: 20min" servings="servings: 2" cuisine="cuisine: WALE" />
+                <RecipeCard title={data.recipe_name} data = {data} cookTime="CookTime: 30mins" prepTime={`prepTime: ${data.prep_time}`} servings={`Servings: ${data.servings}`} cuisine="cuisine: WALE" />
             </TinderCard>
             ) : (<div>
-                    No more Cards!
+                    loading...
                  </div>)}
             </div>
             <div className="swipeButtonContainer">

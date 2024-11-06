@@ -5,11 +5,11 @@ import Tag from '../components/tag'
 import ReactDOM from 'react-dom'
 import wallyWale from '../assets/wally_wale.jpg'
 
-function LearnMoreContainer({ cname }) {
+function LearnMoreContainer({ cname, data }) {
 
     const clickHandler = () => {
         Swal.fire({
-            title: 'Fried Whale',
+            title: data.recipe_name,
             html: 
             `<div>
                 <div class="alertFrameContainer">
@@ -20,10 +20,10 @@ function LearnMoreContainer({ cname }) {
                 <div class="timeContainer">
                     <h5>Cook Time: 20 mins</h5>
                     <h5>Total Time: 50 mins</h5>
-                    <h5>Prep Time: 30 mins</h5>
+                    <h5>Prep Time: ${data.prep_time}</h5>
                 </div>
                 <div>
-                    <h5>Servings: 2</h5>
+                    <h5>Servings: ${data.servings}</h5>
                     <h5>Cuisine: WALE</h5>
                 </div>
                 <h4>Ingredients</h4>
