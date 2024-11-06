@@ -443,3 +443,40 @@ border: 1px solid #3B2A1D;
   display: flex;
   justify-content: center;
 }
+
+.customAlert {
+  width: 900px;
+  border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #95340A,
+              0 0 0 11px #3B2A1D;
+  border-radius: 0px !important;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  background-color: #FFFBF3;
+}
+
+.alertFrameContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alertPhotoFrame {
+  width: 650px;
+  height: 400px;
+  border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #95340A,
+              0 0 0 11px #3B2A1D;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alertImage {
+  width: 100%;
+  height: auto; 
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
