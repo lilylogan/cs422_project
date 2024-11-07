@@ -1,13 +1,42 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import RecipeCard from '../components/card';
 import TinderCard from 'react-tinder-card'
 import SwipingButton from '../components/swipingButtons';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+// fetch function
+const fetchData = async () => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/getRandRecipe`)
+        const data = await response.json();
+        return data;
+    }
+    catch(error) {
+        console.error("Error fetching data from the backend:", error);
+    }
+}
 
 function RecipeCardContainer() {
 
     const [index, setIndex] = useState(1);
     const cardRef = useRef(null);
     const [swiping, setSwiping] = useState(false);
+    const [data, setData] = useState(null);
+    const [generate, setGenerate] = useState(true);
+    const [swipe, setSwipe] = useState('');
+
+    useEffect(() => {
+        if (generate == true) {
+            setGenerate(false);
+            console.log("fetching data!");
+            const getData = async () => {
+                const fetchedData = await fetchData();
+                setData(fetchedData);
+            };
+            getData();
+        }
+    }, [generate]);
 
 
     const onSwipe = (direction) => {
@@ -15,15 +44,22 @@ function RecipeCardContainer() {
         if (!swiping) {
             setSwiping(true)
             if (direction === 'left') {
+                setSwipe('left')
                 console.log("adding to disliked")
             }
             else if (direction === 'right') {
+                setSwipe('right')
                 console.log("adding to meal plan")
+            }
+            else if (direction == 'down') {
+                setSwipe('down')
+                console.log("Passing on Card")
             }
         }
     }
 
     const onCardLeftScreen = (direction) => {
+        setGenerate(true);
         setSwiping(false)
         setIndex((prev)=> {
             return prev + 1;
@@ -48,16 +84,20 @@ function RecipeCardContainer() {
         }
     }
 
+    const handleSubmit = async (event) => {
+        // need the backend to be set up to accept the swipe
+    }
+
 
     return (
         <div>
             <div className="cardContainer">
-            {index > 0 ? (
+            {data ? (
             <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''}`}>
-                <RecipeCard title={index} cookTime="cookTime: 20min" prepTime="prepTime: 20min" servings="servings: 2" cuisine="cuisine: WALE" />
+                <RecipeCard title={data.recipe_name} data = {data} cookTime="CookTime: 30mins" prepTime={`prepTime: ${data.prep_time}`} servings={`Servings: ${data.servings}`} cuisine="cuisine: WALE" />
             </TinderCard>
             ) : (<div>
-                    No more Cards!
+                    loading...
                  </div>)}
             </div>
             <div className="swipeButtonContainer">
