@@ -9,15 +9,14 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // Fetches data from the backend
 const fetchData = async () => {
   try {
-    const response = await fetch(`${BACKEND_URL}/getRandRecipe`);
-    const data = await response.json();
-    console.log(data);
-    return data;
-    
-  } catch (error) {
-    console.error("Error fetching data from the backend:", error);
+      const response = await fetch(`${BACKEND_URL}/getRandRecipe`)
+      const data = await response.json();
+      return data;
   }
-};
+  catch(error) {
+      console.error("Error fetching data from the backend:", error);
+  }
+}
 
 // Generating the Liked page
 function Liked() {
@@ -39,13 +38,13 @@ function Liked() {
     <div>
         <div>
             <SearchBarContainer />
-            <RecipeList title="dummy Recipe" time="20 min" raiting="3/5"/>
+            <RecipeList title="dummy Recipe" time="20 min" raiting="3/5" data={data} />
         </div>
       
-      <div>
+      {/*<div>
       <h1>Data from Backend</h1>
       {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>FLOP</p>}
-      </div>
+      </div>*/}
       
     </div>
   );
