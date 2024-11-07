@@ -57,7 +57,7 @@ export const DayPlanner = ({
                 {meal.time}
               </span>
               <span style={{ ...styles.badge, backgroundColor: THEME.primary }}>
-                Rating: {meal.rating}/5
+                Cusine: {meal.cusine}
               </span>
               <button
                 onClick={() => onRemoveMeal(day, meal.id)}

@@ -62,7 +62,7 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
         <button
           type="submit"
           style={{
-            backgroundColor: '#4A7B32',
+            backgroundColor: `${THEME.secondary}`,
             color: 'white',
             padding: '0.5rem',
             width: '40px',

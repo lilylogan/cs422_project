@@ -1,31 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { THEME } from '../../constants/theme';
 import { styles } from './styles';
 import { DayPlanner } from './dayPlanner';
 import { ShoppingList } from './shoppingList';
+import CalendarView from './calendarView';
 
 // Example initial data
 const initialMeals = {
   Sunday: [
-    { id: 1, name: 'Mushroom Salad', time: '20 min', rating: 3, liked: false },
-    { id: 2, name: 'Teriyaki Chicken', time: '20 min', rating: 5, liked: true }
+    { id: 1, name: 'Mushroom Salad', time: '20 min', cusine: "dinner", liked: false },
+    { id: 2, name: 'Teriyaki Chicken', time: '20 min', cusine: "dinner", liked: true }
   ],
   Monday: [
-    { id: 3, name: 'Lemon Chicken', time: '10 min', rating: 2, liked: true }
+    { id: 3, name: 'Lemon Chicken', time: '10 min', cusine: "dinner", liked: true }
   ],
   Tuesday: [
-    { id: 4, name: 'Ginger Chicken', time: '10 min', rating: 2, liked: false },
-    { id: 5, name: 'Soy Chicken', time: '10 min', rating: 2, liked: true },
-    { id: 6, name: 'Ginger Pasta', time: '10 min', rating: 2, liked: false }
+    { id: 4, name: 'Ginger Chicken', time: '10 min', cusine: "dinner", liked: false },
+    { id: 5, name: 'Soy Chicken', time: '10 min', cusine: "dinner", liked: true },
+    { id: 6, name: 'Ginger Pasta', time: '10 min', cusine: "dinner", liked: false }
   ],
   Wednesday: [],
   Thursday: [],
   Friday: [
-    { id: 7, name: 'Butter Chicken', time: '90 min', rating: 5, liked: false },
-    { id: 8, name: 'Grilled Cheese Sandwhich', time: '5 min', rating: 3, liked: true }
+    { id: 7, name: 'Butter Chicken', time: '90 min', cusine: "dinner", liked: false },
+    { id: 8, name: 'Grilled Cheese Sandwhich', time: '5 min', cusine: "dinner", liked: true }
   ],
   Saturday: [    
-    { id: 9, name: 'Marry Me Pasta', time: '30 min', rating: 4, liked: true }
+    { id: 9, name: 'Marry Me Pasta', time: '30 min', cusine: "dinner", liked: true }
   ]
 };
 
@@ -33,6 +34,17 @@ const MealPlanner = () => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [meals, setMeals] = useState(initialMeals);
   const [shoppingItems, setShoppingItems] = useState([]);
+  const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 1024);
+
+  // Window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Meal planner handlers
   const handleMealDrop = (dragData, targetDay) => {
@@ -95,16 +107,31 @@ const MealPlanner = () => {
           </button>
         </div>
 
-        {isExpanded && Object.entries(meals).map(([day, dayMeals]) => (
-          <DayPlanner
-            key={day}
-            day={day}
-            meals={dayMeals}
-            onMealDrop={handleMealDrop}
-            onToggleLike={handleToggleLike}
-            onRemoveMeal={handleRemoveMeal}
-          />
-        ))}
+        {isExpanded && (
+          <>
+            {isWideScreen ? (
+              <CalendarView
+                meals={meals}
+                onMealDrop={handleMealDrop}
+                onToggleLike={handleToggleLike}
+                onRemoveMeal={handleRemoveMeal}
+              />
+            ) : (
+              <div>
+                {Object.entries(meals).map(([day, dayMeals]) => (
+                  <DayPlanner
+                    key={day}
+                    day={day}
+                    meals={dayMeals}
+                    onMealDrop={handleMealDrop}
+                    onToggleLike={handleToggleLike}
+                    onRemoveMeal={handleRemoveMeal}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <ShoppingList
