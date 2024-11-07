@@ -11,7 +11,11 @@ function RecipeList( { title, time, raiting, data } ) {
             <h5 className="listName">{title}</h5>
             <h5 className="time">Time: {time}</h5>
             <h5 className="raiting">Raiting: {raiting}</h5>
-            <LearnMoreContainer cname="listLearnMore" data={data} />
+            {data ? (<LearnMoreContainer cname="listLearnMore" data={data} />) :
+            (<div>
+                Loading. . .
+            </div>)}
+
             <AddContainer className/>
         </div>
     )
