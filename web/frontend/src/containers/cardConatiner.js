@@ -94,7 +94,7 @@ function RecipeCardContainer() {
             <div className="cardContainer">
             {data ? (
             <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''}`}>
-                <RecipeCard title={data.recipe_name} data = {data} cookTime="CookTime: 30mins" prepTime={`prepTime: ${data.prep_time}`} servings={`Servings: ${data.servings}`} cuisine="cuisine: WALE" />
+                <RecipeCard title={data.recipe_name} data = {data} cookTime={`Cook Time: ${data.cook_time}`} prepTime={`Prep Time: ${data.prep_time}`} servings={`servings: ${data.servings}`} cuisine={`Cuisine: ${data.cuisine}`} image_path={data.image_path} />
             </TinderCard>
             ) : (<div>
                     loading...

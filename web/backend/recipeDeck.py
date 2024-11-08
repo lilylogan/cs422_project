@@ -58,8 +58,6 @@ recipe_ids = [   1,    3,    4,    7,   10,   11,   14,   15,   16,   17,   18,
        1064, 1065, 1066, 1067, 1069, 1070, 1075, 1077, 1081, 1082, 1083,
        1084, 1085, 1087, 1088]
 
-
-
 import random
 class recipeDeck:
     ''' This module will take in a user's liked recipe table, their disliked recipes, 
@@ -76,6 +74,13 @@ class recipeDeck:
         self.first_recipe_name = first_recipe.name if first_recipe else None
         self.first_prepTime = first_recipe.prepTime if first_recipe else None
         self.first_servings = first_recipe.servings if first_recipe else None
+        self.first_cookTime = first_recipe.cookTime if first_recipe else None
+        self.first_cuisine = first_recipe.cuisine if first_recipe else None
+        self.first_image_path = first_recipe.image_path if first_recipe else None
+        self.first_ingredients = first_recipe.ingredients if first_recipe else None
+        self.first_instructions = first_recipe.instructions if first_recipe else None
+
+        
         print(f"The name of the first recipe is: {self.first_recipe_name}")
 
 
@@ -89,7 +94,7 @@ class recipeDeck:
             num = random.randint(0, self.length)
             ranRecipeID = recipe_ids[num] 
             ranRecipe= self.RecipeModel.query.get(ranRecipeID)
-        recipe = {"recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings}
+        recipe = {"recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.ingredients }
         return recipe
 
     def genLikedRecipe(self):

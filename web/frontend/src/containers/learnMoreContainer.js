@@ -5,7 +5,11 @@ import Tag from '../components/tag'
 import ReactDOM from 'react-dom'
 import wallyWale from '../assets/wally_wale.jpg'
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 function LearnMoreContainer({ cname, data }) {
+
+    const fullImagePath = data.image_path ? `${BACKEND_URL}/${data.image_path}` : wallyWale;
 
     const clickHandler = () => {
         Swal.fire({
@@ -14,17 +18,17 @@ function LearnMoreContainer({ cname, data }) {
             `<div>
                 <div class="alertFrameContainer">
                     <div class="alertPhotoFrame">
-                        <img src=${wallyWale} class="alertPhoto" />
+                        <img src=${fullImagePath} class="alertPhoto" />
                     </div>
                 </div>
                 <div class="timeContainer">
-                    <h5 class="alertTime">Cook Time: 20 mins</h5>
+                    <h5 class="alertTime">Cook Time: ${data.cook_time}</h5>
                     <h5 class="alertTime">Total Time: 50 mins</h5>
                     <h5 class="alertTime">Prep Time: ${data.prep_time}</h5>
                 </div>
                 <div class="detailsContainer">
                     <h5 class="alertDetails">Servings: ${data.servings}</h5>
-                    <h5 class="alertDetails">Cuisine: WALE</h5>
+                    <h5 class="alertDetails">Cuisine: ${data.cuisine}</h5>
                 </div>
                 <h4>Ingredients</h4>
                 <ul>
@@ -36,12 +40,7 @@ function LearnMoreContainer({ cname, data }) {
                 </ul>
                 <h4>Directions</h4>
                 <ol>
-                    <li>Find Whale</li>
-                    <li>Fry Whale</li>
-                    <li>Salt Whale</li>
-                    <li>Pepper Whale</li>
-                    <li>Drench in Franks Buffalo</li>
-                    <li>Dip in tarter dauce</li>
+                    ${data.instructions}
                 </ol>
             </div>
             `,

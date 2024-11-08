@@ -4,7 +4,11 @@ import LearnMoreContainer from '../containers/learnMoreContainer';
 import Tag from './tag';
 import wallyWale from '../assets/wally_wale.jpg'
 
-function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data }) {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data, image_path}) {
+    
+    const fullImagePath = image_path ? `${BACKEND_URL}/${image_path}` : wallyWale;
     return (
         <div>
             <h3 className="recipeNameCard">
@@ -13,7 +17,7 @@ function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data }) {
             </h3>
             <div className="frameContainer">
                 <div className="imageFrame">
-                    <img src={wallyWale} alt="Recipe Name" className="cardImage"/>
+                    <img src={fullImagePath} alt="Recipe Name" className="cardImage"/>
                 </div>
             </div>
             <div className = "tagContainer">
