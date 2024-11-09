@@ -98,6 +98,18 @@ html, body {
   background-color: #FFFBF3;
 }
 
+.card.toggled {
+  margin-top: 15px;
+  border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #55732B,
+              0 0 0 11px #3B2A1D;  
+  justify-content: center;
+  width: 55%;
+  text-align: center;
+  height: 90%;
+  background-color: #FFFBF3;
+}
+
 .card-swiping {
   margin-top: 15px;
   border: 1px solid #3B2A1D;
@@ -212,7 +224,7 @@ border: 1px solid #3B2A1D;
 .slider {
   width: 60px;
   height: 30px;
-  background-image: linear-gradient(to right, #C65E42, #E5B1A1);
+  background-image: linear-gradient(to right, #95340A, #E5B1A1);
   border-radius: 50px;
   position: relative;
   cursor: pointer;
@@ -357,8 +369,8 @@ border: 1px solid #3B2A1D;
 }
 
 .tagCard {
-  color: #FFFBF3;
-  background-image: linear-gradient(to right, #DC8855, #C65E42);
+  color: #3B2A1D;
+  background-color: #f7e7c7;
   border-radius: 35px;
   font-size: 18px;
   padding: 5px 12px;
@@ -424,6 +436,18 @@ border: 1px solid #3B2A1D;
   height: 300px;
   border: 1px solid #3B2A1D;
   box-shadow: 0 0 0 10px #95340A,
+              0 0 0 11px #3B2A1D;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageFrame.toggled {
+  width: 35vw;
+  height: 300px;
+  border: 1px solid #3B2A1D;
+  box-shadow: 0 0 0 10px #55732B,
               0 0 0 11px #3B2A1D;
   overflow: hidden;
   display: flex;

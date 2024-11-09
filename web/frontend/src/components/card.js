@@ -6,7 +6,7 @@ import wallyWale from '../assets/wally_wale.jpg'
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data, image_path}) {
+function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data, image_path, toggle}) {
     
     const fullImagePath = image_path ? `${BACKEND_URL}/${image_path}` : wallyWale;
     return (
@@ -16,7 +16,7 @@ function RecipeCard({ title, cookTime, prepTime, servings, cuisine, data, image_
                 <HeartContainer cname="heart"/>
             </h3>
             <div className="frameContainer">
-                <div className="imageFrame">
+                <div className={`imageFrame ${toggle ? 'toggled' : ''}`} >
                     <img src={fullImagePath} alt="Recipe Name" className="cardImage"/>
                 </div>
             </div>

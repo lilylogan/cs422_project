@@ -17,7 +17,7 @@ const fetchData = async () => {
     }
 }
 
-function RecipeCardContainer() {
+function RecipeCardContainer({ toggle }) {
 
     const [index, setIndex] = useState(1);
     const cardRef = useRef(null);
@@ -93,8 +93,8 @@ function RecipeCardContainer() {
         <div>
             <div className="cardContainer">
             {data ? (
-            <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''}`}>
-                <RecipeCard title={data.recipe_name} data = {data} cookTime={`Cook Time: ${data.cook_time}`} prepTime={`Prep Time: ${data.prep_time}`} servings={`servings: ${data.servings}`} cuisine={`Cuisine: ${data.cuisine}`} image_path={data.image_path} />
+            <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''} ${toggle ? 'toggled' : ''}`}>
+                <RecipeCard title={data.recipe_name} data = {data} cookTime={`Cook Time: ${data.cook_time}`} prepTime={`Prep Time: ${data.prep_time}`} servings={`servings: ${data.servings}`} cuisine={`Cuisine: ${data.cuisine}`} image_path={data.image_path} toggle={toggle} />
             </TinderCard>
             ) : (<div>
                     loading...
