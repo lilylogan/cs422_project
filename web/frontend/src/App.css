@@ -36,7 +36,8 @@ html, body {
   font-family: 'brightwall', sans-serif;
   background-color: #95340A;
   /* background-color: #D8572A; */
-  color: #FFFBF3;
+  /* color: #FFFBF3; */
+  color: #FAF5F0;
   text-align: center;
   font-size: 20px;
   margin: 0;
@@ -53,11 +54,14 @@ html, body {
   text-align: center;
   margin-top: 0px;
   padding: 20px;
-  border: 2px solid #3B2A1D;
+  /* border: 2px solid #3B2A1D; */
+  border: 2px solid #FAF5F0;
 }
 
 .navBar {
-  background-color: #FFFBF3;
+  /* background-color: #FFFBF3; */
+  background-color: #FAF5F0;
+
 }
 
 .filler {
@@ -90,42 +94,45 @@ html, body {
 
 .card {
   margin-top: 15px;
-  border: 1px solid #3B2A1D;
-  /* box-shadow: 0 0 0 10px #95340A,
-              0 0 0 11px #3B2A1D;   */
-  box-shadow: 0 0 0 10px #95340A,
-    0 0 0 11px rgb(156, 66, 33);  
+  /* border: 1px solid #FFFBF3; */
+  border: 1px solid white;
+  box-shadow: 0 0 0 10px #EDD9CA,
+    0 0 0 11px white;  
   justify-content: center;
   width: 55%;
   text-align: center;
   height: 90%;
-  background-color: #FFFBF3;
+  /* background-color: #FFFBF3; */
+  background-color: #FAF5F0;
 }
 
 .card.toggled {
   margin-top: 15px;
-  border: 1px solid #3B2A1D;
-  box-shadow: 0 0 0 10px #55732B,
-              0 0 0 11px #3B2A1D;  
+  /* border: 1px solid #FFFBF3; */
+  border: 1px solid #FAF5F0;
+  box-shadow: 0 0 0 10px #B75E4A,
+              0 0 0 11px white;  
   justify-content: center;
   width: 55%;
   text-align: center;
   height: 90%;
-  background-color: #FFFBF3;
+  background-color: #fbf6f5;
+  /* background-color: #FAF5F0;  */
 }
 
 .card-swiping {
   margin-top: 15px;
-  border: 1px solid #3B2A1D;
+  border: 1px solid white;
   /* box-shadow: 0 0 0 10px #95340A,
               0 0 0 11px #3B2A1D;   */
-  box-shadow: 0 0 0 10px #95340A,
-    0 0 0 11px rgb(156, 66, 33);  
+  box-shadow: 0 0 0 10px #EDD9CA,
+    0 0 0 11px white;  
   justify-content: center;
   width: 45%;
   text-align: center;
   height: 80%;
-  background-color: #FFFBF3;
+  /* background-color: #FFFBF3; */
+  background-color: #FAF5F0;
   pointer-events: none;
 }
 
@@ -140,20 +147,21 @@ border: 1px solid #3B2A1D;
 .cardContainer {
   display: flex;
   justify-content: center;
+  /* height: 650px; */
   height: 650px;
   user-select: none;
 }
 
 .learnMore {
-  color: #FFFBF3;
-  background-color: #b23f0e;
-  /* background-color: rgba(71, 23, 50, 0.733); */
-  /* background-image: linear-gradient(to right, #431730, #8b5771); */
+  color: 3B2A1D;
+  /* color: #FAF5F0; */
+  /* E4CAB9 */
+  background-color: #ddc3b8;
   border-radius: 25px;
   font-size: 20px;
   padding: 5px 35px;
-  /* border: 1px solid #3B2A1D; */
-  border: none !important;
+  border: 1px solid white;
+  /* border: none !important; */
   margin-top: 45px;
   transition: transform 0.2s ease-in-out;
 }
@@ -207,8 +215,9 @@ border: 1px solid #3B2A1D;
 
 .liked {
   animation: pulse 0.3s ease-in-out;
-  /* color: #661A1D; */
-  color: #780116;
+  color: #851D2D;
+  /* color: #842d2c; */
+  /* color: #780116; */
 }
 
 @keyframes pulse {
@@ -234,34 +243,31 @@ border: 1px solid #3B2A1D;
 .slider {
   width: 60px;
   height: 30px;
-<<<<<<< Updated upstream
-  background-image: linear-gradient(to right, #95340A, #E5B1A1);
-=======
-  background-color: #95340A;
+  background-color: #EDD9CA;
   /* background-image: linear-gradient(to right, #C65E42, #E5B1A1); */
->>>>>>> Stashed changes
   border-radius: 50px;
   position: relative;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  border: 1px solid #3B2A1D;
+  border: 1px solid white;
 }
 
 .circle {
   box-sizing: border-box;
   width: 26px;
   height: 26px;
-  background-color: #FFFBF3;
+  background-color: #FAF5F0;
+  /* background-color: #FFFBF3; */
   border-radius: 50%;
   position: absolute;
   top: 2px;
   left: 2px;
   transition: all 0.3s ease;
-  border: 3px solid #3B2A1D;
+  border: 3px solid white;
 }
 
 .slider.toggled {
-  background-color: #95340A;
+  background-color: #B75E4A;
   /* background-image: linear-gradient(to right, #9BA777, #55732B); */
 }
 
@@ -347,8 +353,8 @@ border: 1px solid #3B2A1D;
 }
 
 .listLearnMore {
-  color: #FFFBF3;
-  background-color: #b23f0e;
+  color: #3B2A1D;
+  background-color: #E4CAB9;
   /* background-image: linear-gradient(to right, #E5B1A1, #C65E42); */
   border-radius: 35px;
   font-size: 25px;
@@ -365,7 +371,7 @@ border: 1px solid #3B2A1D;
 
 .add {
   color: #FFFBF3;
-  background-color: #c37e61;
+  background-color: rgb(162, 138, 128);
   /* background-color: #55732B; */
   /* background-image: linear-gradient(to right, #55732B, #9BA777); */
   border-radius: 35px;
@@ -391,16 +397,13 @@ border: 1px solid #3B2A1D;
 
 .tagCard {
   color: #3B2A1D;
-<<<<<<< Updated upstream
-  background-color: #f7e7c7;
-=======
-  background-color: #c37e61;
+  /* background-color: #E4CAB9; */
+  background-color: #ddc3b8;
   /* background-image: linear-gradient(to right, #DC8855, #B3683E); */
->>>>>>> Stashed changes
   border-radius: 35px;
   font-size: 18px;
   padding: 5px 12px;
-  /* border: 1px solid #3B2A1D; */
+  border: 1px solid white;
   margin-top: 5px;
 }
 
@@ -414,7 +417,7 @@ border: 1px solid #3B2A1D;
 
 .dislike{
   color: #FFFBF3;
-  background-color: #c37e61;
+  background-color: #b84f23;
   /* background-image: linear-gradient(to right, #C63D19, #96240C); */
   border-radius: 35px;
   font-size: 30px;
@@ -431,7 +434,7 @@ border: 1px solid #3B2A1D;
 
 .pass {
   color: #FFFBF3;
-  background-color: #c37e61;
+  background-color: #b84f23;
   /* background-image: linear-gradient(to right, #FFDF6A, #F5B342); */
   border-radius: 35px;
   font-size: 30px;
@@ -448,7 +451,7 @@ border: 1px solid #3B2A1D;
 
 .addHome {
   color: #FFFBF3;
-  background-color: #c37e61;
+  background-color: #b84f23;
   /* background-image: linear-gradient(to right, #55732B, #9BA777); */
   border-radius: 35px;
   font-size: 30px;
@@ -466,21 +469,22 @@ border: 1px solid #3B2A1D;
 .imageFrame {
   width: 35vw;
   height: 300px;
-  border: 1px solid #3B2A1D;
-  box-shadow: 0 0 0 10px #95340A,
-              0 0 0 11px #3B2A1D;
+  /* border: 1px solid white; */
+  box-shadow: 0 0 0 10px #EDD9CA,
+              0 0 0 11px white;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* for the card itself make #eac3c9 or lighter */
 .imageFrame.toggled {
   width: 35vw;
   height: 300px;
-  border: 1px solid #3B2A1D;
-  box-shadow: 0 0 0 10px #55732B,
-              0 0 0 11px #3B2A1D;
+  /* border: 1px solid white; */
+  box-shadow: 0 0 0 10px #B75E4A,
+              0 0 0 11px white;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -502,9 +506,9 @@ border: 1px solid #3B2A1D;
 
 .customAlert {
   width: 900px;
-  border: 1px solid #3B2A1D;
-  box-shadow: 0 0 0 10px #95340A,
-              0 0 0 11px #3B2A1D;
+  border: 1px solid white;
+  box-shadow: 0 0 0 10px #EDD9CA,
+              0 0 0 11px white;
   border-radius: 0px !important;
   margin-top: 60px;
   margin-bottom: 60px;
@@ -520,9 +524,9 @@ border: 1px solid #3B2A1D;
 .alertPhotoFrame {
   width: 600px;
   height: 350px;
-  border: 1px solid #3B2A1D;
-  box-shadow: 0 0 0 10px #95340A,
-              0 0 0 11px #3B2A1D;
+  border: 1px solid white;
+  box-shadow: 0 0 0 10px #EDD9CA,
+              0 0 0 11px white;
   overflow: hidden;
   display: flex;
   align-items: center;
