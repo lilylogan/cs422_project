@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import loginImage from '../assets/loginimage.jpg';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -103,6 +104,7 @@ const styles = {
 
 
 const LoginPage = () => {
+  const { login } = useAuth(); 
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -116,50 +118,28 @@ const LoginPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError(''); // Clear any previous errors when user types
   };
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     
-    // Basic validation
     if (!formData.email || !formData.password) {
-      setError('Please enter both email and password');
-      return;
+        setError('Please enter both email and password');
+        return;
     }
     
     setIsLoading(true);
     setError('');
     
-    try {
-      const response = await fetch(`${BACKEND_URL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-      
-      // Login successful
-      // Store the userID in localStorage
-      localStorage.setItem('userID', data.userID);
-      
-      // Redirect to main dashboard
-      navigate('/main/home');
-      
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+    const result = await login(formData.email, formData.password);
+    
+    if (result.success) {
+        navigate('/main/home');
+    } else {
+        setError(result.error || 'Login failed');
     }
-  };
+    
+    setIsLoading(false);
+};
 
   const handleSignUpRedirect = () => {
     navigate('/signup');

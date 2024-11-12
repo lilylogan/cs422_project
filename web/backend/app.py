@@ -15,7 +15,15 @@ from auth import check_login, create_account, check_signup
 
 app = Flask(__name__)
 
-CORS(app)  # Load environment variables
+# Configure CORS to allow credentials
+CORS(app, 
+     resources={r"/*": {
+         "origins": ["http://localhost:3000"],
+         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         "allow_headers": ["Content-Type", "Authorization"],
+         "supports_credentials": True
+     }},
+     supports_credentials=True)
 
 DB_USER = os.getenv("DB_USER", "default_user")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "default_password")
@@ -25,6 +33,9 @@ DB_NAME = os.getenv("DB_NAME", "letscook")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'asdsSDfsdaf csac')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_COOKIE_SECURE'] = True  # For HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 db.init_app(app)
 
@@ -92,9 +103,90 @@ def initialize_recipe_database():
             print("Recipe table already populated. Skipping CSV load.")
         
         
-
 # Initialize the database on app startup
 initialize_recipe_database()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/api/check-auth', methods=['GET'])
+def check_auth():
+    """Check if user is authenticated"""
+    if current_user.is_authenticated:
+        return jsonify({
+            'isAuthenticated': True,
+            'user': {
+                'email': current_user.email,
+                'userID': current_user.userID
+            }
+        })
+    return jsonify({'isAuthenticated': False}), 401
+
+@app.route('/api/user', methods=['GET'])
+@login_required
+def get_user_data():
+    """Return current user data"""
+    return jsonify({
+        'email': current_user.email,
+        'userID': current_user.userID,
+        'fname': current_user.fname,
+        'lname': current_user.lname
+    })
+
+@app.route('/login', methods=['POST'])
+def login():
+    """Route to handle user login"""
+    try:
+        data = request.get_json()
+        success, result = check_login(data, User)
+        
+        if success:
+            return jsonify({
+                'message': 'Login successful',
+                'user': {
+                    'email': result.email,
+                    'userID': result.userID
+                }
+            }), 200
+        else:
+            return jsonify({'error': result}), 401
+            
+    except Exception as e:
+        print(f"Error in login: {str(e)}")
+        return jsonify({'error': 'An error occurred during login'}), 500
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    """Route to handle user sign-up"""
+    data = request.get_json()
+    valid_signup = check_signup(data, User)
+    if valid_signup == 0:
+        return jsonify({ 'error': 'Email and password are required'}), 400
+    elif valid_signup == 1:
+        return jsonify({'error': 'Invalid email format'}), 400
+    elif valid_signup == 2:
+        return jsonify({'error': 'An account with this email already exists'}), 409
+    elif valid_signup == 3:
+        return jsonify({'error': 'Password must be at least 8 characters long'}), 400
+    elif valid_signup == 4:
+        from models import ShoppingList
+        userID = create_account(data, User, db, ShoppingList)            
+        if userID:
+            return jsonify({
+                'message': 'User registered successfully',
+                'user': {
+                    'email': current_user.email,
+                    'userID': userID
+                }
+            }), 201
+
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'message': 'Logged out successfully'}), 200
+
 
 
 @app.route('/', defaults={'path': ''})
@@ -128,52 +220,6 @@ def add_user_profile():
     exRecipe = new_Recipe.genRecipe()
     
     return jsonify(exRecipe)
-
-@app.route('/signup', methods=['POST'])
-def signup():
-    """Route to handle user sign-up"""
-    data = request.get_json()
-    valid_signup = check_signup(data, User)
-    if valid_signup == 0:
-        return jsonify({ 'error': 'Email and password are required'}), 400
-    elif valid_signup == 1:
-        return jsonify({'error': 'Invalid email format'}), 400
-    elif valid_signup == 2:
-        return jsonify({'error': 'An account with this email already exists'}), 409
-    elif valid_signup == 3:
-        return jsonify({'error': 'Password must be at least 8 characters long'}), 400
-    elif valid_signup == 4:
-        from models import ShoppingList
-        userID = create_account(data, User, db, ShoppingList)            
-        if userID:
-            return jsonify({'message': 'User registered successfully', 'userID': userID}), 201  
-        
-
-@app.route('/login', methods=['POST'])
-def login():
-    """Route to handle user log in"""
-    try: 
-        data = request.get_json()
-        valid_request = check_login(data, User)
-        if valid_request:
-            return jsonify({'message': 'Login successful'}), 200
-        else:
-            return jsonify({'error': 'Invalid email or password'}), 401
-            
-    except Exception as e:
-        print(f"Error in login: {str(e)}")
-        return jsonify({'error': 'An error occurred during login'}), 500
-
-@app.route('/logout', methods=['POST'])
-@login_required
-def logout():
-    logout_user()
-    return jsonify({'message': 'Logged out successfully'}), 200
-
-    
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 @app.route('/api/protected-route', methods=['GET'])
 @login_required
