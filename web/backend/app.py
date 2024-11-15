@@ -7,6 +7,7 @@ import time
 from sqlalchemy.exc import OperationalError
 import pandas as pd
 from recipeDeck import recipeDeck
+from manageLikedRecipes import likedRecipes
 import ast
 
 from flask_login import LoginManager, login_required, logout_user, current_user
@@ -353,9 +354,49 @@ def error_404(e):
 def error_403(e):
     return render_template('403.html'), 403
 
-@app.route('/getNewRecipe', methods=['GET'])
+@app.route('/sendNewRecipe', methods=['POST'])
 def getNewRecipe():
     """Return recipe information of random recipe from Recipe database"""
+    '''
+    data = request.get_json()
+    action = data.get('action')  # Extract the action variable
+
+    # Process the action as needed
+    response = {"message": f"Action '{action}' received"}
+    print(action)
+    '''
+    data = request.get_json()
+    if not data or 'recipe_id' not in data or 'user_action' not in data:
+        print(data)
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+
+    print("Received data:", data)
+
+    # Retrieve the recipe based on the recipe ID
+    recipe_id = db.session.get(Recipe, int(data["recipe_id"]))
+    if not recipe_id:
+        return jsonify({"status": "failure", "message": "Recipe not found"}), 404
+
+    user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
+
+    recipe_manage = likedRecipes(User, Recipe, MealInPlan)
+    # If user swipes to add to weekly meal planner
+    if (data["user_action"] == "add"):
+        recipe_manage.addToMealPlanner(user_id, int(data["recipe_id"]))
+
+    if (data["user_action"] == "dislike"):
+        recipe_manage.addToDisliked(user_id, int(data["recipe_id"]))
+
+
+    # Process the user action with the recipe, e.g., save to database
+    # (Example action, you may need to implement more functionality here)
+    print(f"User ID: {user_id}, Action: {data['user_action']}, Recipe ID: {data['recipe_id']}")
+
+    # Example response
+    return jsonify({"status": "success", "message": "Data received"}), 200
+
+    
+
 
 @app.route('/images/<filename>')
 def serve_image(filename):

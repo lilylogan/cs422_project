@@ -94,7 +94,7 @@ class recipeDeck:
             ranRecipeID = recipe_ids[num] 
             ranRecipe= self.RecipeModel.query.get(ranRecipeID)
         print(ranRecipe.ingredients)
-        recipe = {"recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
+        recipe = {"recipeID": ranRecipe.recipeID, "recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
         return recipe
 
     def genLikedRecipe(self):

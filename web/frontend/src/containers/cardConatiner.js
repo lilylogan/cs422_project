@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import RecipeCard from '../components/card';
 import TinderCard from 'react-tinder-card'
 import SwipingButton from '../components/swipingButtons';
+import {useAuth} from '../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -10,6 +11,7 @@ const fetchData = async () => {
     try {
         const response = await fetch(`${BACKEND_URL}/getRandRecipe`)
         const data = await response.json();
+        console.log(data);
         return data;
     }
     catch(error) {
@@ -19,12 +21,15 @@ const fetchData = async () => {
 
 function RecipeCardContainer({ toggle }) {
 
+    const {user} = useAuth();
     const [index, setIndex] = useState(1);
     const cardRef = useRef(null);
     const [swiping, setSwiping] = useState(false);
     const [data, setData] = useState(null);
     const [generate, setGenerate] = useState(true);
     const [swipe, setSwipe] = useState('');
+    //const [action, setAction] = useState('');
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (generate == true) {
@@ -45,13 +50,15 @@ function RecipeCardContainer({ toggle }) {
             setSwiping(true)
             if (direction === 'left') {
                 setSwipe('left')
-                console.log("adding to disliked")
+                handleSubmit("dislike"); // Pass 'dislike' as the action to handleSubmit
             }
             else if (direction === 'right') {
                 setSwipe('right')
+                handleSubmit("add"); // Pass 'dislike' as the action to handleSubmit
                 console.log("adding to meal plan")
             }
             else if (direction == 'down') {
+                handleSubmit("pass"); // Pass 'dislike' as the action to handleSubmit
                 setSwipe('down')
                 console.log("Passing on Card")
             }
@@ -84,9 +91,33 @@ function RecipeCardContainer({ toggle }) {
         }
     }
 
-    const handleSubmit = async (event) => {
-        // need the backend to be set up to accept the swipe
-    }
+    const handleSubmit = async (action) => {
+        
+        try {
+            console.log("Sending request to backend");
+            const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_action: action, recipe_id: data.recipeID, user_id: user.userID }),
+            });
+    
+            // Check if response is okay before parsing JSON
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Action failed');
+            }
+    
+            // Parse response JSON if the request was successful
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+
+    
+        } catch (err) {
+            setError(err.message);
+        }
+    };
 
 
     return (
