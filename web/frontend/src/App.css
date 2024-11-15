@@ -168,7 +168,9 @@ border: 1px solid #3B2A1D;
 
 .learnMore:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .recipeNameCard {
@@ -309,9 +311,11 @@ border: 1px solid #3B2A1D;
   display: flex;
   gap: 6vw;
   align-items: center;
-  border: 1px solid #3B2A1D;
+  height: 12vh;
+  min-height: 80px;
+  border: 1px solid #ab9f8a;
   background-color: #FFFBF3;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .listHeart {
@@ -336,20 +340,19 @@ border: 1px solid #3B2A1D;
 
 .time {
   color: #FFFBF3;
-  background-image: linear-gradient(to right, #9BA777, #55732B);
+  /*background-image: linear-gradient(to right, #9BA777, #55732B);*/
+  background-color:#989872;
   border-radius: 35px;
   font-size: 25px;
   padding: 5px 20px;
-  border: 1px solid #3B2A1D;
 }
 
-.raiting {
+.cuisineList {
   color: #FFFBF3;
-  background-image: linear-gradient(to right, #C65E42, #E5B1A1);
+  background-color: #95340A;
   border-radius: 35px;
   font-size: 25px;
   padding: 5px 20px;
-  border: 1px solid #3B2A1D;
 }
 
 .listLearnMore {
@@ -366,12 +369,15 @@ border: 1px solid #3B2A1D;
 
 .listLearnMore:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .add {
   color: #FFFBF3;
-  background-color: rgb(162, 138, 128);
+  /*background-color: rgb(162, 138, 128);*/
+  background-color:#4A7B32;
   /* background-color: #55732B; */
   /* background-image: linear-gradient(to right, #55732B, #9BA777); */
   border-radius: 35px;
@@ -380,11 +386,14 @@ border: 1px solid #3B2A1D;
   border: none !important;
   /* border: 1px solid #3B2A1D; */
   transition: transform 0.2s ease-in-out;
+  margin-right: 10px;
 }
 
 .add:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .tagContainer {
@@ -429,7 +438,9 @@ border: 1px solid #3B2A1D;
 
 .dislike:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .pass {
@@ -446,7 +457,9 @@ border: 1px solid #3B2A1D;
 
 .pass:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .addHome {
@@ -463,7 +476,9 @@ border: 1px solid #3B2A1D;
 
 .addHome:hover {
   cursor: pointer;
-  transform: scale(1.1);
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .imageFrame {
@@ -483,6 +498,7 @@ border: 1px solid #3B2A1D;
   width: 35vw;
   height: 300px;
   /* border: 1px solid white; */
+  /*B75E4A*/
   box-shadow: 0 0 0 10px #B75E4A,
               0 0 0 11px white;
   overflow: hidden;
@@ -564,4 +580,51 @@ border: 1px solid #3B2A1D;
 .alertDetails {
   font-size: 20px;
   margin-top: 5px;
+}
+
+.custom-confirm-button {
+  font-size: 20px;
+  background-color: #4A7B32;
+}
+
+.custom-cancel-button {
+  font-size: 20px;
+  background-color: #EDD9CA;
+  color:#3B2A1D;
+}
+
+.custom-confirm-button:hover {
+  cursor: pointer;
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.custom-cancel-button:hover {
+  cursor: pointer;
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.custom-close-button{
+  color: #FFFBF3;
+  background-color: #4A7B32;
+  font-size: 20px;
+}
+
+.custom-close-button:hover{
+  cursor: pointer;
+  filter: brightness(1.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.addAlert {
+  width: 500px;
+  height: 250px;
+}
+
+.addAlert .swal2-timer-progress-bar {
+  background-color: #4A7B32;
 }

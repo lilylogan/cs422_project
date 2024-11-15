@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { handleLogout, handleDeleteAccount } from '../containers/authUtils.js'; // Adjust the path as needed
 import profileImage from '../assets/wally_wale.jpg'; // Import the local image
 
+
+// 
+// 
 const styles = {
   container: {
     maxWidth: '1024px',
@@ -51,14 +54,14 @@ const styles = {
     fontSize: '1.125rem',
     fontWeight: '600',
     color: 'white',
-    background: '#db8b75',
+    background: '#4A7B32',
     border: 'none',
     borderRadius: '0.375rem',
     cursor: 'pointer',
     transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
   },
   deleteButton: {
-    backgroundColor: '#4A7B32',
+    backgroundColor: '#B75E4A',
   },
   buttonHover: {
     filter: 'brightness(1.3)',
@@ -89,10 +92,12 @@ function Settings() {
             <label style={styles.label}>Email</label>
             <p style={styles.info}>wallywale123@gmail.com</p>
           </div>
+          {/*
           <div>
             <label style={styles.label}>Date Joined</label>
             <p style={styles.info}>10/22/2024</p>
           </div>
+          */}
           <div style={styles.buttonsContainer}>
             <button
               style={{ ...styles.button, ...(isLogoutHovered ? styles.buttonHover : {}) }}

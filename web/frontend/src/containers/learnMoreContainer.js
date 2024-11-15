@@ -46,9 +46,11 @@ function LearnMoreContainer({ cname, data }) {
             `,
             text: 'Recipe information',
             icon: 'info',
+            iconColor: '#4A7B32',
             confirmButtonText: 'Close',
             customClass: {
-                popup: 'customAlert'
+                confirmButton: 'custom-close-button',
+                popup: 'customAlert',
             }
         });
     }

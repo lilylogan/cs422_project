@@ -38,8 +38,13 @@ function Liked() {
     <div>
         <div>
             <SearchBarContainer />
-            <RecipeList title="dummy Recipe" time="20 min" raiting="3/5" data={data} />
-        </div>
+            <RecipeList title="dummy Recipe" time="20 min" data={data} cuisine="cuisine" />
+            <RecipeList title="dummy Recipe" time="20 min" data={data} cuisine="cuisine" />
+            <RecipeList title="dummy Recipe" time="20 min" data={data} cuisine="cuisine" />
+            <RecipeList title="dummy Recipe" time="20 min" data={data} cuisine="cuisine" />
+            <RecipeList title="dummy Recipe" time="20 min" data={data} cuisine="cuisine" />
+            <RecipeList title="dummy Recipe" time="20 min" data={data} cuisine="cuisine" />
+         </div>
       
       {/*<div>
       <h1>Data from Backend</h1>
