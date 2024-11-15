@@ -1,4 +1,3 @@
-
 recipe_ids = [   1,    3,    4,    7,   10,   11,   14,   15,   16,   17,   18,
          19,   20,   22,   23,   24,   25,   27,   28,   32,   34,   35,
          38,   41,   42,   45,   46,   47,   48,   49,   50,   51,   53,
@@ -77,7 +76,7 @@ class recipeDeck:
         self.first_cookTime = first_recipe.cookTime if first_recipe else None
         self.first_cuisine = first_recipe.cuisine if first_recipe else None
         self.first_image_path = first_recipe.image_path if first_recipe else None
-        self.first_ingredients = first_recipe.ingredients if first_recipe else None
+        self.first_ingredients_dict = first_recipe.ingredients if first_recipe else None
         self.first_instructions = first_recipe.instructions if first_recipe else None
 
         
@@ -94,7 +93,8 @@ class recipeDeck:
             num = random.randint(0, self.length)
             ranRecipeID = recipe_ids[num] 
             ranRecipe= self.RecipeModel.query.get(ranRecipeID)
-        recipe = {"recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.ingredients }
+        print(ranRecipe.ingredients)
+        recipe = {"recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
         return recipe
 
     def genLikedRecipe(self):
@@ -102,3 +102,4 @@ class recipeDeck:
         is in the user's liked recipes but not one they have already
         seen in their current session."""
         pass
+        

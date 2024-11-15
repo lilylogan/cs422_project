@@ -32,11 +32,7 @@ function LearnMoreContainer({ cname, data }) {
                 </div>
                 <h4>Ingredients</h4>
                 <ul>
-                    <li>Whale</li>
-                    <li>Salt</li>
-                    <li>Pepper</li>
-                    <li>Tarter Sauce</li>
-                    <li>Franks Buffalo</li>
+                    <li>${data.ingredients}</li>
                 </ul>
                 <h4>Directions</h4>
                 <ol>

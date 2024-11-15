@@ -7,6 +7,7 @@ import time
 from sqlalchemy.exc import OperationalError
 import pandas as pd
 from recipeDeck import recipeDeck
+import ast
 
 from flask_login import LoginManager, login_required, logout_user, current_user
 from auth import check_login, create_account, check_signup
@@ -45,7 +46,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # Import models after initializing db to avoid circular imports
-from models import User, Recipe,ShoppingList, ShoppingListContents, ShoppingListIngredient, RecipeContents, Disliked, MealInPlan
+from models import User, Recipe,ShoppingList, ShoppingListContents, ShoppingListIngredient, RecipeContents, Disliked, MealInPlan, RecipeIngredient
 
 def wait_for_db(retries=5, delay=5):
     """Retry database connection with exponential backoff"""
@@ -72,12 +73,81 @@ except Exception as e:
     print(f"Fatal error: Could not connect to database: {e}")
     raise
 
+
+def is_number(s):
+    """Helper function to check if a string is a number."""
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+# def extract_quantity_and_unit(quantity_unit):
+#     """Extract quantity and unit from a string.
+#        If there's no number in the string, treat the whole string as the unit."""
+    
+#     qualtity_unit_list = quantity_unit.split(" ")
+#     if len(qualtity_unit_list) == 2 and is_number(qualtity_unit_list[0]):
+#         quantity = float(qualtity_unit_list[0])
+#         unit = qualtity_unit_list[1]
+#         notes = None
+#     else:
+#         if qualtity_unit_list[0] and is_number(qualtity_unit_list[0]):
+#             quantity = float(qualtity_unit_list[0])
+#             unit = None
+#             notes = " ".join(qualtity_unit_list[1:])
+#         else: 
+#             quantity = None
+#             unit = None
+#             notes = " ".join(qualtity_unit_list)
+   
+    
+#     return quantity, unit, notes
+
+def extract_quantity_and_unit(quantity_unit):
+    """Extract quantity and unit from a string.
+       If there's no number in the string, treat the whole string as the unit.
+       Integers remain as integers; floats are kept as floats."""
+    
+    def convert_to_number(value):
+        """Convert a number to int if it's whole, otherwise format it to remove unnecessary zeros."""
+        num = float(value)
+        # Check if the number is an integer
+        if num.is_integer():
+            return int(num)
+        else:
+            # Format to remove unnecessary trailing zeros
+            return round(num, 2)  # Keep only necessary precision
+
+    qualtity_unit_list = quantity_unit.split(" ")
+    if len(qualtity_unit_list) == 2 and is_number(qualtity_unit_list[0]):
+        quantity = convert_to_number(qualtity_unit_list[0])
+        unit = qualtity_unit_list[1]
+        notes = None
+    else:
+        if qualtity_unit_list[0] and is_number(qualtity_unit_list[0]):
+            quantity = convert_to_number(qualtity_unit_list[0])
+            unit = None
+            notes = " ".join(qualtity_unit_list[1:])
+        else: 
+            quantity = None
+            unit = None
+            notes = " ".join(qualtity_unit_list)
+    
+    return quantity, unit, notes
+
+
 def load_data_from_csv():
     """Load data from CSV and insert into the Recipe table."""
     df = pd.read_csv("fr_final_recipe.csv")
     with app.app_context():
+        first = 1
+        ingredient_counter = 1
         for _, row in df.iterrows():
+            ingredients_dict = ast.literal_eval(row['cleaned_ingredients'])
+            # print(f"ingredient list {ingredients_dict}")
             recipe = Recipe(
+                recipeID=row["recipe_id"],
                 name=row['recipe_name'],
                 instructions=row['directions'],
                 prepTime=row['prep_time'],
@@ -86,10 +156,58 @@ def load_data_from_csv():
                 nutrition=row['nutrition'],
                 URL=row['url'],
                 cuisine=row['cuisine'],
-                image_path=row['image_path']
+                image_path=row['image_path'],
             )
-            db.session.add(recipe)
-        db.session.commit()
+            db.session.add(recipe) 
+            db.session.commit()
+
+            # Add ingredients to RecipeContents
+            
+            for ingredient, quantity_unit in ingredients_dict.items():
+
+                quantity, unit, notes = extract_quantity_and_unit(quantity_unit)
+
+                # if first:
+                #     recipe_contents_record = RecipeContents(
+                #         recipeID=row["recipe_id"],
+                #         ingredientID=0,
+                #         quantity=quantity,
+                #         unit=unit,
+                #         notes=notes
+                #     )
+
+                #     ingredient_record = RecipeIngredient(
+                #         ingredientID=0,
+                #         name=ingredient
+                #     )
+
+
+                # else:
+                
+                # db.session.add(recipe_contents_record)
+
+                ingredient_record = RecipeIngredient(
+                    ingredientID=ingredient_counter,
+                    name=ingredient
+                )
+                db.session.add(ingredient_record)
+
+                recipe_contents_record = RecipeContents(
+                    recipeID=row["recipe_id"],
+                    ingredientID=ingredient_counter,
+                    quantity=quantity,
+                    unit=unit,
+                    notes=notes
+                )
+
+                db.session.add(recipe_contents_record)
+                # print(f"name {ingredient_record.name}")
+                
+
+                ingredient_counter += 1 
+                db.session.commit() 
+
+        
     print("Data successfully inserted into the recipe database!")
 
 def initialize_recipe_database():

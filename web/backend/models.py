@@ -45,7 +45,7 @@ class RecipeIngredient(db.Model):
     __tablename__ = 'recipe_ingredients'
     
     ingredientID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(100), nullable=False, unique=False)
     
     # Relationships
     recipes = db.relationship("RecipeContents", back_populates="ingredient")
@@ -69,6 +69,35 @@ class Recipe(db.Model):
     liked_by = db.relationship("User", secondary="liked", back_populates="liked_recipes")
     disliked_by = db.relationship("User", secondary="disliked", back_populates="disliked_recipes")
     meal_plans = db.relationship("MealInPlan", back_populates="recipe")
+
+    def get_ingredient_list(self):
+        """Returns a list of ingredient descriptions for this recipe."""
+        ingredients = []
+        
+        for ingredient_container in self.ingredients:
+            parts = []
+
+            # Add quantity if it's not None
+            if ingredient_container.quantity is not None:
+                parts.append(str(ingredient_container.quantity))
+
+            # Add unit if it's not None
+            if ingredient_container.unit is not None:
+                parts.append(ingredient_container.unit)
+
+            # Add ingredient name if it's not None
+            if ingredient_container.ingredient.name is not None:
+                parts.append(ingredient_container.ingredient.name)
+
+            # Join the non-None parts with a space
+            ingredient_string = " ".join(parts)
+
+            # Only add non-empty strings to the list
+            if ingredient_string:
+                ingredients.append(ingredient_string)
+
+        return ingredients
+
 
 class ShoppingListContents(db.Model):
     __tablename__ = 'shopping_list_contents'
