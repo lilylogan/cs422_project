@@ -242,17 +242,6 @@ def check_auth():
         })
     return jsonify({'isAuthenticated': False}), 401
 
-@app.route('/api/user', methods=['GET'])
-@login_required
-def get_user_data():
-    """Return current user data"""
-    return jsonify({
-        'email': current_user.email,
-        'userID': current_user.userID,
-        'fname': current_user.fname,
-        'lname': current_user.lname
-    })
-
 @app.route('/login', methods=['POST'])
 def login():
     """Route to handle user login"""
@@ -261,13 +250,8 @@ def login():
         success, result = check_login(data, User)
         
         if success:
-            return jsonify({
-                'message': 'Login successful',
-                'user': {
-                    'email': result.email,
-                    'userID': result.userID
-                }
-            }), 200
+            return jsonify({ 'message': 'Login successful', 'user': 
+                            {'email': result.email,'userID': result.userID}}), 200
         else:
             return jsonify({'error': result}), 401
             
@@ -292,13 +276,8 @@ def signup():
         from models import ShoppingList
         userID = create_account(data, User, db, ShoppingList)            
         if userID:
-            return jsonify({
-                'message': 'User registered successfully',
-                'user': {
-                    'email': current_user.email,
-                    'userID': userID
-                }
-            }), 201
+            return jsonify({'message': 'User registered successfully', 'user': 
+                            {'email': current_user.email,'userID': userID}}), 201
 
 @app.route('/logout', methods=['POST'])
 @login_required
@@ -387,12 +366,6 @@ def getNewRecipe():
     if (data["user_action"] == "dislike"):
         recipe_manage.addToDisliked(user_id, int(data["recipe_id"]))
 
-
-    # Process the user action with the recipe, e.g., save to database
-    # (Example action, you may need to implement more functionality here)
-    print(f"User ID: {user_id}, Action: {data['user_action']}, Recipe ID: {data['recipe_id']}")
-
-    # Example response
     return jsonify({"status": "success", "message": "Data received"}), 200
 
     
@@ -443,61 +416,33 @@ def update_meal_day():
 @app.route('/api/remove-meal', methods=['DELETE'])
 @login_required
 def remove_meal():
-    """Remove a meal from a user's meal plan.
-    
-    Expected request body:
-    {
-        "mealId": int,
-        "day": string
-    }
-    """
+    """Remove a meal from a user's meal plan. """
     try:
         data = request.get_json()
         
         if not data or 'mealId' not in data or 'day' not in data:
-            return jsonify({
-                'error': 'Missing required fields: mealId and day'
-            }), 400
+            return jsonify({'error': 'Missing required fields: mealId and day'}), 400
             
         meal_id = data['mealId']
         day = data['day']
         
         # Find and delete the meal plan entry
-        meal_plan = MealInPlan.query.filter_by(
-            userID=current_user.userID,
-            recipeID=meal_id,
-            dayOfWeek=day
-        ).first()
+        meal_plan = MealInPlan.query.filter_by(userID=current_user.userID,recipeID=meal_id,dayOfWeek=day).first()
         
         if not meal_plan:
-            return jsonify({
-                'error': 'Meal plan not found'
-            }), 404
+            return jsonify({'error': 'Meal plan not found'}), 404
             
         # Delete the meal plan entry
         db.session.delete(meal_plan)
         db.session.commit()
         
-        return jsonify({
-            'message': 'Meal removed successfully'
-        }), 200
+        return jsonify({'message': 'Meal removed successfully'}), 200
         
     except Exception as e:
         print(f"Error removing meal: {str(e)}")
         db.session.rollback()
-        return jsonify({
-            'error': 'Failed to remove meal'
-        }), 500
-
-# Example route for viewing static data
-#@app.route('/data')
-#def get_static_data():
- #   array = {
-  #      'Name': "Lily",
-   #     "Age": "22",
-    #    "programming": "python"
-    #}
-    # return jsonify(array=array)
+        return jsonify({'error': 'Failed to remove meal'}), 500
+    
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
