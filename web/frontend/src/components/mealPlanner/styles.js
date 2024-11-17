@@ -53,7 +53,7 @@ export const styles = {
   },
   verticalContainer: {
     display: 'block',
-    '@media screen and (min-width: 1024px)': {
+    '@media screen and (minWidth: 1024px)': {
       display: 'none',
     }
   }
@@ -63,7 +63,7 @@ export const calendarStyles = {
   calendarContainer: {
     display: 'block',
     width: '100%',
-    '@media screen and (max-width: 1023px)': {
+    '@media screen and (maxWidth: 1023px)': {
       display: 'none',
     },
   },

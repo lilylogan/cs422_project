@@ -12,7 +12,7 @@ import ast
 
 from flask_login import LoginManager, login_required, logout_user, current_user
 from auth import check_login, create_account, check_signup
-
+from mealPlanner import get_user_planned_meals
 
 
 app = Flask(__name__)
@@ -396,12 +396,98 @@ def getNewRecipe():
     return jsonify({"status": "success", "message": "Data received"}), 200
 
     
-
+@app.route('/getPlannedMeals', methods=['GET'])
+@login_required
+def get_planned_meals():
+    """Get all planned meals for the current user"""
+    meals_by_day, status_code = get_user_planned_meals(current_user.userID)
+    return jsonify(meals_by_day), status_code
 
 @app.route('/images/<filename>')
 def serve_image(filename):
     return send_from_directory('./images', filename)
+
+@app.route('/api/update-meal-day', methods=['PUT'])
+@login_required
+def update_meal_day():
+    """Update the day of a meal in the meal plan"""
+    try:
+        data = request.get_json()
+        meal_id = data.get('mealId')
+        new_day = data.get('newDay')
+        user_id = current_user.userID
+
+        if not all([meal_id, new_day]):
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        # Find the existing meal plan entry
+        meal_plan = MealInPlan.query.filter_by(
+            userID=user_id,
+            recipeID=meal_id
+        ).first()
+
+        if not meal_plan:
+            return jsonify({'error': 'Meal plan not found'}), 404
+
+        # Update the day
+        meal_plan.dayOfWeek = new_day
+        db.session.commit()
+
+        return jsonify({'message': 'Meal day updated successfully'}), 200
+
+    except Exception as e:
+        print(f"Error updating meal day: {str(e)}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to update meal day'}), 500
+
+@app.route('/api/remove-meal', methods=['DELETE'])
+@login_required
+def remove_meal():
+    """Remove a meal from a user's meal plan.
     
+    Expected request body:
+    {
+        "mealId": int,
+        "day": string
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data or 'mealId' not in data or 'day' not in data:
+            return jsonify({
+                'error': 'Missing required fields: mealId and day'
+            }), 400
+            
+        meal_id = data['mealId']
+        day = data['day']
+        
+        # Find and delete the meal plan entry
+        meal_plan = MealInPlan.query.filter_by(
+            userID=current_user.userID,
+            recipeID=meal_id,
+            dayOfWeek=day
+        ).first()
+        
+        if not meal_plan:
+            return jsonify({
+                'error': 'Meal plan not found'
+            }), 404
+            
+        # Delete the meal plan entry
+        db.session.delete(meal_plan)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Meal removed successfully'
+        }), 200
+        
+    except Exception as e:
+        print(f"Error removing meal: {str(e)}")
+        db.session.rollback()
+        return jsonify({
+            'error': 'Failed to remove meal'
+        }), 500
 
 # Example route for viewing static data
 #@app.route('/data')

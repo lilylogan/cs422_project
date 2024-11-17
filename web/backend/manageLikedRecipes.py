@@ -93,7 +93,7 @@ class likedRecipes:
             current_day = last_meal.dayOfWeek
             next_day = self.get_next_day(current_day)
             # Pop the last meal plan entry from the database
-            db.session.delete(last_meal)
+            # db.session.delete(last_meal)
             print(f"Popped last meal plan entry for User ID {user_id}: {current_day} - Recipe ID {last_meal.recipeID}")
         else:
             # Default to Monday if no previous entries are found
