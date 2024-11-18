@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { handleLogout, handleDeleteAccount } from '../containers/authUtils.js'; // Adjust the path as needed
 import profileImage from '../assets/wally_wale.jpg'; // Import the local image
+import { useAuth } from '../context/AuthContext';
 
-
-// 
-// 
 const styles = {
   container: {
     maxWidth: '1024px',
@@ -73,6 +71,7 @@ const styles = {
 function Settings() {
   const [isLogoutHovered, setLogoutHovered] = useState(false);
   const [isDeleteHovered, setDeleteHovered] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <div style={styles.container}>
@@ -86,11 +85,11 @@ function Settings() {
         <div style={styles.infoContainer}>
           <div>
             <label style={styles.label}>Name</label>
-            <p style={styles.info}>Wally Wale</p>
+            <p style={styles.info}>{user?.name || 'No name provided'}</p>
           </div>
           <div>
             <label style={styles.label}>Email</label>
-            <p style={styles.info}>wallywale123@gmail.com</p>
+            <p style={styles.info}>{user?.email || 'Email not available'}</p>
           </div>
           {/*
           <div>
@@ -103,15 +102,16 @@ function Settings() {
               style={{ ...styles.button, ...(isLogoutHovered ? styles.buttonHover : {}) }}
               onMouseEnter={() => setLogoutHovered(true)}
               onMouseLeave={() => setLogoutHovered(false)}
-              onClick={handleLogout}
+              onClick={() => handleLogout(logout)}
             >
               Logout
             </button>
+
             <button
               style={{ ...styles.button, ...styles.deleteButton, ...(isDeleteHovered ? styles.buttonHover : {}) }}
               onMouseEnter={() => setDeleteHovered(true)}
               onMouseLeave={() => setDeleteHovered(false)}
-              onClick={handleDeleteAccount}
+              onClick={() => handleDeleteAccount(user?.userID)}
             >
               Delete Account
             </button>

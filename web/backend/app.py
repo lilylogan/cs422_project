@@ -444,5 +444,43 @@ def remove_meal():
         return jsonify({'error': 'Failed to remove meal'}), 500
     
 
+@app.route('/api/delete-account', methods=['DELETE'])
+@login_required
+def delete_account():
+    """Delete user account and all associated data"""
+    try:
+        user_id = current_user.userID
+
+        # Delete all meal plans associated with the user
+        MealInPlan.query.filter_by(userID=user_id).delete()
+
+        # Delete all shopping lists associated with the user
+        shopping_lists = ShoppingList.query.filter_by(userID=user_id).all()
+        for shopping_list in shopping_lists:
+            # Delete shopping list contents first
+            ShoppingListContents.query.filter_by(listID=shopping_list.listID).delete()
+            
+        ShoppingList.query.filter_by(userID=user_id).delete()
+
+        # Delete all disliked recipes
+        Disliked.query.filter_by(userID=user_id).delete()
+
+        # Finally, delete the user
+        User.query.filter_by(userID=user_id).delete()
+
+        # Commit all deletions
+        db.session.commit()
+
+        # Log the user out
+        logout_user()
+
+        return jsonify({'message': 'Account successfully deleted'}), 200
+
+    except Exception as e:
+        print(f"Error deleting account: {str(e)}")
+        db.session.rollback()
+        return jsonify({'error': 'Failed to delete account'}), 500
+    
+    
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
