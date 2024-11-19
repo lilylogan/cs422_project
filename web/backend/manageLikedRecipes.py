@@ -38,7 +38,29 @@ class likedRecipes:
             db.session.rollback()
             print(f"Failed to add liked recipe: {e}")
             return False
-
+    def removeFromLiked(self, user_id, recipe_id):
+        # Adds a recipe to the user's liked recipes
+        # in the user database
+        try:
+            # Fetch the user and recipe
+            user = self.user_db.query.filter_by(userID=user_id).first()
+            recipe = self.recipe_db.query.filter_by(recipeID=recipe_id).first()
+            
+            if not user or not recipe:
+                return False  # User or recipe does not exist
+            
+            # Check if the recipe is in the user's liked recipes
+            if recipe in user.liked_recipes:
+                # Remove the recipe from the relationship
+                user.liked_recipes.remove(recipe)
+                db.session.commit()
+                return True
+            
+            return False  # Recipe was not in liked recipes
+        except Exception as e:
+            print(f"Error removing liked recipe: {e}")
+            db.session.rollback()
+            return False
     def addToDisliked(self, user_id, recipe_id):
         # Adds a recipe to the user's liked recipes
         # in the user database
