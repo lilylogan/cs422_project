@@ -72,7 +72,9 @@ class likedRecipes:
     def get_next_day(self, current_day):
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         current_index = days.index(current_day)
-        next_index = (current_index + 1) % len(days)
+        next_index = (current_index + 1)
+        if next_index == len(days):
+            next_index = 0
         return days[next_index]
         
     def addToMealPlanner(self, user_id, recipe_id):

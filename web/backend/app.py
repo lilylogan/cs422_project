@@ -263,6 +263,7 @@ def login():
 def signup():
     """Route to handle user sign-up"""
     data = request.get_json()
+    print(data)
     valid_signup = check_signup(data, User)
     if valid_signup == 0:
         return jsonify({ 'error': 'Email and password are required'}), 400
@@ -318,6 +319,25 @@ def add_user_profile():
     exRecipe = new_Recipe.genRecipe()
     
     return jsonify(exRecipe)
+
+@app.route('/getRandLikedRecipe', methods=['POST'])
+def add_liked_recipe():
+    """Route to add a new user profile"""
+    #data = request.get_json()
+    data = request.get_json()
+    if not data or 'recipe_id' not in data or 'user_action' not in data:
+        print(data)
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+
+    print("Received data:", data)
+    new_Recipe = recipeDeck(Recipe)
+
+    # Just generating the first recipe
+    exRecipe = new_Recipe.genLikedRecipe(User, int(data["user_id"]) )
+    
+    return jsonify(exRecipe)
+
+
 
 @app.route('/api/protected-route', methods=['GET'])
 @login_required

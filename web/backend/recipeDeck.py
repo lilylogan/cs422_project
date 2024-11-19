@@ -97,9 +97,22 @@ class recipeDeck:
         recipe = {"recipeID": ranRecipe.recipeID, "recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
         return recipe
 
-    def genLikedRecipe(self):
+    def genLikedRecipe(self, userDB, user_id):
         """This method will randomly select a recipe that
         is in the user's liked recipes but not one they have already
         seen in their current session."""
-        pass
+        user = userDB.query.filter_by(userID=user_id).first()
+        if not user:
+            return None # change to error
+        liked_recipe_ids = [recipe.recipeID for recipe in user.liked_recipes]
+        liked_len = len(liked_recipe_ids)
+        ranLikedRecipe = None
+        while (ranLikedRecipe == None):
+            num = random.randint(0, )
+            ranRecipeID = liked_recipe_ids[num]
+            ranRecipe= self.RecipeModel.query.get(ranRecipeID)
+        recipe = {"recipeID": ranRecipe.recipeID, "recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
+        return recipe
+            
+        
         
