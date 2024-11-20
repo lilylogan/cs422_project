@@ -112,7 +112,7 @@ const CalendarView = ({ meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
                 {/* Meal card footer with time badge and remove button */}
                 <div style={calendarStyles.mealFooter}>
                   <span style={{ ...styles.badge, backgroundColor: THEME.secondary }}>
-                    {meal.cook_time}
+                    {meal.total_time}
                   </span>
                   <button
                     onClick={(e) => {

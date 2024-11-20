@@ -33,6 +33,7 @@ def get_user_planned_meals(user_id):
                 'name': recipe.name,
                 'cook_time': recipe.cookTime,
                 'prep_time': recipe.prepTime,
+                'total_time': recipe.totalTime,
                 'cuisine': recipe.cuisine,
                 'servings': recipe.servings,
                 'instructions': recipe.instructions,
