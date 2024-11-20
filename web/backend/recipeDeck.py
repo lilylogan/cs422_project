@@ -104,8 +104,8 @@ class recipeDeck:
                 num = random.randint(0, self.length)
                 ranRecipeID = recipe_ids[num] 
                 # Check if the recipe is in liked or disliked recipes
-                in_likes = any(recipe.ranRecipeID == ranRecipeID for recipe in user.liked_recipes)
-                in_dislikes = any(recipe.ranRecipeID == ranRecipeID for recipe in user.disliked_recipes)
+                in_likes = any(recipe.recipeID == ranRecipeID for recipe in user.liked_recipes)
+                in_dislikes = any(recipe.recipeID == ranRecipeID for recipe in user.disliked_recipes)
                 #in_mealPlan = any(recipe.ranRecipeID == ranRecipeID for recipe in user.meal_plans)
                 if not in_likes and not in_dislikes:
                     ranRecipe= self.RecipeModel.query.get(ranRecipeID)
