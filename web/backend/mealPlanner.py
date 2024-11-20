@@ -1,6 +1,5 @@
 from flask import jsonify
 from models import MealInPlan
-
 def get_user_planned_meals(user_id):
     """
     Get all planned meals for a specific user.
@@ -37,6 +36,7 @@ def get_user_planned_meals(user_id):
                 'cuisine': recipe.cuisine,
                 'servings': recipe.servings,
                 'instructions': recipe.instructions,
+                'ingredients' : recipe.get_ingredient_list(),
                 'image_path': recipe.image_path
             }
             meals_by_day[meal.dayOfWeek].append(meal_data)

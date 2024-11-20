@@ -237,7 +237,9 @@ def check_auth():
             'isAuthenticated': True,
             'user': {
                 'email': current_user.email,
-                'userID': current_user.userID
+                'userID': current_user.userID, 
+                'fname' : current_user.fname,
+                'lname' : current_user.lname,
             }
         })
     return jsonify({'isAuthenticated': False}), 401
@@ -251,7 +253,7 @@ def login():
         
         if success:
             return jsonify({ 'message': 'Login successful', 'user': 
-                            {'email': result.email,'userID': result.userID}}), 200
+                            {'email': result.email,'userID': result.userID, 'fname': result.fname, 'lname':result.lname}}), 200
         else:
             return jsonify({'error': result}), 401
             
@@ -504,6 +506,22 @@ def delete_account():
         db.session.rollback()
         return jsonify({'error': 'Failed to delete account'}), 500
     
+@app.route('/api/update-profile', methods=['POST'])
+@login_required
+def update_profile():
+    data = request.json
+    user_id = data.get('userId')
+    first_name = data.get('fname')
+    last_name = data.get('lname')
+
+    user = User.query.get(user_id)
+    if user:
+        user.fname = first_name
+        user.lname = last_name
+        db.session.commit()
+        return jsonify({"message": "Profile updated successfully"}), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
     
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
