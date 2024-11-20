@@ -8,7 +8,7 @@ from sqlalchemy.exc import OperationalError
 import pandas as pd
 from recipeDeck import recipeDeck
 from manageLikedRecipes import likedRecipes
-from manageShoppingList import manageShoppingList
+#from manageShoppingList import manageShoppingList
 import ast
 
 from flask_login import LoginManager, login_required, logout_user, current_user
