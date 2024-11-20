@@ -368,6 +368,12 @@ def getNewRecipe():
     if (data["user_action"] == "dislike"):
         recipe_manage.addToDisliked(user_id, int(data["recipe_id"]))
 
+    if (data["heart"] == "add"):
+        recipe_manage.addToLiked(user_id, int(data["recipe_id"]))
+
+    if (data["unheart"] == "add"):
+        recipe_manage.removeFromLiked(user_id, int(data["recipe_id"]))
+
     return jsonify({"status": "success", "message": "Data received"}), 200
 
     
