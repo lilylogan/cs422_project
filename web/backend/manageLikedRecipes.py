@@ -5,11 +5,16 @@ class likedRecipes:
     ''' This module will take in a recipe id and add it to the user's liked recipes
     or disliked recipes depending on which way they swipe.
     '''
-    def __init__(self, userDB, recipeDB, mealPlanDB):
+    def __init__(self, userDB, recipeDB, mealPlanDB, recipeContentsDB, recipeIngredientsDB, shoppingListDB, shoppingListContentsDB, shoppingListIngredientDB):
         # Initializing the userDB
         self.user_db = userDB
         self.recipe_db = recipeDB
         self.plan_db = mealPlanDB
+        self.recipeContentsDB = recipeContentsDB
+        self.recipeIngredientsDB = recipeIngredientsDB
+        self.shoppingListDB = shoppingListDB
+        self.shoppingListContentsDB = shoppingListContentsDB
+        self.shoppingListIngredientsDB = shoppingListIngredientDB
     def addToLiked(self, user_id, recipe_id):
         # Adds a recipe to the user's liked recipes
         # in the user database
@@ -126,6 +131,55 @@ class likedRecipes:
         # Create a new meal plan entry with the next day
         new_meal = self.plan_db(userID=user_id, recipeID=recipe_id, dayOfWeek=next_day)
         db.session.add(new_meal)
+
+        # Retrieve ingredients from the recipe
+        recipe_ingredients = (
+            self.recipeContentsDB.query
+            .filter_by(recipeID=recipe_id)
+            .all()
+        )
+
+        # Retrieve or create the user's shopping list
+        shopping_list = self.shoppingListDB.query.filter_by(userID=user_id).first()
+
+        # Add ingredients to the shopping list
+        for ingredient in recipe_ingredients:
+            ingredient_id = ingredient.ingredientID
+            quantity = ingredient.quantity
+            unit = ingredient.unit
+
+            # Check if the ingredient already exists in the user's shopping list ingredients
+            ingredients_recipe_entry = (self.recipeIngredientsDB.query.filter_by(ingredientID=ingredient_id).first())
+
+            # Create a new entry in ShoppingListIngredients
+            new_ingredient_entry = self.shoppingListIngredientsDB(
+                ingredientID=ingredient_id,
+                name=ingredients_recipe_entry.name
+            )
+
+            try:
+                db.session.add(new_ingredient_entry)
+                db.session.commit()
+                print("recipe ingredient added to shopping list")
+            except Exception as e:
+                db.session.rollback()  # Roll back in case of failure
+                print(f"Error during database commit: {e}")
+
+                # Create a new entry in ShoppingListContents
+            new_entry = self.shoppingListContentsDB(
+                listID=shopping_list.listID,
+                ingredientID=ingredient_id,
+                quantity=quantity,
+                unit=unit
+            )
+            try:
+                db.session.add(new_entry)
+                db.session.commit()
+                print("ingredient added to shopping list contents")
+            except Exception as e:
+                db.session.rollback()  # Roll back in case of failure
+                print(f"Error during database commit: {e}")
+            
         
         # Commit the changes to the database
         try:

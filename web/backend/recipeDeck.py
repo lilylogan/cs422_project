@@ -75,6 +75,7 @@ class recipeDeck:
         self.first_prepTime = first_recipe.prepTime if first_recipe else None
         self.first_servings = first_recipe.servings if first_recipe else None
         self.first_cookTime = first_recipe.cookTime if first_recipe else None
+        self.first_totalTime = first_recipe.totalTime if first_recipe else None
         self.first_cuisine = first_recipe.cuisine if first_recipe else None
         self.first_image_path = first_recipe.image_path if first_recipe else None
         self.first_ingredients_dict = first_recipe.ingredients if first_recipe else None

@@ -36,7 +36,7 @@ class ShoppingListIngredient(db.Model):
     __tablename__ = 'shopping_list_ingredients'
     
     ingredientID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(100), nullable=False, unique=False)
     
     # Relationships
     shopping_lists = db.relationship("ShoppingListContents", back_populates="ingredient")
@@ -63,6 +63,7 @@ class Recipe(db.Model):
     URL = db.Column(db.String(255))
     cuisine = db.Column(db.Text)
     image_path = db.Column(db.Text)
+    totalTime = db.Column(db.Text)
     
     # Relationships
     ingredients = db.relationship("RecipeContents", back_populates="recipe")

@@ -8,6 +8,7 @@ from sqlalchemy.exc import OperationalError
 import pandas as pd
 from recipeDeck import recipeDeck
 from manageLikedRecipes import likedRecipes
+from manageShoppingList import manageShoppingList
 import ast
 
 from flask_login import LoginManager, login_required, logout_user, current_user
@@ -146,7 +147,6 @@ def load_data_from_csv():
         ingredient_counter = 1
         for _, row in df.iterrows():
             ingredients_dict = ast.literal_eval(row['cleaned_ingredients'])
-            # print(f"ingredient list {ingredients_dict}")
             recipe = Recipe(
                 recipeID=row["recipe_id"],
                 name=row['recipe_name'],
@@ -158,6 +158,7 @@ def load_data_from_csv():
                 URL=row['url'],
                 cuisine=row['cuisine'],
                 image_path=row['image_path'],
+                totalTime = row['total_time'],
             )
             db.session.add(recipe) 
             db.session.commit()
@@ -237,9 +238,7 @@ def check_auth():
             'isAuthenticated': True,
             'user': {
                 'email': current_user.email,
-                'userID': current_user.userID, 
-                'fname' : current_user.fname,
-                'lname' : current_user.lname,
+                'userID': current_user.userID
             }
         })
     return jsonify({'isAuthenticated': False}), 401
@@ -253,7 +252,7 @@ def login():
         
         if success:
             return jsonify({ 'message': 'Login successful', 'user': 
-                            {'email': result.email,'userID': result.userID, 'fname': result.fname, 'lname':result.lname}}), 200
+                            {'email': result.email,'userID': result.userID}}), 200
         else:
             return jsonify({'error': result}), 401
             
@@ -265,7 +264,6 @@ def login():
 def signup():
     """Route to handle user sign-up"""
     data = request.get_json()
-    print(data)
     valid_signup = check_signup(data, User)
     if valid_signup == 0:
         return jsonify({ 'error': 'Email and password are required'}), 400
@@ -311,39 +309,34 @@ def hello(path):
         abort(404) # Not found error
 
 
-@app.route('/getRandRecipe', methods=['POST'])
+@app.route('/getRandRecipe', methods=['GET'])
 def add_user_profile():
     """Route to add a new user profile"""
-    data = request.get_json()
-    if not data or 'user_id' not in data:
-        print(data)
-        return jsonify({"status": "failure", "message": "Invalid data"}), 400
-    new_Recipe = recipeDeck(Recipe, User)
-
-    # Just generating the first recipe
-    exRecipe = new_Recipe.genRecipe(int(data["user_id"]))
-    
-    return jsonify(exRecipe)
-
-@app.route('/getRandLikedRecipe', methods=['POST'])
-def add_liked_recipe():
-    """Route to add a new user profile"""
     #data = request.get_json()
-    data = request.get_json()
-    if not data or 'recipe_id' not in data or 'user_action' not in data:
-        print(data)
-        return jsonify({"status": "failure", "message": "Invalid data"}), 400
-
-    print("Received data:", data)
-    new_Recipe = recipeDeck(Recipe, User)
+    new_Recipe = recipeDeck(Recipe)
 
     # Just generating the first recipe
-    exRecipe = new_Recipe.genLikedRecipe(User, int(data["user_id"]) )
+    exRecipe = new_Recipe.genRecipe()
     
     return jsonify(exRecipe)
 
+# @app.route('/getShoppingList', methods=['POST'])
+# def get_shopping_list():
+#     """get the shoppinglist"""
+#     # print("get shopping list")
+#     shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
 
+#     data = request.get_json()
+#     if not data or 'user_id' not in data:
+#         print(data)
+#         return jsonify({"status": "failure", "message": "Invalid data"}), 400
+    
 
+#     user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
+
+#     return jsonify(shopping_list_manager.getShoppingList(user_id))
+
+    
 @app.route('/api/protected-route', methods=['GET'])
 @login_required
 def protected_route():
@@ -383,7 +376,7 @@ def getNewRecipe():
 
     user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
 
-    recipe_manage = likedRecipes(User, Recipe, MealInPlan)
+    recipe_manage = likedRecipes(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
     # If user swipes to add to weekly meal planner
     if (data["user_action"] == "add"):
         recipe_manage.addToMealPlanner(user_id, int(data["recipe_id"]))
@@ -506,22 +499,6 @@ def delete_account():
         db.session.rollback()
         return jsonify({'error': 'Failed to delete account'}), 500
     
-@app.route('/api/update-profile', methods=['POST'])
-@login_required
-def update_profile():
-    data = request.json
-    user_id = data.get('userId')
-    first_name = data.get('fname')
-    last_name = data.get('lname')
-
-    user = User.query.get(user_id)
-    if user:
-        user.fname = first_name
-        user.lname = last_name
-        db.session.commit()
-        return jsonify({"message": "Profile updated successfully"}), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
     
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
