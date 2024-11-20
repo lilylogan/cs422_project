@@ -24,7 +24,7 @@ function LearnMoreContainer({ cname, data }) {
                 </div>
                 <div class="timeContainer">
                     <h5 class="alertTime">Cook Time: ${data.cook_time}</h5>
-                    <h5 class="alertTime">Total Time: 50 mins</h5>
+                    <h5 class="alertTime">Total Time: ${data.total_time}</h5>
                     <h5 class="alertTime">Prep Time: ${data.prep_time}</h5>
                 </div>
                 <div class="detailsContainer">
