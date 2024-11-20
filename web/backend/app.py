@@ -309,14 +309,17 @@ def hello(path):
         abort(404) # Not found error
 
 
-@app.route('/getRandRecipe', methods=['GET'])
+@app.route('/getRandRecipe', methods=['POST'])
 def add_user_profile():
     """Route to add a new user profile"""
-    #data = request.get_json()
-    new_Recipe = recipeDeck(Recipe)
+    data = request.get_json()
+    if not data or 'user_id' not in data:
+        print(data)
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+    new_Recipe = recipeDeck(Recipe, User)
 
     # Just generating the first recipe
-    exRecipe = new_Recipe.genRecipe()
+    exRecipe = new_Recipe.genRecipe(int(data["user_id"]))
     
     return jsonify(exRecipe)
 
@@ -330,7 +333,7 @@ def add_liked_recipe():
         return jsonify({"status": "failure", "message": "Invalid data"}), 400
 
     print("Received data:", data)
-    new_Recipe = recipeDeck(Recipe)
+    new_Recipe = recipeDeck(Recipe, User)
 
     # Just generating the first recipe
     exRecipe = new_Recipe.genLikedRecipe(User, int(data["user_id"]) )

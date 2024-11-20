@@ -6,18 +6,28 @@ import {useAuth} from '../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-// fetch function
-const fetchData = async () => {
+const fetchData = async (userID) => {
     try {
-        const response = await fetch(`${BACKEND_URL}/getRandRecipe`)
+        const response = await fetch(`${BACKEND_URL}/getRandRecipe`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id: userID }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+
         const data = await response.json();
         console.log(data);
         return data;
-    }
-    catch(error) {
+    } catch (error) {
         console.error("Error fetching data from the backend:", error);
     }
-}
+};
+
 
 function RecipeCardContainer({ toggle }) {
 
@@ -32,16 +42,20 @@ function RecipeCardContainer({ toggle }) {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        if (generate == true) {
+        if (generate === true) {
             setGenerate(false);
             console.log("fetching data!");
             const getData = async () => {
-                const fetchedData = await fetchData();
-                setData(fetchedData);
+                if (user?.userID) {
+                    const fetchedData = await fetchData(user.userID); // Pass userID here
+                    setData(fetchedData);
+                } else {
+                    console.error("User ID is not available");
+                }
             };
             getData();
         }
-    }, [generate]);
+    }, [generate, user]);
 
 
     const onSwipe = (direction) => {

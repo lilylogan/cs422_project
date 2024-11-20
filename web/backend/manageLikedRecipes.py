@@ -89,7 +89,7 @@ class likedRecipes:
             db.session.rollback()
             print(f"Failed to add liked recipe: {e}")
             return False
-            return
+    
         
     def get_next_day(self, current_day):
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']

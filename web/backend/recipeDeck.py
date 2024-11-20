@@ -62,12 +62,13 @@ class recipeDeck:
     ''' This module will take in a user's liked recipe table, their disliked recipes, 
         an array of recipe id's they have already seen, and the recipe database.
     '''
-    def __init__(self, RecipeModel):
+    def __init__(self, RecipeModel, UserModel):
         # User disliked recipes
         # Recipe id's they have seen this session (will be empty array originally)
         # Recipe database
         #with current_app.app_context():
         self.RecipeModel = RecipeModel
+        self.UserModel = UserModel
         first_recipe = RecipeModel.query.first()
         self.length = len(recipe_ids)
         self.first_recipe_name = first_recipe.name if first_recipe else None
@@ -83,25 +84,42 @@ class recipeDeck:
         print(f"The name of the first recipe is: {self.first_recipe_name}")
 
 
-    def genRecipe(self):
+    def genRecipe(self, user_id):
         """This method will randomly select a recipe that
         is not in the user's liked recipes, disliked recipes,
         or the user's seen recipes in the current session and
         return the recipe database entry."""
+
+        
+        # Fetch the user
+        user = self.UserModel.query.filter_by(userID=user_id).first()
+        if not user:
+            return None  # User does not exist
+            
+          
         ranRecipe = None
         while (ranRecipe == None):
-            num = random.randint(0, self.length)
-            ranRecipeID = recipe_ids[num] 
-            ranRecipe= self.RecipeModel.query.get(ranRecipeID)
+            try:
+                num = random.randint(0, self.length)
+                ranRecipeID = recipe_ids[num] 
+                # Check if the recipe is in liked or disliked recipes
+                in_likes = any(recipe.ranRecipeID == ranRecipeID for recipe in user.liked_recipes)
+                in_dislikes = any(recipe.ranRecipeID == ranRecipeID for recipe in user.disliked_recipes)
+                #in_mealPlan = any(recipe.ranRecipeID == ranRecipeID for recipe in user.meal_plans)
+                if not in_likes and not in_dislikes:
+                    ranRecipe= self.RecipeModel.query.get(ranRecipeID)
+            except Exception as e:
+                print(f"Error checking recipe in likes or dislikes: {e}")
+                return None
         print(ranRecipe.ingredients)
         recipe = {"recipeID": ranRecipe.recipeID, "recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
         return recipe
 
-    def genLikedRecipe(self, userDB, user_id):
+    def genLikedRecipe(self, user_id):
         """This method will randomly select a recipe that
         is in the user's liked recipes but not one they have already
         seen in their current session."""
-        user = userDB.query.filter_by(userID=user_id).first()
+        user = self.UserModel.query.filter_by(userID=user_id).first()
         if not user:
             return None # change to error
         liked_recipe_ids = [recipe.recipeID for recipe in user.liked_recipes]
