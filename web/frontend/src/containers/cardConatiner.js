@@ -6,56 +6,17 @@ import {useAuth} from '../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const fetchData = async (userID) => {
-    try {
-        const response = await fetch(`${BACKEND_URL}/getRandRecipe`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ user_id: userID }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log(data);
-        return data;
-    } catch (error) {
-        console.error("Error fetching data from the backend:", error);
-    }
-};
-
-
-function RecipeCardContainer({ toggle }) {
+function RecipeCardContainer({ toggle, homeData }) {
 
     const {user} = useAuth();
     const [index, setIndex] = useState(1);
     const cardRef = useRef(null);
     const [swiping, setSwiping] = useState(false);
-    const [data, setData] = useState(null);
+    //const [data, setData] = useState(homeData);
     const [generate, setGenerate] = useState(true);
     const [swipe, setSwipe] = useState('');
     //const [action, setAction] = useState('');
     const [error, setError] = useState('');
-
-    useEffect(() => {
-        if (generate === true) {
-            setGenerate(false);
-            console.log("fetching data!");
-            const getData = async () => {
-                if (user?.userID) {
-                    const fetchedData = await fetchData(user.userID); // Pass userID here
-                    setData(fetchedData);
-                } else {
-                    console.error("User ID is not available");
-                }
-            };
-            getData();
-        }
-    }, [generate, user]);
 
 
     const onSwipe = (direction) => {
@@ -114,7 +75,7 @@ function RecipeCardContainer({ toggle }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ user_action: action, recipe_id: data.recipeID, user_id: user.userID }),
+                body: JSON.stringify({ user_action: action, recipe_id: homeData.recipeID, user_id: user.userID }),
             });
     
             // Check if response is okay before parsing JSON
@@ -137,9 +98,9 @@ function RecipeCardContainer({ toggle }) {
     return (
         <div>
             <div className="cardContainer">
-            {data ? (
+            {homeData ? (
             <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''} ${toggle ? 'toggled' : ''}`}>
-                <RecipeCard title={data.recipe_name} data = {data} cookTime={`Cook Time: ${data.cook_time}`} prepTime={`Prep Time: ${data.prep_time}`} servings={`servings: ${data.servings}`} cuisine={`Cuisine: ${data.cuisine}`} image_path={data.image_path} toggle={toggle} />
+                <RecipeCard title={homeData.recipe_name} data = {homeData} cookTime={`Cook Time: ${homeData.cook_time}`} prepTime={`Prep Time: ${homeData.prep_time}`} servings={`servings: ${homeData.servings}`} cuisine={`Cuisine: ${homeData.cuisine}`} image_path={homeData.image_path} toggle={toggle} />
             </TinderCard>
             ) : (<div>
                     loading...
