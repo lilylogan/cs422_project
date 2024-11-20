@@ -24,14 +24,14 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
             setSwiping(true)
             if (direction === 'left') {
                 setSwipe('left')
-                handleSubmit("dislike"); // Pass 'dislike' as the action to handleSubmit
+                handleSubmit("dislike") // Pass 'dislike' as the action to handleSubmit
             }
             else if (direction === 'right') {
                 setSwipe('right')
-                handleSubmit("add"); // Pass 'dislike' as the action to handleSubmit
+                handleSubmit("add") // Pass 'dislike' as the action to handleSubmit
                 console.log("adding to meal plan")
             }
-            else if (direction == 'down') {
+            else if (direction === 'down') {
                 handleSubmit("pass"); // Pass 'dislike' as the action to handleSubmit
                 setSwipe('down')
                 console.log("Passing on Card")
@@ -94,12 +94,13 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
     };
 
 
+    
     return (
         <div>
             <div className="cardContainer">
             {homeData ? (
             <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''} ${toggle ? 'toggled' : ''}`}>
-                <RecipeCard title={homeData.recipe_name} data = {homeData} cookTime={`Cook Time: ${homeData.cook_time}`} prepTime={`Prep Time: ${homeData.prep_time}`} servings={`servings: ${homeData.servings}`} cuisine={`Cuisine: ${homeData.cuisine}`} image_path={homeData.image_path} toggle={toggle} />
+                <RecipeCard user={user} title={homeData.recipe_name} data = {homeData} cookTime={`Cook Time: ${homeData.cook_time}`} prepTime={`Prep Time: ${homeData.prep_time}`} servings={`servings: ${homeData.servings}`} cuisine={`Cuisine: ${homeData.cuisine}`} image_path={homeData.image_path} toggle={toggle} />
             </TinderCard>
             ) : (<div>
                     loading...

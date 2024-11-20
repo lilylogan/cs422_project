@@ -636,11 +636,13 @@ border: 1px solid #3B2A1D;
 }
 
 .help {
-  font-size: 35px;
+  font-size: 200px;
   color:#3B2A1D;
   border-radius: 100%;
   border: None;
   width: 30px;
+  margin: 0;
+  padding: 0;
 }
 
 .help:hover {
@@ -663,5 +665,9 @@ border: 1px solid #3B2A1D;
 
 .helpTitle {
   font-size: 25px;
+}
+
+.ingredientsList {
+  columns: 2;
 }
 

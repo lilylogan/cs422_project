@@ -10,6 +10,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 function LearnMoreContainer({ cname, data }) {
 
     const fullImagePath = data.image_path ? `${BACKEND_URL}/${data.image_path}` : wallyWale;
+    const ingredientList = data.ingredients.map((item) => `<li>${item}</li>`).join('');
     
 
     const clickHandler = () => {
@@ -32,8 +33,8 @@ function LearnMoreContainer({ cname, data }) {
                     <h5 class="alertDetails">Cuisine: ${data.cuisine}</h5>
                 </div>
                 <h4>Ingredients</h4>
-                <ul>
-                    <li>${data.ingredients}</li>
+                <ul class="ingredientsList">
+                    ${ingredientList}
                 </ul>
                 <h4>Directions</h4>
                 <ol>

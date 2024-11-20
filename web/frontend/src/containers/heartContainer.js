@@ -1,14 +1,60 @@
 import React, { useState } from 'react'
 import Heart from '../components/heart'
 
-function HeartContainer({ cname }) {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-    const[liked, setLiked] = useState(false);
+
+function HeartContainer({ cname, data, user }) {
+    const [error, setError] = useState('');
+    
+
+
+    const handleLike = async (action) => {
+        try {
+            // send request
+            console.log("Sending request to backend");
+            const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({user_action: action, recipe_id: data.recipeID, user_id: user.userID}),
+            });
+
+            // check response
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.error || 'Action Failed')
+            }
+
+            // parse successful response
+            const responseData = await response.json()
+            console.log("Response data:", responseData)
+        } 
+        catch(err) {
+            setError(err.message)
+        }
+    };
+
+    const[liked, setLiked] = useState("unheart");
 
     const handleClick = () => {
-        setLiked(!liked);
+        setLiked((prevLiked) => {
+            let newLiked;
+            if (prevLiked === "unheart") {
+                newLiked = "heart"
 
-        // add to liked recipe list
+                // add to liked list
+                handleLike("heart")
+            }
+            else {
+                newLiked = "unheart"
+
+                // remove from liked list
+                handleLike("unheart")
+            }
+            return newLiked;
+        })
     }
 
     return (
