@@ -6,14 +6,13 @@ import {useAuth} from '../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-function RecipeCardContainer({ toggle, homeData }) {
+function RecipeCardContainer({ toggle, homeData, setGenerate }) {
 
     const {user} = useAuth();
     const [index, setIndex] = useState(1);
     const cardRef = useRef(null);
     const [swiping, setSwiping] = useState(false);
     //const [data, setData] = useState(homeData);
-    const [generate, setGenerate] = useState(true);
     const [swipe, setSwipe] = useState('');
     //const [action, setAction] = useState('');
     const [error, setError] = useState('');
@@ -88,7 +87,7 @@ function RecipeCardContainer({ toggle, homeData }) {
             const responseData = await response.json();
             console.log("Response data:", responseData);
 
-    
+
         } catch (err) {
             setError(err.message);
         }

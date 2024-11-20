@@ -10,6 +10,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 function LearnMoreContainer({ cname, data }) {
 
     const fullImagePath = data.image_path ? `${BACKEND_URL}/${data.image_path}` : wallyWale;
+    
 
     const clickHandler = () => {
         Swal.fire({

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import DeckSwapContainer from '../containers/deckSwapContainer';
 import RecipeCardContainer from '../containers/cardConatiner';
 import {useAuth} from '../context/AuthContext';
+import HelpButtonContainer from '../containers/helpContainer';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -52,8 +53,9 @@ function Home() {
 
     return (
         <div>
-            <DeckSwapContainer toggle={toggle} setToggle={setToggle} />
-            <RecipeCardContainer homeData = {homeData} toggle={toggle} stToggle={setToggle} />
+            <HelpButtonContainer />
+                <DeckSwapContainer toggle={toggle} setToggle={setToggle} />
+            <RecipeCardContainer homeData = {homeData} toggle={toggle} stToggle={setToggle} setGenerate={setGenerate} />
         </div>
     )
 }
