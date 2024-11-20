@@ -88,7 +88,7 @@ export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal 
             </div>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               <span style={{ ...styles.badge, backgroundColor: THEME.secondary }}>
-                {meal.cook_time}
+                {meal.total_time}
               </span>
               <span style={{ ...styles.badge, backgroundColor: THEME.primary }}>
                 Cuisine: {meal.cuisine}
