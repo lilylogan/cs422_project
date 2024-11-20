@@ -169,25 +169,6 @@ def load_data_from_csv():
 
                 quantity, unit, notes = extract_quantity_and_unit(quantity_unit)
 
-                # if first:
-                #     recipe_contents_record = RecipeContents(
-                #         recipeID=row["recipe_id"],
-                #         ingredientID=0,
-                #         quantity=quantity,
-                #         unit=unit,
-                #         notes=notes
-                #     )
-
-                #     ingredient_record = RecipeIngredient(
-                #         ingredientID=0,
-                #         name=ingredient
-                #     )
-
-
-                # else:
-                
-                # db.session.add(recipe_contents_record)
-
                 ingredient_record = RecipeIngredient(
                     ingredientID=ingredient_counter,
                     name=ingredient
@@ -202,9 +183,7 @@ def load_data_from_csv():
                     notes=notes
                 )
 
-                db.session.add(recipe_contents_record)
-                # print(f"name {ingredient_record.name}")
-                
+                db.session.add(recipe_contents_record)                
 
                 ingredient_counter += 1 
                 db.session.commit() 
@@ -309,21 +288,27 @@ def hello(path):
         abort(404) # Not found error
 
 
-@app.route('/getRandRecipe', methods=['GET'])
+@app.route('/getRandRecipe', methods=['POST'])
 def add_user_profile():
     """Route to add a new user profile"""
     #data = request.get_json()
-    new_Recipe = recipeDeck(Recipe)
+    # new_Recipe = recipeDeck(Recipe)
 
     # Just generating the first recipe
-    exRecipe = new_Recipe.genRecipe()
+    # exRecipe = new_Recipe.genRecipe()
+    data = request.get_json()
+    if not data or 'user_id' not in data:
+        print(data)
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+    new_Recipe = recipeDeck(Recipe, User)
+    exRecipe = new_Recipe.genRecipe(int(data["user_id"]))
     
     return jsonify(exRecipe)
 
 # @app.route('/getShoppingList', methods=['POST'])
 # def get_shopping_list():
 #     """get the shoppinglist"""
-#     # print("get shopping list")
+#     print("get shopping list")
 #     shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
 
 #     data = request.get_json()
@@ -331,7 +316,6 @@ def add_user_profile():
 #         print(data)
 #         return jsonify({"status": "failure", "message": "Invalid data"}), 400
     
-
 #     user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
 
 #     return jsonify(shopping_list_manager.getShoppingList(user_id))
