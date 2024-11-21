@@ -423,6 +423,40 @@ def update_meal_day():
         db.session.rollback()
         return jsonify({'error': 'Failed to update meal day'}), 500
 
+@app.route('/getLikedRecipes', methods=['POST'])
+def getLikedRecipes():
+    """Return recipe information of random recipe from Recipe database"""
+    data = request.get_json()
+    if not data or 'user_id' not in data:
+        print(data)
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+
+    user = User.query.get(data['user_id'])
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Extract the liked recipes
+    liked_recipes = [
+        {
+            "recipeID": recipe.recipeID,
+            "name": recipe.name,
+            "instructions": recipe.instructions,
+            "prepTime": recipe.prepTime,
+            "cookTime": recipe.cookTime,
+            "servings": recipe.servings,
+            "nutrition": recipe.nutrition,
+            "URL": recipe.URL,
+            "cuisine": recipe.cuisine,
+            "image_path": recipe.image_path,
+            "totalTime": recipe.totalTime,
+        }
+        for recipe in user.liked_recipes
+    ]
+
+    print(liked_recipes)
+
+    return jsonify(liked_recipes)
+
 @app.route('/api/remove-meal', methods=['DELETE'])
 @login_required
 def remove_meal():
