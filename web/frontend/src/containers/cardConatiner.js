@@ -99,7 +99,7 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
         <div>
             <div className="cardContainer">
             {homeData ? (
-            <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] : ['up']} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''} ${toggle ? 'toggled' : ''}`}>
+            <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] :(toggle ? ['up', 'down'] : ['up'])} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''} ${toggle ? 'toggled' : ''}`}>
                 <RecipeCard user={user} title={homeData.recipe_name} data = {homeData} cookTime={`Cook Time: ${homeData.cook_time}`} prepTime={`Prep Time: ${homeData.prep_time}`} servings={`servings: ${homeData.servings}`} cuisine={`Cuisine: ${homeData.cuisine}`} image_path={homeData.image_path} toggle={toggle} />
             </TinderCard>
             ) : (<div>

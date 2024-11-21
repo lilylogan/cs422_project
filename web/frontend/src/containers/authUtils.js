@@ -29,11 +29,14 @@ export const handleLogout = async (logoutFunction) => {
       await Swal.fire({
         title: "Logged Out Successfully",
         icon: "success",
-        color: '#203a58',
-        background: '#D1D6D9',
-        iconColor: '#6F8CA4',
+        color: '#3B2A1D',
+        background: '#FAF5F0',
+        iconColor: '#4A7B32',
+        timer: 1750,
+        timerProgressBar: true,
         customClass: {
           confirmButton: 'custom-confirm-button',
+          popup: 'logoutAlert'
         },
       });
 
@@ -47,7 +50,7 @@ export const handleLogout = async (logoutFunction) => {
       text: "Failed to logout. Please try again.",
       icon: "error",
       background: '#FAF5F0',
-      color: '#3B2A1D',
+      color: '#FAF5F0',
       iconColor: '#95340A',
     });
   }
@@ -93,9 +96,9 @@ export const handleDeleteAccount = async (userId) => {
         title: "Account Deleted",
         text: "Your account has been successfully deleted.",
         icon: "success",
-        color: '#203a58',
-        background: '#D1D6D9',
-        iconColor: '#6F8CA4',
+        color: '#3B2A1D',
+        background: '#FAF5F0',
+        iconColor: '#4A7B32',
         customClass: {
           confirmButton: 'custom-confirm-button',
         },

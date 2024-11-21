@@ -15,7 +15,7 @@ function HelpButtonContainer() {
                         <img class="alertPhoto" />
                     </div>
                 </div>
-                <div>
+                <div class="helpInstructions">
                     <ul>
                         <li>Swipe Right to Add the Recipe to your Meal Plan</li>
                         <li>Swipe Down to Add on the Recipe and get a new one</li>
@@ -33,7 +33,7 @@ function HelpButtonContainer() {
                     </div>
                 </div>
                 <div>
-                    <ul>
+                    <ul class="helpInstructions">
                         <li>Swipe Right to Add the Recipe to your Meal Plan</li>
                         <li>Swipe Left to to Add on the Recipe and get a new one</li>
                         <li>Click the Heart to Remove the Recipe from your Liked Recipe List</li>

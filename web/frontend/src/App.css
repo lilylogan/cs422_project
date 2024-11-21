@@ -325,7 +325,7 @@ border: 1px solid #3B2A1D;
   cursor: pointer;
   font-size: 60px;
   background-color: none;
-  color: #C65E42;
+  color: #851D2D;
   transition: transform 0.2s ease-in-out;
   margin-left: 15px;
 }
@@ -336,7 +336,7 @@ border: 1px solid #3B2A1D;
 }
 
 .listName {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .time {
@@ -344,7 +344,7 @@ border: 1px solid #3B2A1D;
   /*background-image: linear-gradient(to right, #9BA777, #55732B);*/
   background-color:#989872;
   border-radius: 35px;
-  font-size: 25px;
+  font-size: 20px;
   padding: 5px 20px;
 }
 
@@ -352,7 +352,7 @@ border: 1px solid #3B2A1D;
   color: #FFFBF3;
   background-color: #95340A;
   border-radius: 35px;
-  font-size: 25px;
+  font-size: 20px;
   padding: 5px 20px;
 }
 
@@ -387,7 +387,7 @@ border: 1px solid #3B2A1D;
   border: none !important;
   /* border: 1px solid #3B2A1D; */
   transition: transform 0.2s ease-in-out;
-  margin-right: 10px;
+  /*margin-right: 10px; */
 }
 
 .add:hover {
@@ -427,7 +427,7 @@ border: 1px solid #3B2A1D;
 
 .dislike{
   color: #FFFBF3;
-  background-color: #a97861;
+  background-color: #B75E4A;
   /* background-image: linear-gradient(to right, #C63D19, #96240C); */
   border-radius: 35px;
   font-size: 30px;
@@ -446,7 +446,7 @@ border: 1px solid #3B2A1D;
 
 .pass {
   color: #FFFBF3;
-  background-color: #487381;
+  background-color: #B75E4A;
   /* background-image: linear-gradient(to right, #FFDF6A, #F5B342); */
   border-radius: 35px;
   font-size: 30px;
@@ -465,7 +465,7 @@ border: 1px solid #3B2A1D;
 
 .addHome {
   color: #FFFBF3;
-  background-color: #60956b;
+  background-color: #B75E4A;
   /* background-image: linear-gradient(to right, #55732B, #9BA777); */
   border-radius: 35px;
   font-size: 30px;
@@ -630,6 +630,9 @@ border: 1px solid #3B2A1D;
   background-color: #4A7B32;
 }
 
+.logoutAlert .swal2-timer-progress-bar {
+  background-color: #4A7B32;
+}
 .helpContainer {
   display: flex;
   justify-content: center;
@@ -671,3 +674,33 @@ border: 1px solid #3B2A1D;
   columns: 2;
 }
 
+.delete {
+  font-size: 200px;
+  color:#3B2A1D;
+  border-radius: 100%;
+  border: None;
+  width: 30px;
+  margin-right: 20px;
+  padding: 0;
+}
+
+.delete:hover {
+  cursor: pointer;
+  /*filter: brightness(1.3);*/
+  color: #95340A;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.deleteAlert {
+  width: 500px;
+  height: 250px;
+}
+
+.deleteAlert .swal2-timer-progress-bar {
+  background-color: #95340A;
+}
+
+.helpInstructions {
+  margin-top: 35px;
+}

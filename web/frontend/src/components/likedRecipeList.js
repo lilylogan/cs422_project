@@ -2,8 +2,10 @@ import React from 'react'
 import HeartContainer from '../containers/heartContainer'
 import LearnMoreContainer from '../containers/learnMoreContainer'
 import AddContainer from '../containers/addContainer'
+import DeleteButtonContainer from '../containers/deleteContainer'
 
 function RecipeList( { title, time, cuisine, data } ) {
+
 
     return (
         <div className="recipeListContainer">
@@ -15,8 +17,8 @@ function RecipeList( { title, time, cuisine, data } ) {
             (<div>
                 Loading. . .
             </div>)}
-
             <AddContainer className/>
+            <DeleteButtonContainer />
         </div>
     )
 }
