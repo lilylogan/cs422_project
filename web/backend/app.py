@@ -11,6 +11,7 @@ from manageLikedRecipes import likedRecipes
 #from manageShoppingList import manageShoppingList
 import ast
 
+
 from flask_login import LoginManager, login_required, logout_user, current_user
 from auth import check_login, create_account, check_signup
 from mealPlanner import get_user_planned_meals
@@ -374,7 +375,7 @@ def getNewRecipe():
         recipe_manage.addToLiked(user_id, int(data["recipe_id"]))
 
     if (data["user_action"] == "unheart"):
-        recipe_manage.addToLiked(user_id, int(data["recipe_id"]))
+        recipe_manage.removeFromLiked(user_id, int(data["recipe_id"]))
 
     return jsonify({"status": "success", "message": "Data received"}), 200
 
@@ -441,14 +442,15 @@ def getLikedRecipes():
             "recipeID": recipe.recipeID,
             "name": recipe.name,
             "instructions": recipe.instructions,
-            "prepTime": recipe.prepTime,
-            "cookTime": recipe.cookTime,
+            "prep_time": recipe.prepTime,
+            "cook_time": recipe.cookTime,
             "servings": recipe.servings,
             "nutrition": recipe.nutrition,
             "URL": recipe.URL,
             "cuisine": recipe.cuisine,
             "image_path": recipe.image_path,
-            "totalTime": recipe.totalTime,
+            "total_time": recipe.totalTime,
+            "ingredients": recipe.get_ingredient_list(),
         }
         for recipe in user.liked_recipes
     ]

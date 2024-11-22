@@ -4,7 +4,7 @@ import LearnMoreContainer from '../containers/learnMoreContainer'
 import AddContainer from '../containers/addContainer'
 import DeleteButtonContainer from '../containers/deleteContainer'
 
-function RecipeList( { title, time, cuisine, data } ) {
+function RecipeList( { title, time, cuisine, data, user, setGenerate } ) {
 
 
     return (
@@ -17,8 +17,8 @@ function RecipeList( { title, time, cuisine, data } ) {
             (<div>
                 Loading. . .
             </div>)}
-            <AddContainer className/>
-            <DeleteButtonContainer />
+            <AddContainer user={user} data={data} />
+            <DeleteButtonContainer data={data} user={user} setGenerate={setGenerate}/>
         </div>
     )
 }

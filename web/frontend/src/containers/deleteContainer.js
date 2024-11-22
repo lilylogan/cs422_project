@@ -1,8 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DeleteButton from '../components/delete'
 import Swal from 'sweetalert2'
 
-function deleteButtonContainer() {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+function DeleteButtonContainer({ data, user, setGenerate }) {
+  const [error, setError] = useState('');
+
+  const handleLike = async (action) => {
+    try {
+        // send request
+        console.log("Sending request to backend");
+        const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({user_action: action, recipe_id: data.recipeID, user_id: user.userID}),
+        });
+
+        // check response
+        if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(errorData.error || 'Action Failed')
+        }
+
+        // parse successful response
+        const responseData = await response.json()
+        console.log("Response data:", responseData)
+    } 
+    catch(err) {
+        setError(err.message)
+    }
+  };
 
     const clickHandler = async () => {
         try {
@@ -41,25 +71,8 @@ function deleteButtonContainer() {
                       },
                 })
                 // delete from liked list
-                /*
-              const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/delete-account`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId }),
-              });
-        
-              if (!response.ok) {
-                throw new Error('Failed to delete account');
-              } 
-            }
-            if (!response.ok) {
-                throw new Error('Failed to delete account');
-              }
-            */
-
+                await handleLike("unheart")
+                setGenerate(true);
         } 
         } catch (error) {
             console.error('Delete account error:', error);
@@ -79,4 +92,4 @@ function deleteButtonContainer() {
     )
 }
 
-export default deleteButtonContainer;
+export default DeleteButtonContainer;

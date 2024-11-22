@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import Add from "../components/add";
 import Swal from 'sweetalert2'
 
-function AddContainer() {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+function AddContainer({ data, user }) {
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (action) => {
+        
+        try {
+            console.log("Sending request to backend");
+            const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_action: action, recipe_id: data.recipeID, user_id: user.userID }),
+            });
+    
+            // Check if response is okay before parsing JSON
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Action failed');
+            }
+    
+            // Parse response JSON if the request was successful
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+
+
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     const clickHandler = () => {
         // at to meal planner
 
@@ -23,6 +55,7 @@ function AddContainer() {
                 popup: 'addAlert',
               },
         })
+        handleSubmit("add")
     }
 
     return (
