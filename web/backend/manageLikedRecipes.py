@@ -1,6 +1,8 @@
 from models import db
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
+from manageShoppingList import manageShoppingList
+
 class likedRecipes:
     ''' This module will take in a recipe id and add it to the user's liked recipes
     or disliked recipes depending on which way they swipe.

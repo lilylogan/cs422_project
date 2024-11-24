@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { THEME } from '../../constants/theme';
 import { styles } from './styles';
 
+
 export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) => {
   const [newItem, setNewItem] = useState('');
 

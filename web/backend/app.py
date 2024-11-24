@@ -8,9 +8,9 @@ from sqlalchemy.exc import OperationalError
 import pandas as pd
 from recipeDeck import recipeDeck
 from manageLikedRecipes import likedRecipes
-#from manageShoppingList import manageShoppingList
+from manageShoppingList import manageShoppingList
 import ast
-
+import json
 
 from flask_login import LoginManager, login_required, logout_user, current_user
 from auth import check_login, create_account, check_signup
@@ -84,28 +84,6 @@ def is_number(s):
         return True
     except ValueError:
         return False
-
-# def extract_quantity_and_unit(quantity_unit):
-#     """Extract quantity and unit from a string.
-#        If there's no number in the string, treat the whole string as the unit."""
-    
-#     qualtity_unit_list = quantity_unit.split(" ")
-#     if len(qualtity_unit_list) == 2 and is_number(qualtity_unit_list[0]):
-#         quantity = float(qualtity_unit_list[0])
-#         unit = qualtity_unit_list[1]
-#         notes = None
-#     else:
-#         if qualtity_unit_list[0] and is_number(qualtity_unit_list[0]):
-#             quantity = float(qualtity_unit_list[0])
-#             unit = None
-#             notes = " ".join(qualtity_unit_list[1:])
-#         else: 
-#             quantity = None
-#             unit = None
-#             notes = " ".join(qualtity_unit_list)
-   
-    
-#     return quantity, unit, notes
 
 def extract_quantity_and_unit(quantity_unit):
     """Extract quantity and unit from a string.
@@ -308,22 +286,74 @@ def add_user_profile():
     
     return jsonify(exRecipe)
 
-# @app.route('/getShoppingList', methods=['POST'])
-# def get_shopping_list():
-#     """get the shoppinglist"""
-#     print("get shopping list")
-#     shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
+@app.route('/getShoppingList', methods=['POST'])
+def get_shopping_list():
+    """get the shoppinglist"""
+    print("getting shopping list")
 
-#     data = request.get_json()
-#     if not data or 'user_id' not in data:
-#         print(data)
-#         return jsonify({"status": "failure", "message": "Invalid data"}), 400
+    data = request.get_json()
+    print(f"data: {data}")
+    if not data or 'user_id' not in data:
+        print("HELLO")
+        print(f"data: {data}")
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+
+    print("Received data:", data)
+
+    user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
+
+    shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
+
+    # Fetch the shopping list from the manager
+    shopping_list = shopping_list_manager.getShoppingList(user_id)
+
+    print(f"SHOPPING LIST {shopping_list}")
+    return jsonify(shopping_list), 200
+  
+
+@app.route('/addItemToShoppingList', methods=['POST'])
+def add_item_to_shopping_list():
+    data = request.get_json()
     
-#     user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
+    # Make sure you extract the `item` after getting the `data`
+    item = data.get('item')
+    
+    if not data or 'user_id' not in data or not item:
+        return jsonify({"status": "failure", "message": "User ID and item are required"}), 400
 
-#     return jsonify(shopping_list_manager.getShoppingList(user_id))
+    user_id = int(data["user_id"])
+
+    shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
+
+    try:
+        shopping_list_manager.addToShoppingListManually(user_id, item)
+        return jsonify({'message': 'Item added successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
     
+
+@app.route('/removeItemFromShoppingList', methods=['POST'])
+def remove_item_from_shopping_list():
+    data = request.get_json()
+    if not data or 'user_id' not in data:
+        print(f"data: {data}")
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+
+    print("Received data:", data)
+
+    user_id = int(data["user_id"]) 
+    
+    item_id = data.get('item_id')
+    
+    if not user_id or not item_id:
+        return jsonify({'error': 'User ID and item ID are required'}), 400
+    
+    shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
+    
+    return shopping_list_manager.removeItem(user_id, item_id)
+
+
 @app.route('/api/protected-route', methods=['GET'])
 @login_required
 def protected_route():
@@ -475,6 +505,10 @@ def remove_meal():
         # Find and delete the meal plan entry
         meal_plan = MealInPlan.query.filter_by(userID=current_user.userID,recipeID=meal_id,dayOfWeek=day).first()
         
+        # Remove ingredients with the manageShoppingList 
+        # shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
+        # shopping_list_manager.removeRecipeInShoppingList(user_id=current_user.userID, recipe_id=meal_id)
+
         if not meal_plan:
             return jsonify({'error': 'Meal plan not found'}), 404
             

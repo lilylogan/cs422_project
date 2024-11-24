@@ -1,6 +1,10 @@
 from models import db
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
+import parse_ingredient
+from flask import Flask, render_template, abort, jsonify, request, send_from_directory
+from foodunits import units_convertor
+
 
 class manageShoppingList:
     """ This module will take in a user id and aid with formatting of the shopping list as well as 
@@ -17,11 +21,23 @@ class manageShoppingList:
         self.shoppingListContentsDB = shoppingListContentsDB
         self.shoppingListIngredientsDB = shoppingListIngredientDB
 
+        # shopping list has listID and userID (same)
+        # shopping list ingredients has ingredientID and name
+        # shopping list contents has listID (same as user) ingredientID quantity and unit
+
     def getShoppingList(self, user_id):
         """gets all the ingredients of the recipes in mealplan for the user and 
-        returns them in a list format
+        returns them in a dict format
         """
-        user = self.user_db.query.get(user_id)
+
+        # { id:
+        #   {name: , 
+        #    unit: ,
+        #    quantity: }   
+        # }
+
+        # Initialize the final structure
+        final_product = {}
 
         # Retrieve ingredients from the recipe
         shopping_ingredients_contents = (
@@ -29,55 +45,178 @@ class manageShoppingList:
             .filter_by(listID=user_id)
             .all()
         )
-
-        return_ingredients = []
+    
+        # Loop through ingredients and store in format
 
         for ingredient in shopping_ingredients_contents:
-
-            # shoppinglistcontents has listid, ingredientID, quantity, unit
-
-            # shoppinglistingredient has ingredientID and name
-
             ingredient_id = ingredient.ingredientID
             quantity = ingredient.quantity
             unit = ingredient.unit
 
+            # Get name grom shopping list ingredient db
             shopping_list_ingredient = self.shoppingListIngredientsDB.query.filter_by(ingredientID=ingredient_id).first()
 
             name = shopping_list_ingredient.name
 
-            return_ingredients.append(f"{quantity} {unit} {name}")
+            # add to final dictionary
+            final_product[ingredient_id] = {}
 
-
-            parts = []
-
-            # Add quantity if it's not None
-            if quantity is not None:
-                parts.append(str(quantity))
-
-            # Add unit if it's not None
-            if unit is not None:
-                parts.append(unit)
-
-            # Add ingredient name if it's not None
-            if name is not None:
-                parts.append(name)
-
-            # Join the non-None parts with a space
-            ingredient_string = " ".join(parts)
-
-            # Only add non-empty strings to the list
-            if ingredient_string:
-                return_ingredients.append(ingredient_string)
-
-        print(f"shopping list ingredients {return_ingredients}")
+            final_product[ingredient_id]["name"] = name
+            final_product[ingredient_id]["unit"] = unit
+            final_product[ingredient_id]["quantity"] = float(quantity)
+            final_product[ingredient_id]["checked"] = False
         
-        return return_ingredients
+        return final_product
+    
 
+    def addToShoppingListManually(self, user_id, item):
+        """Adds to the shopping list
+        This can be when the user adds to the list manually
+        NOTE: item is a string
+        """
+        # get the quantity unit and name
 
-
-
+        parsed_item = parse_ingredient.parse(item)
         
+        name = parsed_item.product
+        quantity = parsed_item.quantity
+        unit = parsed_item.unit
+        
+        # # get shopping list
+        shopping_list = self.shoppingListDB.query.get(user_id)
 
+        # # create entry in ingredients (using name and ingredient id (autogenerates))
+        new_ingredient_entry = self.shoppingListIngredientsDB(
+            name=name
+        )
+
+        try:
+                db.session.add(new_ingredient_entry)
+                db.session.commit()
+                print("recipe ingredient added to shopping list")
+        except Exception as e:
+                db.session.rollback()  # Roll back in case of failure
+                print(f"Error during database commit: {e}")
+
+        ingredient_id = new_ingredient_entry.ingredientID
+
+        # create entry in contents (using listID, ingredientID, quantity, and unit)
+        new_contents_entry = self.shoppingListContentsDB(
+             listID=shopping_list.listID,
+             ingredientID=ingredient_id,
+             quantity=quantity,
+             unit=unit
+        )
+
+        try:
+                db.session.add(new_contents_entry)
+                db.session.commit()
+                print("ingredient added to shopping list contents")
+        except Exception as e:
+                db.session.rollback()  # Roll back in case of failure
+                print(f"Error during database commit: {e}")
+
+        # add to any existing content (using the function? or just the adding to the quantity, but need to make sure the
+        # units are the same!!)    
+
+
+    def removeItem(self, user_id, item_id):
+        """Removes one item from the shopping list
+        This could either be when the user removes once single item or when they delete
+        a recipe from their meal plan (this is implemented in separate function)
+        NOTE: item is NOT a string but a class that consits of a name and ingredient id (shoppingListIngredient)
+        """
+
+        # get shopping list
+        # user = self.user_db.query.get(user_id)
+        shopping_list = self.shoppingListDB.query.get(user_id)
+
+        # get shoppingListContents (to get quantity)
+
+        shopping_list_content = self.shoppingListContentsDB.query.filter_by(listID=shopping_list.listID, ingredientID=item_id)
+        shopping_list_ingredient = self.shoppingListIngredientsDB.query.filter_by(ingredientID=item_id)
+
+        if not shopping_list_content or not shopping_list_ingredient:
+             return jsonify({'error': 'ingredient not found in shopping list'}), 404
+
+        try:
+            db.session.delete(shopping_list_ingredient)
+            db.session.commit()
+
+            db.session.delete(shopping_list_content)
+            db.session.commit()
+
+            return jsonify({'message': 'ingredient removed successfully from shopping list'}), 200
+    
+        except Exception as e:
+            print(f"Error removing ingredient: {str(e)}")
+            db.session.rollback()
+            return jsonify({'error': 'Failed to remove ingredient'}), 500 
 
     
+    def removeRecipeInShoppingList(self, user_id, recipe_id):
+        """This removes all of the ingredients which are in this recipe from 
+        the user's shopping list
+        """
+
+        # NOTE: this should be called in the deleting from meal planner
+
+        # get the recipe ingredients
+        recipe_ingredients = (
+            self.recipeContentsDB.query
+            .filter_by(recipeID=recipe_id)
+            .all()
+        )
+        for ingredient in recipe_ingredients:
+            self.removeItem(ingredient.ingredientID)
+
+
+    # def convert(self, quantity, unit):
+    #     """Convers an ingredients units and quantity to match the standard
+    #     Standard: 
+    #     """
+    #     pass
+    # def convert(self, first_ingredient, second_ingredient):
+        # """Convers second ingredients units and quantity to match the first ingredient given
+        #    Each are in the shopping list
+        #    Name (are == ) are from shoppingListIngredients
+        #    Quantity and Unit are in shoppingListContents
+
+        #    from shopping_ingredients_contents
+        # """
+        # # (need to check if no units or no quantities)
+
+
+        # first_ingredient_unit = first_ingredient["unit"]
+        # first_ingredient_quantity = first_ingredient["quantity"]
+        # if (first_ingredient_quantity is None):
+        #     first_ingredient_quantity = 0
+        
+        # second_ingredient_unit = second_ingredient.unit
+        # second_ingredient_quantity = second_ingredient.quantity
+        # if (second_ingredient_quantity is None):
+        #     second_ingredient_quantity = 0
+
+        # if first_ingredient_unit is None or second_ingredient_unit is None:
+        #     combined_ingredient_unit = None
+        #     combined_ingredient_quantity = float(first_ingredient_quantity) + float(second_ingredient_quantity)
+        #     return (combined_ingredient_unit, combined_ingredient_quantity)
+
+        # if first_ingredient_unit == second_ingredient_unit:
+        #     combined_ingredient_quantity = float(second_ingredient_quantity) + float(first_ingredient_quantity)
+        #     return (first_ingredient_unit, combined_ingredient_quantity)
+
+        # # Example with units_convertor
+        # # units_convertor("2.5", to_unit="g", from_unit="fl oz", ingredient="skimmed milk")
+        # # Output: {"converted value": 76.152, "unit": "g"}
+
+        # print(f"quantity converted {second_ingredient_quantity}, quantity converting {first_ingredient_quantity}")
+        # print(f"unit converted {second_ingredient_unit}, unit converting {first_ingredient_unit}")
+
+        # convertor_output = units_convertor(float(second_ingredient_quantity), to_unit=first_ingredient_unit, from_unit=second_ingredient_unit)
+
+        # print(f"convertor output {convertor_output}")
+        # combined_ingredient_unit = convertor_output["unit"]
+        # combined_ingredient_quantity = convertor_output["converted value"] + float(first_ingredient_quantity)
+
+        # return (combined_ingredient_unit, combined_ingredient_quantity)
