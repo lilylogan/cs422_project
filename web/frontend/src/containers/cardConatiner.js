@@ -93,23 +93,68 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
         }
     };
 
-
     
     return (
         <div>
             <div className="cardContainer">
-            {homeData ? (
-            <TinderCard ref={cardRef} key={index} onSwipe={onSwipe} onCardLeftScreen={onCardLeftScreen} flickOnSwipe={true} preventSwipe={swiping ? ['up', 'left', 'right', 'down'] :(toggle ? ['up', 'down'] : ['up'])} swipeRequirementType='velocity' swipeThreshold={1.60} className={`card ${swiping ? 'card-swiping' : ''} ${toggle ? 'toggled' : ''}`}>
-                <RecipeCard user={user} title={homeData.recipe_name} data = {homeData} cookTime={`Cook Time: ${homeData.cook_time}`} prepTime={`Prep Time: ${homeData.prep_time}`} servings={`servings: ${homeData.servings}`} cuisine={`Cuisine: ${homeData.cuisine}`} image_path={homeData.image_path} toggle={toggle} />
-            </TinderCard>
-            ) : (<div>
-                    loading...
-                 </div>)}
+                
+            {homeData === null || homeData === undefined ? (
+                    <div>loading...</div>
+                ) : homeData.msg === "No liked recipes in the database" ? (
+                    <div><h3>Like a recipe for it to show up in this deck</h3></div>
+                ) : (
+                    <TinderCard
+                        ref={cardRef}
+                        key={index}
+                        onSwipe={onSwipe}
+                        onCardLeftScreen={onCardLeftScreen}
+                        flickOnSwipe={true}
+                        preventSwipe={
+                            swiping
+                                ? ['up', 'left', 'right', 'down']
+                                : toggle
+                                ? ['up', 'down']
+                                : ['up']
+                        }
+                        swipeRequirementType="velocity"
+                        swipeThreshold={1.6}
+                        className={`card ${swiping ? 'card-swiping' : ''} ${
+                            toggle ? 'toggled' : ''
+                        }`}
+                    >
+                        <RecipeCard
+                            user={user}
+                            title={homeData.recipe_name}
+                            data={homeData}
+                            cookTime={`Cook Time: ${homeData.cook_time}`}
+                            prepTime={`Prep Time: ${homeData.prep_time}`}
+                            servings={`Servings: ${homeData.servings}`}
+                            cuisine={`Cuisine: ${homeData.cuisine}`}
+                            image_path={homeData.image_path}
+                            toggle={toggle}
+                        />
+                    </TinderCard>
+                )}
             </div>
             <div className="swipeButtonContainer">
-                <SwipingButton clickHandler={swipeLeft} swiping={swiping} text="Dislike" cname="dislike"/>
-                <SwipingButton clickHandler={swipeDown} swiping={swiping} text="Pass" cname="pass" />
-                <SwipingButton clickHandler={swipeRight} swiping={swiping} text="Add" cname="addHome" />
+                <SwipingButton
+                    clickHandler={swipeLeft}
+                    swiping={swiping}
+                    text="Dislike"
+                    cname="dislike"
+                />
+                <SwipingButton
+                    clickHandler={swipeDown}
+                    swiping={swiping}
+                    text="Pass"
+                    cname="pass"
+                />
+                <SwipingButton
+                    clickHandler={swipeRight}
+                    swiping={swiping}
+                    text="Add"
+                    cname="addHome"
+                />
             </div>
         </div>
     );

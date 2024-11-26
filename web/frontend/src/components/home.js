@@ -6,7 +6,7 @@ import HelpButtonContainer from '../containers/helpContainer';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const fetchData = async (userID) => {
+const fetchRandData = async (userID) => {
     try {
         const response = await fetch(`${BACKEND_URL}/getRandRecipe`, {
             method: 'POST',
@@ -27,6 +27,29 @@ const fetchData = async (userID) => {
         console.error("Error fetching data from the backend:", error);
     }
 };
+const fetchLikedData = async (userID) => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/getRandLikedRecipe`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id: userID }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching data from the backend:", error);
+    }
+};
+
+
 
 function Home() {
     const [toggle, setToggle] = useState(false);
@@ -40,7 +63,9 @@ function Home() {
             console.log("fetching data!");
             const getData = async () => {
                 if (user?.userID) {
-                    const fetchedData = await fetchData(user.userID); // Pass userID here
+                    const fetchedData = toggle
+                        ? await fetchLikedData(user.userID)
+                        : await fetchRandData(user.userID);
                     setData(fetchedData);
                 } else {
                     console.error("User ID is not available");
@@ -48,13 +73,17 @@ function Home() {
             };
             getData();
         }
-    }, [generate, user]);
+    }, [generate, user, toggle]);
 
+    const handleToggle = () => {
+        setToggle((prev) => !prev);
+        setGenerate(true); // Trigger data regeneration
+    };
 
     return (
         <div>
             <HelpButtonContainer />
-                <DeckSwapContainer toggle={toggle} setToggle={setToggle} />
+                <DeckSwapContainer toggle={toggle} setToggle={handleToggle} />
             <RecipeCardContainer homeData = {homeData} toggle={toggle} stToggle={setToggle} setGenerate={setGenerate} />
         </div>
     )

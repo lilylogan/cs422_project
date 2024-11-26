@@ -285,6 +285,25 @@ def add_user_profile():
     exRecipe = new_Recipe.genRecipe(int(data["user_id"]))
     
     return jsonify(exRecipe)
+@app.route('/getRandLikedRecipe', methods=['POST'])
+def send_liked_random_recipe():
+    """Route to add a new user profile"""
+    #data = request.get_json()
+    # new_Recipe = recipeDeck(Recipe)
+
+    # Just generating the first recipe
+    # exRecipe = new_Recipe.genRecipe()
+    data = request.get_json()
+    if not data or 'user_id' not in data:
+        print(data)
+        return jsonify({"status": "failure", "message": "Invalid data"}), 400
+    new_Recipe = recipeDeck(Recipe, User)
+    exRecipe = new_Recipe.genLikedRecipe(int(data["user_id"]))
+    if exRecipe == {}:
+        return jsonify({"msg" : "No liked recipes in the database"})
+    print(exRecipe)
+    
+    return jsonify(exRecipe)
 
 @app.route('/getShoppingList', methods=['POST'])
 def get_shopping_list():

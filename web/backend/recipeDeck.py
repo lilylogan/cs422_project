@@ -101,7 +101,7 @@ class recipeDeck:
         ranRecipe = None
         while (ranRecipe == None):
             try:
-                num = random.randint(0, self.length)
+                num = random.randint(0, self.length - 1)
                 ranRecipeID = recipe_ids[num] 
                 # Check if the recipe is in liked or disliked recipes
                 in_likes = any(recipe.recipeID == ranRecipeID for recipe in user.liked_recipes)
@@ -125,12 +125,16 @@ class recipeDeck:
             return None # change to error
         liked_recipe_ids = [recipe.recipeID for recipe in user.liked_recipes]
         liked_len = len(liked_recipe_ids)
-        ranLikedRecipe = None
-        while (ranLikedRecipe == None):
-            num = random.randint(0, )
-            ranRecipeID = liked_recipe_ids[num]
-            ranRecipe= self.RecipeModel.query.get(ranRecipeID)
-        recipe = {"recipeID": ranRecipe.recipeID, "recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
+        if liked_len > 0:
+            ranRecipe = None
+            while (ranRecipe == None):
+                num = random.randint(0, liked_len - 1)
+                print(num)
+                ranRecipeID = liked_recipe_ids[num]
+                ranRecipe= self.RecipeModel.query.get(ranRecipeID)
+            recipe = {"recipeID": ranRecipe.recipeID, "recipe_name": ranRecipe.name, "prep_time": ranRecipe.prepTime, "servings": ranRecipe.servings, "cook_time": ranRecipe.cookTime, "cuisine": ranRecipe.cuisine, "image_path": ranRecipe.image_path, "instructions": ranRecipe.instructions, "ingredients": ranRecipe.get_ingredient_list() }
+        else:
+            recipe = {}
         return recipe
             
         
