@@ -1,5 +1,5 @@
 from models import db
-from sqlalchemy import desc
+from sqlalchemy import func, desc
 from sqlalchemy.orm import joinedload
 from manageShoppingList import manageShoppingList
 
@@ -107,31 +107,44 @@ class likedRecipes:
         return days[next_index]
         
     def addToMealPlanner(self, user_id, recipe_id):
-        # Retrieve the user and recipe by their IDs
-        user =  self.user_db.query.get(user_id)
-        recipe =  self.recipe_db.query.get(recipe_id)
-        
+       # Import necessary modules for ordering
+        user = self.user_db.query.get(user_id)
+        recipe = self.recipe_db.query.get(recipe_id)
+
         # Ensure both the user and recipe exist
         if not user or not recipe:
             print(f"User or Recipe not found. User ID: {user_id}, Recipe ID: {recipe_id}")
             return False
-        
-        # Get the most recent meal plan entry for this user by `dayOfWeek` in descending order
-        last_meal = self.plan_db.query.filter_by(userID=user_id).order_by(desc(self.plan_db.dayOfWeek)).first()
 
-        # Retrieve the `dayOfWeek` from the last meal plan entry and calculate the next day
-        if last_meal:
-            current_day = last_meal.dayOfWeek
-            next_day = self.get_next_day(current_day)
-            # Pop the last meal plan entry from the database
-            # db.session.delete(last_meal)
-            print(f"Popped last meal plan entry for User ID {user_id}: {current_day} - Recipe ID {last_meal.recipeID}")
-        else:
-            # Default to Monday if no previous entries are found
-            next_day = 'Monday'
+        # Query for the count of recipes for each day of the week in the user's meal plan
+        meal_counts = (
+            self.plan_db.query
+            .with_entities(self.plan_db.dayOfWeek, func.count(self.plan_db.recipeID).label("count"))
+            .filter_by(userID=user_id)
+            .group_by(self.plan_db.dayOfWeek)
+            .all()
+        )
 
-        # Create a new meal plan entry with the next day
-        new_meal = self.plan_db(userID=user_id, recipeID=recipe_id, dayOfWeek=next_day)
+        # Convert results to a dictionary for easier manipulation
+        day_counts = {day: count for day, count in meal_counts}
+
+        # Define the order of days in the week
+        days_of_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+        # Initialize counts for days without entries as zero
+        for day in days_of_week:
+            if day not in day_counts:
+                day_counts[day] = 0
+
+        # Find the day(s) with the least recipes
+        min_recipes = min(day_counts.values())
+        target_days = [day for day, count in day_counts.items() if count == min_recipes]
+
+        # Pick the first day in sequential order if there are ties
+        target_day = next(day for day in days_of_week if day in target_days)
+
+        # Create a new meal plan entry for the target day
+        new_meal = self.plan_db(userID=user_id, recipeID=recipe_id, dayOfWeek=target_day)
         db.session.add(new_meal)
 
         # Retrieve ingredients from the recipe
@@ -151,7 +164,7 @@ class likedRecipes:
             unit = ingredient.unit
 
             # Check if the ingredient already exists in the user's shopping list ingredients
-            ingredients_recipe_entry = (self.recipeIngredientsDB.query.filter_by(ingredientID=ingredient_id).first())
+            ingredients_recipe_entry = self.recipeIngredientsDB.query.filter_by(ingredientID=ingredient_id).first()
 
             # Create a new entry in ShoppingListIngredients
             new_ingredient_entry = self.shoppingListIngredientsDB(
@@ -162,12 +175,12 @@ class likedRecipes:
             try:
                 db.session.add(new_ingredient_entry)
                 db.session.commit()
-                print("recipe ingredient added to shopping list")
+                print("Recipe ingredient added to shopping list")
             except Exception as e:
                 db.session.rollback()  # Roll back in case of failure
                 print(f"Error during database commit: {e}")
 
-                # Create a new entry in ShoppingListContents
+            # Create a new entry in ShoppingListContents
             new_entry = self.shoppingListContentsDB(
                 listID=shopping_list.listID,
                 ingredientID=ingredient_id,
@@ -177,33 +190,15 @@ class likedRecipes:
             try:
                 db.session.add(new_entry)
                 db.session.commit()
-                print("ingredient added to shopping list contents")
+                print("Ingredient added to shopping list contents")
             except Exception as e:
                 db.session.rollback()  # Roll back in case of failure
                 print(f"Error during database commit: {e}")
-            
-        
+
         # Commit the changes to the database
         try:
             db.session.commit()
-            print(f"Added Recipe ID {recipe_id} to User ID {user_id}'s meal plan for {next_day}")
-
-            """
-            An example on how to get a meal plan for a user on a specific day and print it:
-            # Query MealInPlan for the user's meals on the specified day
-            meals = (
-                self.plan_db.query
-                .filter_by(userID=user_id, dayOfWeek="Tuesday")
-                .options(joinedload(self.plan_db.recipe))  # Load related recipe data
-                .all()
-            )
-            
-            # Extract recipes for the meals
-            recipes = [meal.recipe for meal in meals]
-            
-            print(recipes)
-            """
-
+            print(f"Added Recipe ID {recipe_id} to User ID {user_id}'s meal plan for {target_day}")
             return True
         except Exception as e:
             db.session.rollback()
