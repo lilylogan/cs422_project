@@ -364,6 +364,7 @@ def remove_item_from_shopping_list():
     user_id = int(data["user_id"]) 
     
     item_id = data.get('item_id')
+    print(f"REMOVING KEY: {item_id}")
     
     if not user_id or not item_id:
         return jsonify({'error': 'User ID and item ID are required'}), 400
@@ -534,6 +535,7 @@ def remove_meal():
         # Delete the meal plan entry
         db.session.delete(meal_plan)
         db.session.commit()
+        # add for removing too
         
         return jsonify({'message': 'Meal removed successfully'}), 200
         

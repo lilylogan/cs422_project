@@ -107,6 +107,7 @@ class ShoppingListContents(db.Model):
     ingredientID = db.Column(db.Integer, db.ForeignKey('shopping_list_ingredients.ingredientID', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Numeric(10, 2))
     unit = db.Column(db.String(50))
+    checked = db.Column(db.Boolean, nullable=False, default=False)
     
     # Relationships
     shopping_list = db.relationship("ShoppingList", back_populates="ingredients")

@@ -52,6 +52,7 @@ class manageShoppingList:
             ingredient_id = ingredient.ingredientID
             quantity = ingredient.quantity
             unit = ingredient.unit
+            checked = ingredient.checked
 
             # Get name grom shopping list ingredient db
             shopping_list_ingredient = self.shoppingListIngredientsDB.query.filter_by(ingredientID=ingredient_id).first()
@@ -62,9 +63,16 @@ class manageShoppingList:
             final_product[ingredient_id] = {}
 
             final_product[ingredient_id]["name"] = name
-            final_product[ingredient_id]["unit"] = unit
-            final_product[ingredient_id]["quantity"] = float(quantity)
-            final_product[ingredient_id]["checked"] = False
+            if unit is not None:
+                final_product[ingredient_id]["unit"] = self.abbreviate(unit)
+            else: 
+                final_product[ingredient_id]["unit"] = unit
+
+            if (quantity is not None):
+                final_product[ingredient_id]["quantity"] = float(quantity)
+            else:
+                 final_product[ingredient_id]["quantity"] = None
+            final_product[ingredient_id]["checked"] = checked
         
         return final_product
     
@@ -81,6 +89,7 @@ class manageShoppingList:
         name = parsed_item.product
         quantity = parsed_item.quantity
         unit = parsed_item.unit
+        checked = False
         
         # # get shopping list
         shopping_list = self.shoppingListDB.query.get(user_id)
@@ -105,7 +114,8 @@ class manageShoppingList:
              listID=shopping_list.listID,
              ingredientID=ingredient_id,
              quantity=quantity,
-             unit=unit
+             unit=unit,
+             checked = False
         )
 
         try:
@@ -133,17 +143,18 @@ class manageShoppingList:
 
         # get shoppingListContents (to get quantity)
 
-        shopping_list_content = self.shoppingListContentsDB.query.filter_by(listID=shopping_list.listID, ingredientID=item_id)
-        shopping_list_ingredient = self.shoppingListIngredientsDB.query.filter_by(ingredientID=item_id)
+        shopping_list_content = self.shoppingListContentsDB.query.filter_by(listID=shopping_list.listID, ingredientID=item_id).first()
+        shopping_list_ingredient = self.shoppingListIngredientsDB.query.filter_by(ingredientID=item_id).first()
 
         if not shopping_list_content or not shopping_list_ingredient:
              return jsonify({'error': 'ingredient not found in shopping list'}), 404
 
         try:
-            db.session.delete(shopping_list_ingredient)
-            db.session.commit()
 
             db.session.delete(shopping_list_content)
+            db.session.commit()
+        
+            db.session.delete(shopping_list_ingredient)
             db.session.commit()
 
             return jsonify({'message': 'ingredient removed successfully from shopping list'}), 200
@@ -170,6 +181,99 @@ class manageShoppingList:
         for ingredient in recipe_ingredients:
             self.removeItem(ingredient.ingredientID)
 
+    def abbreviate(self, unit):
+        # Volume
+        if unit.lower() == "teaspoon":
+            return "tsp"
+        if unit.lower() == "tablespoon":
+            return "Tbs"
+        if unit.lower() == "cup":
+            return "cup"
+        if unit.lower() == "pint":
+            return "pnt"
+        if unit.lower() == "quart":
+            return "qt"
+        if unit.lower() == "gallon":
+            return "gal"
+        if unit.lower() == "milliliter":
+            return "ml"
+        if unit.lower() == "liter":
+            return "l"
+        if unit.lower() == "deciliter":
+            return "dl"
+        
+        # Length
+        if unit.lower() == "millimeter":
+            return "mm"
+        if unit.lower() == "centimeter":
+            return "cm"
+        if unit.lower() == "meter":
+            return "m"
+        if unit.lower() == "kilometer":
+            return "km"
+        if unit.lower() == "inch":
+            return "in"
+        if unit.lower() == "foot" or unit.lower() == "feet":
+            return "ft"
+        if unit.lower() == "yard":
+            return "yd"
+        if unit.lower() == "mile":
+            return "mi"
+        
+        # Weight/Mass
+        if unit.lower() == "milligram":
+            return "mg"
+        if unit.lower() == "gram":
+            return "g"
+        if unit.lower() == "kilogram":
+            return "kg"
+        if unit.lower() == "metric ton":
+            return "mt"
+        if unit.lower() == "ounce":
+            return "oz"
+        if unit.lower() == "pound":
+            return "lb"
+        
+        # Area
+        if unit.lower() == "square millimeter":
+            return "mm2"
+        if unit.lower() == "square centimeter":
+            return "cm2"
+        if unit.lower() == "square meter":
+            return "m2"
+        if unit.lower() == "hectare":
+            return "ha"
+        if unit.lower() == "square kilometer":
+            return "km2"
+        if unit.lower() == "acre":
+            return "ac"
+        
+        # Volume (alternative)
+        if unit.lower() == "cubic meter":
+            return "m3"
+        if unit.lower() == "cubic centimeter":
+            return "cm3"
+        if unit.lower() == "cubic millimeter":
+            return "mm3"
+        
+        # Time
+        if unit.lower() == "second":
+            return "s"
+        if unit.lower() == "minute":
+            return "min"
+        if unit.lower() == "hour":
+            return "h"
+        if unit.lower() == "day":
+            return "d"
+        if unit.lower() == "week":
+            return "week"
+        if unit.lower() == "month":
+            return "month"
+        if unit.lower() == "year":
+            return "year"
+    
+    # Unsupported unit
+    # raise ValueError(f"Unsupported unit {unit}, use one of the supported units.")
 
     # def convert(self, quantity, unit):
     #     """Convers an ingredients units and quantity to match the standard

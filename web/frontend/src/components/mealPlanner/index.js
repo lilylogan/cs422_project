@@ -39,39 +39,6 @@ const fetchUserMeals = async () => {
   }
 };
 
-/*  
-    Description: Fetches the shopping list from user's account.
-    Returns: shoppingList :: an array of shopping items
-*/
-// Fetches the shopping list from user's account.
-const getShoppingList = async (userId) => {
-  try {
-    const response = await fetch(`${BACKEND_URL}/getShoppingList`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ user_id: userId }) // Include user_id in the request
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch shopping list');
-    }
-
-    const shoppingList = await response.json();
-    
-    console.log('Fetched shopping list:', shoppingList);
-    return shoppingList;
-  } catch (error) {
-    console.error("Error fetching shopping list:", error);
-    return [];
-  }
-};
-
-
-
-
 const MealPlanner = () => {
   // State to control the expanded/collapsed state of the meal planner
   const [isExpanded, setIsExpanded] = useState(true);
@@ -97,13 +64,7 @@ const MealPlanner = () => {
       }
     };
 
-    const loadShoppingList = async () => {
-      const list = await getShoppingList();
-      setShoppingItems(list);
-    };
-
     loadMealPlans();
-    loadShoppingList();
   }, []);
 
   // Handle window resize
@@ -165,7 +126,7 @@ const MealPlanner = () => {
       )
     }));
   };
-
+  // const [generateAfterRemoveMeal, setGenerateAfterRemoveMeal] = useState(null);
   // Function to remove a meal from a specific day
   const handleRemoveMeal = async (day, mealId) => {
     try {
@@ -200,6 +161,7 @@ const MealPlanner = () => {
         setMeals(userMeals);
       }
     }
+    // setGenerateAfterRemoveMeal(true);
   };
 
   // Shopping List Functions
@@ -212,7 +174,8 @@ const MealPlanner = () => {
   };
 
   const handleRemoveItem = (id) => {
-    setShoppingItems(prev => prev.filter(item => item.id !== id));
+    
+    // setShoppingItems(prev => prev.filter(item => item.id !== id));
   };
 
   const handleAddItem = (name) => {
@@ -273,6 +236,8 @@ const MealPlanner = () => {
         onToggleItem={handleToggleItem}
         onRemoveItem={handleRemoveItem}
         onAddItem={handleAddItem}
+        // setGenerateAfterRemoveMeal={setGenerateAfterRemoveMeal}
+        // generateAfterRemoveMeal={generateAfterRemoveMeal}
       />
     </div>
   );
