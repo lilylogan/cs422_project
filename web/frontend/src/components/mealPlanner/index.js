@@ -4,8 +4,31 @@ import { styles } from './styles';
 import { DayPlanner } from './dayPlanner';
 import { ShoppingList } from './shoppingList';
 import CalendarView from './calendarView';
+import {useAuth} from '../../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+const fetchShoppingList = async () => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/getShoppingList`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch shopping list');
+    }
+
+    const shoppingList = await response.json();
+    console.log('Fetched shopping list:', shoppingList);
+    return shoppingList;
+  } catch (error) {
+    console.error("Error fetching shopping list:", error);
+    return null;
+  }
+};
 
 /*  
     Description: Fetches meals for the meal planner from user's account.
@@ -54,6 +77,14 @@ const MealPlanner = () => {
 
   // State to track the screen size and determine the layout
   const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 1024);
+
+  const {user} = useAuth();
+
+  const [shoppingListKey, setShoppingListKey] = useState(0);
+
+  const regenerateShoppingList = () => {
+    setShoppingListKey(prevKey => prevKey + 1);
+  };
 
   // Fetch meal data when component mounts
   useEffect(() => {
@@ -126,7 +157,7 @@ const MealPlanner = () => {
       )
     }));
   };
-  // const [generateAfterRemoveMeal, setGenerateAfterRemoveMeal] = useState(null);
+  const [generateAfterRemoveMeal, setGenerate] = useState(null);
   // Function to remove a meal from a specific day
   const handleRemoveMeal = async (day, mealId) => {
     try {
@@ -145,7 +176,8 @@ const MealPlanner = () => {
         },
         body: JSON.stringify({
           mealId,
-          day
+          day,
+          user_id: user.userID
         })
       });
   
@@ -153,15 +185,24 @@ const MealPlanner = () => {
         throw new Error('Failed to remove meal from database');
       }
   
+      // Fetch and update the shopping list immediately after successful deletion
+      const updatedShoppingList = await fetchShoppingList(user.userID);
+      if (updatedShoppingList) {
+        // Update the shopping list in the ShoppingList component
+        setShoppingItems(updatedShoppingList);
+    }
+    // Force shopping list regeneration
+    regenerateShoppingList();
+
     } catch (error) {
       console.error('Error removing meal:', error);
+  
       // Revert the UI changes if the update fails
       const userMeals = await fetchUserMeals();
       if (userMeals) {
         setMeals(userMeals);
       }
     }
-    // setGenerateAfterRemoveMeal(true);
   };
 
   // Shopping List Functions
@@ -173,9 +214,29 @@ const MealPlanner = () => {
     );
   };
 
-  const handleRemoveItem = (id) => {
-    
-    // setShoppingItems(prev => prev.filter(item => item.id !== id));
+  
+
+  const handleRemoveItem = async (item) => {
+    for (const id of item.ids) {
+      try {
+        const response = await fetch(`${BACKEND_URL}/removeItemFromShoppingList`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_id: user.userID, item_id: id }),
+        });
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setGenerate(true);  // This triggers the useEffect to refetch
+        return data;
+      }
+      catch(error) {
+        console.error("Error fetching data from the backend:", error);
+      }
+    }
   };
 
   const handleAddItem = (name) => {
@@ -187,8 +248,7 @@ const MealPlanner = () => {
         id: Date.now(),
         name: name.trim(),
         checked: false
-      }
-    ]);
+      }])
   };
 
   return (
@@ -232,10 +292,20 @@ const MealPlanner = () => {
       </div>
 
       <ShoppingList
+        key={shoppingListKey}
         items={shoppingItems}
         onToggleItem={handleToggleItem}
         onRemoveItem={handleRemoveItem}
         onAddItem={handleAddItem}
+        regenerateShoppingList={() => {
+          const loadShoppingList = async () => {
+            const updatedList = await fetchShoppingList();
+            if (updatedList) {
+              setShoppingItems(updatedList);
+            }
+          };
+          loadShoppingList();
+        }}
         // setGenerateAfterRemoveMeal={setGenerateAfterRemoveMeal}
         // generateAfterRemoveMeal={generateAfterRemoveMeal}
       />

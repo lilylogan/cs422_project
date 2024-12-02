@@ -512,33 +512,64 @@ def getLikedRecipes():
 @app.route('/api/remove-meal', methods=['DELETE'])
 @login_required
 def remove_meal():
-    """Remove a meal from a user's meal plan. """
+    """Remove a meal from a user's meal plan and its ingredients from the shopping list."""
     try:
         data = request.get_json()
-        
+
         if not data or 'mealId' not in data or 'day' not in data:
             return jsonify({'error': 'Missing required fields: mealId and day'}), 400
-            
+
         meal_id = data['mealId']
         day = data['day']
-        
-        # Find and delete the meal plan entry
-        meal_plan = MealInPlan.query.filter_by(userID=current_user.userID,recipeID=meal_id,dayOfWeek=day).first()
-        
-        # Remove ingredients with the manageShoppingList 
-        # shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
-        # shopping_list_manager.removeRecipeInShoppingList(user_id=current_user.userID, recipe_id=meal_id)
+
+        # Find the meal plan entry
+        meal_plan = MealInPlan.query.filter_by(
+            userID=current_user.userID,
+            recipeID=meal_id,
+            dayOfWeek=day
+        ).first()
 
         if not meal_plan:
             return jsonify({'error': 'Meal plan not found'}), 404
+
+        # Retrieve the ingredients associated with the recipe
+        recipe_ingredients = RecipeContents.query.filter_by(recipeID=meal_id).all()
+
+        # Find the user's shopping list
+        shopping_list = ShoppingList.query.filter_by(userID=data["user_id"]).first()
+        
+        print("Deleting shopping list items:", shopping_list)
+
+        if shopping_list:
+            for ingredient in recipe_ingredients:
+                # Find the ingredient entry in ShoppingListContents
+                shopping_list_entry = ShoppingListContents.query.filter_by(
+                    listID=shopping_list.listID,
+                    ingredientID=ingredient.ingredientID
+                ).first()
+                print(shopping_list_entry)
+
+                if shopping_list_entry:
+                    # Reduce the quantity or delete the entry if it's no longer needed
+                    if shopping_list_entry.quantity and ingredient.quantity:
+                        print("Deleting entry")
+                        print(shopping_list_entry.quantity)
+                        print(ingredient.quantity)
+                        if shopping_list_entry.quantity > ingredient.quantity:
+                            shopping_list_entry.quantity -= ingredient.quantity
+                        if shopping_list_entry.quantity == ingredient.quantity:
+                            db.session.delete(shopping_list_entry)
+                    else:
+                        db.session.delete(shopping_list_entry)
+                        
             
+
         # Delete the meal plan entry
         db.session.delete(meal_plan)
         db.session.commit()
-        # add for removing too
-        
-        return jsonify({'message': 'Meal removed successfully'}), 200
-        
+
+        return jsonify({'message': 'Meal and associated shopping list items removed successfully'}), 200
+
     except Exception as e:
         print(f"Error removing meal: {str(e)}")
         db.session.rollback()

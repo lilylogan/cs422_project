@@ -113,25 +113,35 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
   const [display, setDisplay] = useState(null);
 
   useEffect(() => {
-    if (generate) {
-      const getData = async () => {
-        if (user?.userID) {
-          const fetchedData = await fetchShoppingList(user.userID); // Pass userID here
-          // setData(combined_data)
-          setData(fetchedData);
-          // convert and combine
-          const combined_data = processFetchedData(fetchedData);
-          // console.log(combined_data);
-          setDisplay(combined_data);
-        } else {
-          console.error('User ID is not available');
-        }
-        setGenerate(false);
-        // setGenerateAfterRemoveMeal(false);
-      };
-      getData();
+    // If items prop changes, trigger regeneration
+    if (items) {
+      setGenerate(true);
     }
-  }, [user, generate]);
+  }, [items]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        if (user?.userID && generate) {
+          console.log('Regenerating shopping list...');
+          const fetchedData = await fetchShoppingList(user.userID);
+          if (fetchedData) {
+            setData(fetchedData);
+            const combined_data = processFetchedData(fetchedData);
+            setDisplay(combined_data);
+          }
+        }
+      } catch (error) {
+        console.error('Error regenerating shopping list:', error);
+      } finally {
+        setGenerate(false);
+      }
+    };
+  
+    getData();
+  }, [user, generate, items]); // Added items as a dependency
+
+
 
   // const handleToggle = (id) => {
   //   // Update the checked state locally (you may need to sync with backend)
