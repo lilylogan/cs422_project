@@ -3,7 +3,6 @@ from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 import parse_ingredient
 from flask import Flask, render_template, abort, jsonify, request, send_from_directory
-from foodunits import units_convertor
 
 
 class manageShoppingList:

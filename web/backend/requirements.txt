@@ -7,4 +7,3 @@ Flask-Login
 pandas
 pip
 zestful-parse-ingredient
-foodunits
