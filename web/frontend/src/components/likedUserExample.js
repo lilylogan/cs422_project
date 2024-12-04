@@ -1,4 +1,10 @@
-// components/liked.js
+/*
+likedUserExample.js
+Description: 
+Date: October 28th, 2024
+Inital Author: 
+Modified By: 
+*/
 import React, { useEffect, useState } from 'react';
 import HeartContainer from '../containers/heartContainer';
 import SearchBarContainer from '../containers/searchContainer';

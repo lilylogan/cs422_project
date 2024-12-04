@@ -1,4 +1,10 @@
-
+/*
+liked.js
+Description: Fetches liked recipes from backend and displays the results as a list to the user.
+Date: October 18th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React, { useEffect, useState } from 'react';
 import HeartContainer from '../containers/heartContainer';
 import SearchBarContainer from '../containers/searchContainer';

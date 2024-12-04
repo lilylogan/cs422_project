@@ -1,3 +1,10 @@
+/*
+deckSwap.js
+Description: Component to swap between the Discovery and Liked Deck, used in the home page.
+Date: October 7th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 function DeckSwap({ toggle, handleToggle }) {
     return (
         <div className="toggleContainer">

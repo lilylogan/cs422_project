@@ -1,3 +1,10 @@
+/* 
+login.js
+Description: Front end handling and styling of the login page
+Date: October 20th, 2024
+Inital Author: Ellison Largent
+Modified By: 
+*/
 import React, { useState } from 'react';
 import loginImage from '../assets/loginimage.jpg';
 import { useNavigate } from 'react-router-dom';

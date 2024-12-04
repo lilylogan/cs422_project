@@ -1,3 +1,10 @@
+/*
+learnMore.js
+Description: Component that displays a Learn More button
+Date: October 12th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React from 'react'
 
 function LearnMore({ onClick, cname }) {

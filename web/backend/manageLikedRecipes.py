@@ -1,3 +1,10 @@
+"""
+manageLikedRecipes.py
+Description: 
+Date: 
+Inital Author: 
+Modified By: 
+"""
 from models import db
 from sqlalchemy import func, desc
 from sqlalchemy.orm import joinedload

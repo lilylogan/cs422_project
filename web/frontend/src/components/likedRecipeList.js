@@ -1,3 +1,10 @@
+/*
+likedRecipeList.js
+Description: Component for the front end of the likedRecipes page, formats the recipes and displays to users with learn more buttons available.
+Date: Novemeber 24th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React from 'react'
 import HeartContainer from '../containers/heartContainer'
 import LearnMoreContainer from '../containers/learnMoreContainer'
@@ -9,7 +16,6 @@ function RecipeList( { title, time, cuisine, data, user, setGenerate } ) {
 
     return (
         <div className="recipeListContainer">
-            <HeartContainer cname="listHeart" />
             <h5 className="listName">{title}</h5>
             <h5 className="time">Time: {time}</h5>
             <h5 className="cuisineList">cuisine: {cuisine}</h5>

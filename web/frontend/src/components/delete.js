@@ -1,3 +1,10 @@
+/*
+delete.js
+Description: Component for delete button. Used in liked page.
+Date: October 9th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React from 'react'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 

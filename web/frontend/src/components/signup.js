@@ -1,3 +1,11 @@
+/* 
+signup.js
+Description: Component for displaying the front end of the sign up page. Sends information to backend
+in order to create and verify accounts.
+Date: November 2nd, 2024
+Inital Author: Ellison Largent
+Modified By: 
+*/
 import React, { useState } from 'react';
 import loginImage from '../assets/loginimage.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -5,7 +13,6 @@ import { useAuth } from '../context/AuthContext'; // Add this import
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-// ... (keeping all your existing styles object as is)
 const styles = {
     container: {
         minHeight: '100vh',

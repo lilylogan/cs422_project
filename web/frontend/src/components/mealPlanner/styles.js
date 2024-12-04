@@ -1,3 +1,10 @@
+/*
+styles.js
+Description: Styling for the meal planner page
+Date: October 26th, 2024
+Inital Author: Ellison Largent
+Modified By: 
+*/
 import { THEME } from '../../constants/theme';
 
 export const styles = {

@@ -1,3 +1,10 @@
+/*
+home.js
+Description: Component that displays the layout of the main home page and fetches recipes to display for tinder like interface.
+Date: October 7th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React, { useState, useEffect } from 'react'
 import DeckSwapContainer from '../containers/deckSwapContainer';
 import RecipeCardContainer from '../containers/cardConatiner';

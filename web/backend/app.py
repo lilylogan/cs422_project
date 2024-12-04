@@ -1,3 +1,11 @@
+"""
+app.py
+Description: Main python file that creates the app and launches it also holds
+methods for fetching information and storing information for the user.
+Date: October 28th, 2024
+Inital Author: Amanda Hoteling
+Modified By: Ellison Largent, Lily Logan, and Will 
+"""
 from flask import Flask, render_template, abort, jsonify, request, send_from_directory
 import os
 from flask_sqlalchemy import SQLAlchemy
@@ -198,7 +206,8 @@ def check_auth():
                 'email': current_user.email,
                 'userID': current_user.userID,
                 'lname': current_user.lname,
-                'fname': current_user.fname
+                'fname': current_user.fname,
+                'image_path': current_user.image_path
             }
         })
     return jsonify({'isAuthenticated': False}), 401
@@ -630,5 +639,61 @@ def update_profile():
     else:
         return jsonify({"error": "User not found"}), 404
     
+@app.route('/api/update-profile-image', methods=['POST'])
+@login_required
+def update_profile_image():
+    """
+    Endpoint to update a user's profile image
+    
+    Expected JSON payload:
+    {
+        "userId": int,
+        "imagePath": str (e.g., "bear.jpg")
+    }
+    
+    Returns:
+    - 200 OK with success message if update successful
+    - 400 Bad Request if data is invalid
+    - 404 Not Found if user doesn't exist
+    - 500 Internal Server Error for database issues
+    """
+    try:
+        # Get JSON data from the request
+        data = request.get_json()
+        
+        # Validate required fields
+        user_id = data.get('userId')
+        image_path = data.get('imageTag')
+        
+        # Validate input
+        if not user_id or not image_path:
+            return jsonify({"status": "error", "message": "User ID and image path are required"}), 400
+        
+        # Find the user
+        user = User.query.get(user_id)
+        
+        # Check if user exists
+        if not user:
+            return jsonify({"status": "error", "message": "User not found"}), 404
+        
+        # Update image path
+        user.image_path = image_path
+        print("\n\n" + image_path + "\n\n")
+        # Commit changes to database
+        try:
+            db.session.commit()
+        except Exception as db_error:
+            db.session.rollback()
+            app.logger.error(f"Database error updating profile image: {db_error}")
+            return jsonify({"status": "error", "message": "Database error occurred"}), 500
+        
+        # Return success response
+        return jsonify({"status": "success", "message": "Profile image updated successfully","imagePath": image_path
+        }), 200
+    
+    except Exception as e:
+        # Catch any unexpected errors
+        app.logger.error(f"Unexpected error in update_profile_image: {e}")
+        return jsonify({"status": "error", "message": "An unexpected error occurred"}), 500
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

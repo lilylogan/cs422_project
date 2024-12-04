@@ -1,3 +1,10 @@
+/*
+card.js
+Description: Front end display of the recipe cards used in the home page.
+Date: October 9th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React from 'react'
 import HeartContainer from '../containers/heartContainer';
 import LearnMoreContainer from '../containers/learnMoreContainer';

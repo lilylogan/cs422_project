@@ -1,3 +1,10 @@
+/* 
+navbar.js
+Description: Component for displaying a navigation bar that hosts options for page selection that reroutes the user when an option is clicked.
+Date: October 20th, 2024
+Inital Author: Will Marceau
+Modified By: Ellison Largent
+*/
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 

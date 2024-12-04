@@ -1,8 +1,37 @@
+/* 
+settings.js
+Description: Component for displaying and handling the settings page. Allows users to change their name, login, logout, or
+switch their user profile image to one of the eight available options.
+Date: December 2nd, 2024
+Inital Author: Ellison Largent
+Modified By: 
+*/
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { handleLogout, handleDeleteAccount } from '../containers/authUtils.js';
-import profileImage from '../assets/wally_wale.jpg';
+import defaultProfileImage from '../assets/wally_wale.jpg';
 import { useAuth } from '../context/AuthContext';
+
+
+// Import all profile images
+import bearImage from '../assets/bear.jpg';
+import bunnyImage from '../assets/bunny.jpg';
+import catImage from '../assets/cat.jpg';
+import lionImage from '../assets/lion.jpg';
+import duckImage from '../assets/duck.png';
+import mouseImage from '../assets/mouse.jpg';
+import octopusImage from '../assets/octopus.jpg';
+
+const profileImages = [
+  {src: bearImage, tag: 'bear'},
+  {src: bunnyImage, tag: 'bunny'},
+  {src: catImage, tag: 'cat'},
+  {src: lionImage, tag: 'lion'},
+  {src: duckImage, tag: 'duck'},
+  {src: mouseImage, tag: 'mouse'},
+  {src: octopusImage, tag: 'octopus'},
+  {src: defaultProfileImage, tag: 'wally'}
+];
 
 const styles = {
   container: {
@@ -127,7 +156,28 @@ const styles = {
     filter: 'brightness(1.3)',
     boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
     transform: 'scale(1.05)',
+  },
+  imageGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '1rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '1rem',
+  },
+  imageOption: {
+    width: '100px',
+    height: '100px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    cursor: 'pointer',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  },
+  selectedImage: {
+    transform: 'scale(1.1)',
+    boxShadow: '0 0 0 3px #4A7B32',
   }
+
 };
 
 function Settings() {
@@ -136,6 +186,8 @@ function Settings() {
   const [isEditHovered, setEditHovered] = useState(false);
   const { user, logout } = useAuth();
 
+  /* Function to handle changing a users name, requests entries for first and last name, sends to backend, and displays updated
+  first and last name */
   const handleEditName = async () => {
     const { value: formValues } = await Swal.fire({
       title: 'Edit Your Name',
@@ -207,7 +259,104 @@ function Settings() {
       }
     }
   };
+  /* Function to handle a user switching to a different profile */
+  const handleEditProfileImage = async () => {
+    const { value: selectedTag } = await Swal.fire({
+      title: 'Choose Your Profile Image',
+      html: `
+        <div id="image-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 1rem;">
+          ${profileImages.map(img => `
+            <img 
+              src="${img.src}" 
+              alt="${img.tag}" 
+              data-tag="${img.tag}"
+              style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; cursor: pointer;"
+              class="profile-image-option"
+            />
+          `).join('')}
+        </div>
+      `,
+      background: '#FAF5F0',
+      color: '#3B2A1D',
+      confirmButtonText: 'Select',
+      confirmButtonColor: '#4A7B32',
+      showCancelButton: true,
+      cancelButtonColor: '#B75E4A',
+      didRender: () => {
+        const imageGrid = document.getElementById('image-grid');
+        imageGrid.addEventListener('click', (e) => {
+          if (e.target.classList.contains('profile-image-option')) {
+            document.querySelectorAll('.profile-image-option').forEach(img => {
+              img.style.transform = 'scale(1)';
+              img.style.boxShadow = 'none';
+            });
+            e.target.style.transform = 'scale(1.1)';
+            e.target.style.boxShadow = '0 0 0 3px #4A7B32';
+          }
+        });
+      },
+      preConfirm: () => {
+        const selectedImg = document.querySelector('.profile-image-option[style*="scale(1.1)"]');
+        return selectedImg ? selectedImg.getAttribute('data-tag') : null; 
+      },
+      customClass: {
+        confirmButton: 'custom-confirm-button',
+      },
+    });
 
+    if (selectedTag) {
+      console.log('Payload being sent:', {
+        userId: user?.userID,
+        imageTag: selectedTag,
+      });
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/update-profile-image`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            userId: user?.userID, 
+            imageTag: selectedTag
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update profile image');
+        }
+
+        await Swal.fire({
+          title: "Profile Image Updated",
+          text: "Your profile image has been successfully updated.",
+          icon: "success",
+          background: '#FAF5F0',
+          color: '#3B2A1D',
+          iconColor: '#4A7B32',
+          confirmButtonColor: '#4A7B32',
+        });
+
+        // Force a page reload or context refresh to show updated image
+        window.location.reload();
+      } catch (error) {
+        console.error('Update profile image error:', error);
+        Swal.fire({
+          title: "Error",
+          text: "Failed to update profile image. Please try again.",
+          icon: "error",
+          background: '#FAF5F0',
+          color: '#3B2A1D',
+          iconColor: '#95340A',
+        });
+      }
+    }
+  };
+
+
+  /*    PAGE LAYOUT     */
+
+  const currentProfileImage = profileImages.find(img => img.tag === user?.image_path) || profileImages.find(img => img.tag === 'wally');
+  
   return (
     <div style={{
       ...styles.container,
@@ -231,8 +380,9 @@ function Settings() {
               marginRight: '0',
             } : {})
           }}
-          src={profileImage}
+          src={currentProfileImage.src}
           alt="Profile"
+          onClick={handleEditProfileImage}
         />
         <div style={styles.infoContainer}>
           <div>

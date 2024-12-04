@@ -1,3 +1,11 @@
+"""
+models.py
+Description: The code behind creating the relational database for the users
+using sqlalchemy.
+Date: October 29th, 2024
+Inital Author: Ellison Largent
+Modified By: Amanda Hoteling, and Lily Logan
+"""
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from flask_login import UserMixin
@@ -13,7 +21,8 @@ class User(UserMixin, db.Model):
     fname = db.Column(db.String(50), nullable=False)
     lname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    
+    image_path = db.Column(db.Text)
+
     # Relationships
     shopping_list = db.relationship("ShoppingList", back_populates="user", uselist=False)
     liked_recipes = db.relationship("Recipe", secondary="liked", back_populates="liked_by")

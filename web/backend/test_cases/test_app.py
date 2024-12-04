@@ -1,3 +1,10 @@
+"""
+test_app.py
+Description: Test suite for the app creation, homepage, login, logout, and liked recipes.
+Date: 
+Inital Author: Amanda Hoelting
+Modified By: 
+"""
 import unittest
 from app import app, db  # Import your Flask app and database from app.py
 from flask import json, jsonify

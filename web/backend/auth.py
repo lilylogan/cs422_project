@@ -1,3 +1,11 @@
+"""
+auth.py
+Description: Handles the login and signup features of the app.
+Feeds back into the app.py file. 
+Date: November 4th, 2024
+Inital Author: Ellison Largent
+Modified By: 
+"""
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from flask_login import login_user

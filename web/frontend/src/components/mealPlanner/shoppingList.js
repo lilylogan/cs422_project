@@ -1,3 +1,10 @@
+/*
+shoppingList.js
+Description: The front end for fetching, inserting, and displaying the shopping list items and converting units. Works with the index page to display image.
+Date: October 20th, 2024
+Inital Author: Ellison Largent
+Modified By: Lily Logan
+*/
 import React, { useEffect, useState } from 'react';
 import { THEME } from '../../constants/theme';
 import { styles } from './styles';

@@ -1,3 +1,11 @@
+/*
+index.js
+Description: The front end of the calendar view of the meal planner works in concert with index.js in the mealPlanner repositiory 
+to handle the meal planner on wider screens, including things such as moving meals, displaying meals, and removing meals.
+Date: October 20th, 2024
+Inital Author: Ellison Largent
+Modified By: 
+*/
 import React, { useState, useEffect } from 'react';
 import { THEME } from '../../constants/theme';
 import { styles } from './styles';
