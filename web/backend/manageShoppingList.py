@@ -277,6 +277,44 @@ class manageShoppingList:
             return "month"
         if unit.lower() == "year":
             return "year"
+        
+
+    def check(self, user_id, item_id):
+        """
+        Toggles the 'checked' status of an item in the shopping list.
+        """
+
+        # Retrieve the shopping list entry
+        shopping_list = self.shoppingListDB.query.get(user_id)
+
+        if not shopping_list:
+            return jsonify({'error': 'Shopping list not found for the user'}), 404
+
+        # Retrieve the specific shopping list content
+        shopping_list_content = self.shoppingListContentsDB.query.filter_by(
+            listID=shopping_list.listID,
+            ingredientID=item_id
+        ).first()
+
+        if not shopping_list_content:
+            return jsonify({'error': 'Ingredient not found in shopping list'}), 404
+
+        try:
+            # Toggle the checked status
+            shopping_list_content.checked = not shopping_list_content.checked
+            
+            # Commit the changes
+            db.session.commit()
+            return jsonify({
+                'message': 'Ingredient checked status updated successfully',
+                'ingredientID': item_id,
+                'checked': shopping_list_content.checked
+            }), 200
+
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'Failed to update checked status: {str(e)}'}), 500
+
     
     # Unsupported unit
     # raise ValueError(f"Unsupported unit {unit}, use one of the supported units.")

@@ -162,39 +162,96 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
   //   setGenerate(true);
   // };
 
+  // const handleToggle = (id) => {
+  //   setData((prevData) => {
+  //     // Step 1: Get the display item
+  //     const displayItem = prevData[id];
+      
+  //     if (!displayItem || !displayItem.ids) {
+  //       console.error(`No display item or ids found for id: ${id}`);
+  //       return prevData;
+  //     }
+  
+  //     // Step 2: Create a copy of the existing data
+  //     const updatedData = { ...prevData };
+  
+  //     // Step 3: Loop through the ids in the display item
+  //     displayItem.ids.forEach((itemId) => {
+  //       if (updatedData[itemId]) {
+  //         // Toggle the `checked` attribute of the matching items
+  //         updatedData[itemId] = {
+  //           ...updatedData[itemId],
+  //           checked: !updatedData[itemId].checked,
+  //         };
+  //       }
+  //     });
+  
+  //     // Step 4: Toggle the `checked` attribute of the display item itself
+  //     updatedData[id] = {
+  //       ...displayItem,
+  //       checked: !displayItem.checked,
+  //     };  
+  //     return updatedData;
+  //   });
+  //   setGenerate(true);
+  // };
+
   const handleToggle = (id) => {
     setData((prevData) => {
-      // Step 1: Get the display item
-      const displayItem = prevData[id];
-      
+      const updatedData = { ...prevData };
+  
+      // Find the display item corresponding to the given id
+      const displayItem = display[id];
       if (!displayItem || !displayItem.ids) {
         console.error(`No display item or ids found for id: ${id}`);
         return prevData;
       }
   
-      // Step 2: Create a copy of the existing data
-      const updatedData = { ...prevData };
-  
-      // Step 3: Loop through the ids in the display item
+      // Toggle `checked` for all associated IDs in `data`
       displayItem.ids.forEach((itemId) => {
         if (updatedData[itemId]) {
-          // Toggle the `checked` attribute of the matching items
           updatedData[itemId] = {
             ...updatedData[itemId],
             checked: !updatedData[itemId].checked,
           };
+  
+          // Trigger backend update for each item
+          fetch(`${BACKEND_URL}/checkItemInShoppingList`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user_id: user.userID, item_id: itemId }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`Error updating item ${itemId}: ${response.statusText}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(`Item ${itemId} updated successfully`, data);
+            })
+            .catch((error) => {
+              console.error("Error updating item:", error);
+            });
         }
       });
   
-      // Step 4: Toggle the `checked` attribute of the display item itself
-      updatedData[id] = {
-        ...displayItem,
-        checked: !displayItem.checked,
-      };  
+      // Return the updated state
       return updatedData;
     });
-    setGenerate(true);
+  
+    // Optional: Update `display` state for UI consistency
+    setDisplay((prevDisplay) => ({
+      ...prevDisplay,
+      [id]: {
+        ...prevDisplay[id],
+        checked: !prevDisplay[id].checked,
+      },
+    }));
   };
+  
   
 
   const [debugOutput, setDebugOutput] = useState('');
@@ -398,13 +455,13 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
       </form>
 
       {/* Debugging: Display fetched and processed data */}
-      <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
+      {/* <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
         <h3>Debug Output</h3>
         <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', maxHeight: '200px', overflow: 'auto' }}>
           {/* Debug combined data */}
-          {debugOutput || JSON.stringify(display, null, 2)}
+          {/* {debugOutput || JSON.stringify(display, null, 2)}
         </pre>
-      </div>
+      </div> */}
     </div>
   );
 

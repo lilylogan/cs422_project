@@ -383,6 +383,27 @@ def remove_item_from_shopping_list():
     return shopping_list_manager.removeItem(user_id, item_id)
 
 
+@app.route('/checkItemInShoppingList', methods=['POST'])
+def check_item_in_shopping_list():
+    data = request.get_json()
+    
+    # Validate the input
+    if not data or 'user_id' not in data or 'item_id' not in data:
+        return jsonify({"status": "failure", "message": "User ID and Item ID are required"}), 400
+
+    user_id = int(data["user_id"])
+    item_id = int(data["item_id"])
+    # checked = data.get("checked")  # Optional boolean to toggle the state
+
+    shopping_list_manager = manageShoppingList(User, Recipe, MealInPlan, RecipeContents, RecipeIngredient, ShoppingList, ShoppingListContents, ShoppingListIngredient)
+
+    try:
+        shopping_list_manager.check(user_id, item_id)
+        return jsonify({"message": "Item checked status updated successfully"}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/protected-route', methods=['GET'])
 @login_required
 def protected_route():
