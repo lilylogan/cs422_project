@@ -9,7 +9,7 @@
 ## Aplication Description
 
 
-A web application with login capabilities, made for those who are tired of trying to find out what to make for dinner for the week. The basis of the web app is that the user will be presented with recipe after recipe one at a time till they find one to cook. While doing this the user can filter the recipes to what they want to see, sort them into their meal plan, dislikes, or pin them as favorites. Beyond this they can move around the meals for each day of the week and view their week's recipes and add the ingredients to their shopping list. 
+A web application with login capabilities, made for those who are tired of trying to find out what to make for dinner for the week. The basis of the web app is that the user will be presented with recipe after recipe one at a time till they find one to cook. While doing this the user can  sort them into their meal plan, dislikes, or pin them as favorites. Beyond this they can move around the meals for each day of the week and view their week's recipes and add the ingredients to their shopping list. 
 
 
 ## Page Usage and Purpose
