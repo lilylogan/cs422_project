@@ -10,12 +10,16 @@ import HeartContainer from '../containers/heartContainer'
 import LearnMoreContainer from '../containers/learnMoreContainer'
 import AddContainer from '../containers/addContainer'
 import DeleteButtonContainer from '../containers/deleteContainer'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import BakeryDiningIcon from '@mui/icons-material/BakeryDining';
 
 function RecipeList( { title, time, cuisine, data, user, setGenerate } ) {
 
 
     return (
         <div className="recipeListContainer">
+            <RestaurantMenuIcon className= "forks" sx = {{fontSize: 65}}/>
+            {/*<HeartContainer cname="listHeart" />*/}
             <h5 className="listName">{title}</h5>
             <h5 className="time">Time: {time}</h5>
             <h5 className="cuisineList">cuisine: {cuisine}</h5>
@@ -25,6 +29,7 @@ function RecipeList( { title, time, cuisine, data, user, setGenerate } ) {
             </div>)}
             <AddContainer user={user} data={data} />
             <DeleteButtonContainer data={data} user={user} setGenerate={setGenerate}/>
+            {/*<DeleteButtonContainer data={data} user={user} setGenerate={setGenerate}/>*/}
         </div>
     )
 }

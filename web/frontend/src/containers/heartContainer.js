@@ -6,19 +6,23 @@ Date: November 20th, 2024
 Inital Author: Will Marceau
 Modified By: 
 */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Heart from '../components/heart'
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 
-function HeartContainer({ cname, data, user }) {
+function HeartContainer({ cname, data, user, start }) {
     const [error, setError] = useState('');
     
+    useEffect(() => {
+        setLiked(start);
+      }, [start]);
 
 
     const handleLike = async (action) => {
         try {
+            console.log("like")
             // send request
             console.log("Sending request to backend");
             const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {
@@ -44,9 +48,10 @@ function HeartContainer({ cname, data, user }) {
         }
     };
 
-    const[liked, setLiked] = useState("unheart");
+    const[liked, setLiked] = useState(start);
 
     const handleClick = () => {
+        console.log("click")
         setLiked((prevLiked) => {
             let newLiked;
             if (prevLiked === "unheart") {

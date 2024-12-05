@@ -94,6 +94,8 @@ const MealPlanner = () => {
 
   const [shoppingListKey, setShoppingListKey] = useState(0);
 
+  const[liked, setLiked] = useState("unheart");
+
   const regenerateShoppingList = () => {
     setShoppingListKey(prevKey => prevKey + 1);
   };
@@ -284,6 +286,8 @@ const MealPlanner = () => {
                 onMealDrop={handleMealDrop}
                 onToggleLike={handleToggleLike}
                 onRemoveMeal={handleRemoveMeal}
+                liked={liked}
+                setLiked={setLiked}
               />
             ) : (
               <div>
@@ -295,6 +299,7 @@ const MealPlanner = () => {
                     onMealDrop={handleMealDrop}
                     onToggleLike={handleToggleLike}
                     onRemoveMeal={handleRemoveMeal}
+                    liked={liked}
                   />
                 ))}
               </div>

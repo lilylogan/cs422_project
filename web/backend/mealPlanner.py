@@ -6,7 +6,8 @@ Date: November 15th, 2024
 Modified By: 
 """
 from flask import jsonify
-from models import MealInPlan
+from models import MealInPlan, User
+
 def get_user_planned_meals(user_id):
     """
     Get all planned meals for a specific user.
@@ -20,6 +21,10 @@ def get_user_planned_meals(user_id):
     try:
         # Query meal plans for current user
         meal_plans = MealInPlan.query.filter_by(userID=user_id).all()
+
+        user = User.query.filter_by(userID=user_id).first()
+        if not user:
+            return None  # User does not exist
         
         # Add debug logging
         print(f"Found {len(meal_plans)} meal plans for user {user_id}")
@@ -29,10 +34,17 @@ def get_user_planned_meals(user_id):
             'Sunday': [], 'Monday': [], 'Tuesday': [], 'Wednesday': [],
             'Thursday': [], 'Friday': [], 'Saturday': []
         }
-        
+
         # Populate the meals for each day
         for meal in meal_plans:
             recipe = meal.recipe
+            in_likes = any(liked.recipeID == recipe.recipeID for liked in user.liked_recipes)
+
+            if in_likes:
+                toggle = "heart"
+            else:
+                toggle = "unHeart"
+
             print(f"Processing meal plan: Day={meal.dayOfWeek}, Recipe={recipe.name}")
             
             meal_data = {
@@ -45,7 +57,8 @@ def get_user_planned_meals(user_id):
                 'servings': recipe.servings,
                 'instructions': recipe.instructions,
                 'ingredients' : recipe.get_ingredient_list(),
-                'image_path': recipe.image_path
+                'image_path': recipe.image_path,
+                'toggle': toggle,
             }
             meals_by_day[meal.dayOfWeek].append(meal_data)
             

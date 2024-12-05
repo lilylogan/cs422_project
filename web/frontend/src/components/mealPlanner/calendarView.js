@@ -83,6 +83,7 @@ const CalendarView = ({ meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
           >
             {/* Map through meals for the current day and display each meal as a draggable item */}
             {meals[day].map((meal) => (
+              // testing here
               <div
                 key={meal.id}
                 draggable
@@ -104,13 +105,13 @@ const CalendarView = ({ meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
                 {/* Meal card header with title and like (heart) toggle */}
                 <div style={calendarStyles.mealHeader}>
                   <div
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering the meal click
-                      onToggleLike(day, meal.id);
-                    }}
+                     onClick={(e) => {
+                       e.stopPropagation(); // Prevent triggering the meal click
+                       onToggleLike(day, meal.id);
+                     }}
                     style={{ cursor: 'pointer' }}
                   >
-                    <HeartContainer cname="plannerHeart" key={`${day}-${meal.id}`} />
+                    <HeartContainer cname="plannerHeart" key={`${day}-${meal.id}`} start={meal.toggle} />
                   </div>
                   <div style={calendarStyles.mealTitle}>
                     {meal.name}
