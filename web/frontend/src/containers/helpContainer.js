@@ -9,6 +9,9 @@ Modified By:
 import React from 'react'
 import HelpButton from '../components/help'
 import Swal from 'sweetalert2'
+import help1Image from '../assets/help1.png'
+import help2Image from '../assets/help2.png'
+
 
 function HelpButtonContainer() {
     const clickHandler = () => {
@@ -20,7 +23,7 @@ function HelpButtonContainer() {
                 </div>
                 <div class="alertFrameContainer">
                     <div class="alertPhotoFrame">
-                        <img class="alertPhoto" />
+                        <img class="alertPhoto" src="${help1Image}" alt="Discovery Deck Help" />                     
                     </div>
                 </div>
                 <div class="helpInstructions">
@@ -37,7 +40,7 @@ function HelpButtonContainer() {
                 </div>
                 <div class="alertFrameContainer">
                     <div class="alertPhotoFrame">
-                        <img class="alertPhoto"/>
+                        <img class="alertPhoto" src="${help2Image}" alt="Liked Deck Help" />                     
                     </div>
                 </div>
                 <div>
