@@ -54,12 +54,12 @@ Supposing everything went smoothly, your web application should now be up and ru
   
 ### recipe_data
 * images: a folder containing all the images corresponding to the recipes in the database.
-* recipe_dataset_vis.ipynb, recipe_db.py, recipes.csv, recipes.db, recipes_clean.csv, final_final_recipes.csv: Various files relating to the imported recipe dataset and the process by which it was cleaned, as well as a copy of the cleaned, uncleaned, and final version of the set.
+* recipe_dataset_vis.ipynb, recipe_db.py, recipes.csv, recipes.db, recipes_clean.csv, final_final_recipes.csv: contains various files relating to the imported recipe dataset and the process by which it was cleaned, as well as a copy of the cleaned, uncleaned, and final version of the set.
 
 ### web
 * backend: stores backend files
   * images: contains images for recipes from dataset to be shown on the app
-  * templates: Basic error page to display in the event of something going wrong
+  * templates: basic error page to display in the event of something going wrong
   * test_cases: a folder to put the test case file for testing the app and ensuring everything works.
   * Dockerfile.backend: contains the necessary components to be added to the docker image required by the backend
   * app.py: the main file for running the app, handles much of the backend processsing as it holds the api endpoints for the front end to talk to
