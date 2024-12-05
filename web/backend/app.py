@@ -550,6 +550,7 @@ def remove_meal():
             return jsonify({'error': 'Missing required fields: mealId and day'}), 400
 
         meal_id = data['mealId']
+        print(meal_id)
         day = data['day']
 
         # Find the meal plan entry
@@ -596,6 +597,7 @@ def remove_meal():
 
         # Delete the meal plan entry
         db.session.delete(meal_plan)
+        db.session.flush()
         db.session.commit()
 
         return jsonify({'message': 'Meal and associated shopping list items removed successfully'}), 200

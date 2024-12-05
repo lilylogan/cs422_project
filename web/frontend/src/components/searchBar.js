@@ -12,7 +12,7 @@ function SearchBar({ item, handleChange }) {
     return (
         <div className="searchBarContainer">
         <div className="searchBar">
-            <div className> <MagnifyingGlass className="searchIcon"/></div>
+            <div> <MagnifyingGlass className="searchIcon"/></div>
             <input
                 type="search"
                 placeholder="Search . . . "

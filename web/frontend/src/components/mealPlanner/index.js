@@ -16,13 +16,17 @@ import {useAuth} from '../../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const fetchShoppingList = async () => {
+const fetchShoppingList = async (userID) => {
   try {
     const response = await fetch(`${BACKEND_URL}/getShoppingList`, {
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({
+        user_id: userID
+      })
     });
 
     if (!response.ok) {
@@ -307,7 +311,7 @@ const MealPlanner = () => {
         onAddItem={handleAddItem}
         regenerateShoppingList={() => {
           const loadShoppingList = async () => {
-            const updatedList = await fetchShoppingList();
+            const updatedList = await fetchShoppingList(user.userID);
             if (updatedList) {
               setShoppingItems(updatedList);
             }

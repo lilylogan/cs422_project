@@ -152,8 +152,10 @@ class likedRecipes:
 
         # Create a new meal plan entry for the target day
         new_meal = self.plan_db(userID=user_id, recipeID=recipe_id, dayOfWeek=target_day)
+        print("New meal:", new_meal)
         db.session.add(new_meal)
-
+        db.session.commit()
+        
         # Retrieve ingredients from the recipe
         recipe_ingredients = (
             self.recipeContentsDB.query
