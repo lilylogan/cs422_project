@@ -45,18 +45,18 @@ Supposing everything went smoothly, your web application should now be up and ru
 
 ## Directory Organization
 
-# Documentation
+### Documentation
 * Project Plan.pdf: The plan for how our project was to be approached and accomplished over a ten week period, authored by Lily Logan the Project Manager.
 * SDS.pdf: The Software Design Specifications of the "Let's Cook!" in greater detail.
 * SRS.pdf: The Software Requirements Specifications of the "Let's Cook!" project in greater detail including the Concept of Operations (ConOps).
 * Technologies Used.pdf: A list of what technologies this project uses and some detail on how.
 
   
-# recipe_data
+### recipe_data
 * images: a folder containing all the images corresponding to the recipes in the database.
 * recipe_dataset_vis.ipynb, recipe_db.py, recipes.csv, recipes.db, recipes_clean.csv, final_final_recipes.csv: Various files relating to the imported recipe dataset and the process by which it was cleaned, as well as a copy of the cleaned, uncleaned, and final version of the set.
 
-# web
+### web
 * backend: stores backend files
   * images: contains images for recipes from dataset to be shown on the app
   * templates: Basic error page to display in the event of something going wrong
@@ -86,7 +86,7 @@ Supposing everything went smoothly, your web application should now be up and ru
   * Dockerfile.frontend: contains the necessary components to be added to the docker image required by the frontend
 * docker-compose.yml: a docker compose file that can be built and ran to run the program locally in a container
 * run.sh: a script to build the docker image and run the program locally
-# READMEmd
+### READMEmd
 The current file you are reading that describes the system, requirements, installation, purpose, and authors of the project.
 
 ## Initial Project Proposal
