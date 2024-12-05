@@ -94,7 +94,7 @@ html, body {
   justify-content: center;
   width: 55%;
   text-align: center;
-  height: 95%;
+  height: flex;
   background-color: #FAF5F0;
 }
 
@@ -108,7 +108,7 @@ html, body {
   justify-content: center;
   width: 55%;
   text-align: center;
-  height: 95%;
+  height: flex;
   background-color: #fbf6f5;
 }
 
@@ -418,9 +418,9 @@ border: 1px solid #3B2A1D;
   display: flex;
   flex-wrap: wrap; /* Allow tags to wrap */
   justify-content: center;
-  gap: 10px;
-  padding: 0 10px;
-  margin-top: 15px;
+  gap: 5px;
+  padding: 0 0px;
+  margin-top: 10px;
 }
 
 .tagCard {
@@ -430,7 +430,7 @@ border: 1px solid #3B2A1D;
   font-size: clamp(0.8rem, 3vw, 1rem); /* Responsive tag font size */
   padding: 5px 10px;
   border: 1px solid white;
-  margin: 10px 10px 10px 10px;
+  margin: 15px 0px 0px 0px;
 
 }
 
@@ -839,6 +839,6 @@ border: 1px solid #3B2A1D;
 .learnMore {
   display: block;
   width: fit-content;
-  margin: 40px auto 0;
+  margin: 20px auto 0;
   font-size: clamp(1rem, 4vw, 1.25rem);
 }
