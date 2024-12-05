@@ -21,7 +21,7 @@ function RecipeCard({ user, title, cookTime, prepTime, servings, cuisine, data, 
         <div>
             <h3 className="recipeNameCard">
                 {title}
-                <HeartContainer cname="heart" user={user} data={data} start={toggle ? "heart" : "unheart"} />
+                <HeartContainer cname="heart" user={user} id={data.recipeID} start={toggle ? "heart" : "unheart"} />
             </h3>
             <div className="frameContainer">
                 <div className={`imageFrame ${toggle ? 'toggled' : ''}`} >

@@ -12,7 +12,7 @@ import Heart from '../components/heart'
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 
-function HeartContainer({ cname, data, user, start }) {
+function HeartContainer({ cname, data, user, start, id }) {
     const [error, setError] = useState('');
     
     useEffect(() => {
@@ -22,7 +22,7 @@ function HeartContainer({ cname, data, user, start }) {
 
     const handleLike = async (action) => {
         try {
-            console.log("like")
+            //console.log("like")
             // send request
             console.log("Sending request to backend");
             const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {
@@ -30,7 +30,7 @@ function HeartContainer({ cname, data, user, start }) {
                 headers: {
                     'Content-type': 'application/json',
                 },
-                body: JSON.stringify({user_action: action, recipe_id: data.recipeID, user_id: user.userID}),
+                body: JSON.stringify({user_action: action, recipe_id: id, user_id: user.userID}),
             });
 
             // check response
@@ -51,7 +51,6 @@ function HeartContainer({ cname, data, user, start }) {
     const[liked, setLiked] = useState(start);
 
     const handleClick = () => {
-        console.log("click")
         setLiked((prevLiked) => {
             let newLiked;
             if (prevLiked === "unheart") {

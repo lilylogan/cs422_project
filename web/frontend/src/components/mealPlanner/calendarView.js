@@ -12,9 +12,11 @@ import { styles, calendarStyles } from './styles';
 import HeartContainer from '../../containers/heartContainer';
 import LearnMoreContainer from '../../containers/learnMoreContainer';
 import ReactDOM from 'react-dom';
+import {useAuth} from '../../context/AuthContext';
 
 // Main CalendarView component that renders a drag-and-drop meal planner calendar view
 const CalendarView = ({ meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
+  const {user} = useAuth();
   const[lastTap, setLastTap] = useState(null);
   // Array representing full names of the days of the week
   const fullDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -111,7 +113,7 @@ const CalendarView = ({ meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
                      }}
                     style={{ cursor: 'pointer' }}
                   >
-                    <HeartContainer cname="plannerHeart" key={`${day}-${meal.id}`} start={meal.toggle} />
+                    <HeartContainer cname="plannerHeart" key={`${day}-${meal.id}`} start={meal.toggle} id={meal.id} user={user}/>
                   </div>
                   <div style={calendarStyles.mealTitle}>
                     {meal.name}

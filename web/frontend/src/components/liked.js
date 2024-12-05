@@ -6,7 +6,6 @@ Inital Author: Will Marceau
 Modified By: 
 */
 import React, { useEffect, useState } from 'react';
-import HeartContainer from '../containers/heartContainer';
 import SearchBarContainer from '../containers/searchContainer';
 import RecipeList from './likedRecipeList'
 import {useAuth} from '../context/AuthContext';

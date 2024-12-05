@@ -12,9 +12,11 @@ import { styles } from './styles';
 import HeartContainer from '../../containers/heartContainer';
 import LearnMoreContainer from '../../containers/learnMoreContainer';
 import ReactDOM from 'react-dom';
+import {useAuth} from '../../context/AuthContext';
 
 export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
   // Drag and drop handlers
+  const {user} = useAuth();
   const handleDragOver = (e) => e.preventDefault();
   const handleDrop = (e) => {
     e.preventDefault();
@@ -88,6 +90,9 @@ export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal 
                 handleHeartClick(meal.id);
               }}>
                 <HeartContainer 
+                  start={meal.toggle}
+                  user={user}
+                  id={meal.id}
                   cname="plannerHeart"  
                   key={`${day}-${meal.id}`}
                 />

@@ -11,7 +11,6 @@ import LearnMoreContainer from '../containers/learnMoreContainer'
 import AddContainer from '../containers/addContainer'
 import DeleteButtonContainer from '../containers/deleteContainer'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import BakeryDiningIcon from '@mui/icons-material/BakeryDining';
 
 function RecipeList( { title, time, cuisine, data, user, setGenerate } ) {
 
