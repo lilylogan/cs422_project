@@ -150,18 +150,21 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
                     swiping={swiping}
                     text="Dislike"
                     cname="left"
+                    toggle={toggle}
                 />
                 <SwipingButton
                     clickHandler={swipeDown}
                     swiping={swiping}
                     text="Pass"
                     cname="down"
+                    toggle={toggle}
                 />
                 <SwipingButton
                     clickHandler={swipeRight}
                     swiping={swiping}
                     text="Add"
                     cname="right"
+                    toggle={toggle}
                 />
             </div>
         </div>

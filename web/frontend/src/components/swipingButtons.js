@@ -5,12 +5,13 @@ Date: December 2nd, 2024
 Inital Author: Will Marceau
 Modified By: 
 */
+
 import React from 'react'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-function SwipingButton({ text, cname, clickHandler, swiping }) {
+function SwipingButton({ text, cname, clickHandler, swiping, toggle }) {
     return (
         <>
         {cname === 'right' && (
@@ -19,7 +20,7 @@ function SwipingButton({ text, cname, clickHandler, swiping }) {
         {cname === 'left' && (
             <KeyboardArrowLeftIcon onClick={clickHandler} className="swipe" sx = {{fontSize: 108}} />
         )}
-        {cname === 'down' && (
+        {cname === 'down' && !toggle && (
             <KeyboardArrowDownIcon onClick={clickHandler} className="swipe" sx = {{fontSize: 108}} />
         )}
         </>
