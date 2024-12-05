@@ -1,3 +1,11 @@
+/* 
+helpContainer.js
+Description: Provides the pop up help window for users that demonstrates how to swipe in case users are not sure or
+need a reminder. Shows the difference to users for discovery deck vs liked deck swipping.
+Date: November 20th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React from 'react'
 import HelpButton from '../components/help'
 import Swal from 'sweetalert2'

@@ -1,3 +1,10 @@
+/* 
+addContainer.js
+Description: Handles the recipe adding to meal planner and pops up a notification to the user that meal has successfully been added.
+Date: November 20th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React, { useState } from "react";
 import Add from "../components/add";
 import Swal from 'sweetalert2'

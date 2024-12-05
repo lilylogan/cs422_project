@@ -1,3 +1,10 @@
+/* 
+App.js
+Description: The routing of the pages and the requiring of authroziation to access some pages.
+Date: October 8th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from "./components/home";

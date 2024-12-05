@@ -1,3 +1,11 @@
+/* 
+AuthContext.js
+Description: Holds logic for if user is authenitcated, used in many other sections to
+access details on current user. 
+Date: November 8th, 2024
+Inital Author: Ellison Largent
+Modified By: 
+*/
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create a context for authentication state that will be available throughout the app

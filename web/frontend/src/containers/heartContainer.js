@@ -1,3 +1,11 @@
+/* 
+heartContainer.js
+Description: Holds logic for what the heart should look like based on status as a
+liked or unliked recipe, and changes upon clicking the heart. 
+Date: November 20th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React, { useState } from 'react'
 import Heart from '../components/heart'
 

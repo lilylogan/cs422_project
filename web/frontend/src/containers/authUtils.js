@@ -1,3 +1,11 @@
+/* 
+authUtils.js
+Description: Displays logout and account deletion warnings to users, and logs out or deletes account
+of given user when user chooses.
+Date: November 19th, 2024
+Inital Author: Will Marceau
+Modified By: Ellison Largent
+*/
 import Swal from 'sweetalert2';
 import { useAuth } from '../context/AuthContext';
 

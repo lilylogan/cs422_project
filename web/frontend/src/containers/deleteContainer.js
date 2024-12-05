@@ -1,3 +1,12 @@
+/* 
+deleteContainer.js
+Description: Container that prompts the user if they really want to delete a recipe, and
+sends information to delete said recipe to backend as well as notifies user that recipe has 
+been deleted as requested.
+Date: November 29th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React, { useState } from 'react'
 import DeleteButton from '../components/delete'
 import Swal from 'sweetalert2'

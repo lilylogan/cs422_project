@@ -1,4 +1,10 @@
-// src/components/mealPlanner/MealPlannerContainer.jsx
+/* 
+mealPlannerContainer.js
+Description: 
+Date: 
+Inital Author: 
+Modified By: 
+*/
 import React, { useState } from 'react';
 import { DayPlanner } from './DayPlanner';
 import { THEME } from '../../constants/theme';

@@ -1,3 +1,13 @@
+/* 
+learnMoreContainer.js
+Description: Provides a learn more container for the recipes that show more of 
+the recipe input when the learn more container is accessed. Used on the main page, liked page
+and meal planner page. 
+Date: November 20th, 2024
+Inital Author: Will Marceau
+Modified By: 
+*/
+
 import React from 'react'
 import LearnMore from '../components/learnMore'
 import Swal from 'sweetalert2'

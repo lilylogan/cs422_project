@@ -1,3 +1,10 @@
+/* 
+searchContainer.js
+Description: 
+Date: 
+Inital Author: Will Marceau
+Modified By: 
+*/
 import React, { useState } from 'react'
 import SearchBar from '../components/searchBar'
 
