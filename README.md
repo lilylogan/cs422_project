@@ -67,25 +67,25 @@ Supposing everything went smoothly, your web application should now be up and ru
   * manageLikedRecipes.py: contains the logic for adding or removing recipes from liked, disliked, and meal planner
   * fr_final_recipe.csv: the final rendition of the dataset for recipes
   * manageShoppingList.py: contains the logic for formatiing and accessing the shopping list as well as managing what happens to ingredients when a recipe is removed or added to the meal planner
-  * mealPlanner.py: handles fetching and returning meals from the meal planner.
+  * mealPlanner.py: handles fetching and returning meals from the meal planner
   * models.py: the basis for the database creation, uses sqlalchemy, and pymysql
   * recipeDeck.py: contains the logic for generating and fetching a random or liked recipe based on if in discovery or liked deck
   * requirements.txt: contains the required software dependencies for the backend to function as it should, is used in the docker files
  
 * frontend: stores frontend files
-  * public: contains public images such as the favicon.ico to display in the tab of the window, as well as the index.html to handle basic rendering.
+  * public: contains public images such as the favicon.ico to display in the tab of the window, as well as the index.html to handle basic rendering
   * src:
-    * assets: contains images for profile photo options, as well as the login image, magnifying glass image, the help images for the help button and the font we choose for our logo.
+    * assets: contains images for profile photo options, as well as the login image, magnifying glass image, the help images for the help button and the font we choose for our logo
     * components: contains components that comprise the various pages of the webapp when used together
-    * constants: contains theme colors for easier changing in future.
+    * constants: contains theme colors for easier changing in future
     * containers: contains various containers used throughout the project in various pages
     * context: contains AuthContext.js that provides checking for authenitcation, used to access the current user information
     * app.css: contains general styling for the frontend
     * app.js: contains base layout of the web app in terms of routes 
-  * package.json: stores information central to the confifguration of the project.
+  * package.json: stores information central to the confifguration of the project
   * Dockerfile.frontend: contains the necessary components to be added to the docker image required by the frontend
-* docker-compose.yml: a docker compose file that can be built and ran to run the program locally in a container.
-* run.sh: a script to build the docker image and run the program locally.
+* docker-compose.yml: a docker compose file that can be built and ran to run the program locally in a container
+* run.sh: a script to build the docker image and run the program locally
 # READMEmd
 The current file you are reading that describes the system, requirements, installation, purpose, and authors of the project.
 
