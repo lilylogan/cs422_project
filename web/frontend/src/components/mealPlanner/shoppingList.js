@@ -92,6 +92,12 @@ function processFetchedData(fetchedData) {
   return combinedItemsMap;
 }
 
+/* 
+  Description: Fetches the shopping list for a specific user from the backend
+  Parameters: userID - the unique identifier for the user
+  Returns: Shopping list data for the specified user
+  Purpose: Retrieve the shopping list items associated with a user's account
+*/
 const fetchShoppingList = async (userID) => {
   try {
     const response = await fetch(`${BACKEND_URL}/getShoppingList`, {
@@ -112,6 +118,16 @@ const fetchShoppingList = async (userID) => {
   }
 };
 
+/* 
+  Description: React component for managing a shopping list
+  Parameters: 
+    - items: Optional prop for initial items 
+    - onToggleItem: Callback for toggling item checked status
+    - onRemoveItem: Callback for removing an item from the list
+    - onAddItem: Callback for adding a new item to the list
+  Returns: Rendered shopping list component with add, remove, and toggle functionality
+  Purpose: Provide a user interface for managing shopping list items
+*/
 export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) => {
   const [newItem, setNewItem] = useState('');
   const [data, setData] = useState(null);
@@ -119,6 +135,12 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
   const[generate, setGenerate] = useState(true);
   const [display, setDisplay] = useState(null);
 
+  /* 
+  Description: Trigger list regeneration when items prop changes
+  Parameters: items prop from parent component
+  Returns: Updates generate state to trigger data refetch
+  Purpose: Ensure shopping list is refreshed when external changes occur
+  */
   useEffect(() => {
     // If items prop changes, trigger regeneration
     if (items) {
@@ -126,6 +148,12 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
     }
   }, [items]);
 
+  /* 
+  Description: Fetch and process shopping list data when user or generate state changes
+  Parameters: user context and generate state
+  Returns: Sets processed shopping list data in display state
+  Purpose: Retrieve and combine shopping list items for the current user
+  */
   useEffect(() => {
     const getData = async () => {
       try {
@@ -148,7 +176,12 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
     getData();
   }, [user, generate, items]); // Added items as a dependency
 
-
+  /* 
+  Description: Handle toggling the checked status of a shopping list item
+  Parameters: id of the item to toggle
+  Returns: Updates both data and display states, triggers backend update
+  Purpose: Allow users to mark items as checked/unchecked and sync with backend
+  */
   const handleToggle = (id) => {
     setData((prevData) => {
       const updatedData = { ...prevData };
@@ -194,7 +227,7 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
       // Return the updated state
       return updatedData;
     });
-  
+
     setDisplay((prevDisplay) => ({
       ...prevDisplay,
       [id]: {
@@ -204,10 +237,15 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
     }));
   };
   
-  
 
   const [debugOutput, setDebugOutput] = useState('');
 
+  /* 
+  Description: Remove an item from the shopping list
+  Parameters: item to be removed (with potentially multiple associated IDs)
+  Returns: Triggers backend removal and list regeneration
+  Purpose: Allow users to delete items from their shopping list
+  */
   const handleRemoveItem = async (item) => {
     // get id from data not from display
     // const data_id = getDataId(id, data, setDebugOutput);
@@ -234,6 +272,12 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
     }
   };
 
+  /* 
+  Description: Add a new item to the shopping list
+  Parameters: name of the item to add
+  Returns: Triggers backend addition and list regeneration
+  Purpose: Allow users to add new items to their shopping list
+  */
   const handleAddItem = async (name) => {
     if (!name.trim()) return;
     try {
@@ -256,6 +300,12 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
     }
   };
 
+  /* 
+  Description: Handle form submission for adding a new item
+  Parameters: form submission event
+  Returns: Adds new item to shopping list and clears input
+  Purpose: Provide a form-based interface for adding shopping list items
+  */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newItem.trim()) {

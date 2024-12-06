@@ -109,7 +109,6 @@ const styles = {
   }
 };
 
-
 const LoginPage = () => {
   const { login } = useAuth(); 
   const [formData, setFormData] = useState({
@@ -121,11 +120,23 @@ const LoginPage = () => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
+  /*  
+    Description: Updates the state when the user types into input fields.
+    Parameters: e (object) - The event object from the input change.
+    Returns: void
+    Purpose: To handle user input and clear any previous error messages.
+  */
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError(''); // Clear any previous errors when user types
   };
   
+  /*  
+    Description: Handles the login process when the form is submitted.
+    Parameters: e (object) - The event object from the form submission.
+    Returns: void
+    Purpose: To validate inputs, call the login function from AuthContext, and navigate to the home page upon success or display an error message upon failure.
+  */
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -148,6 +159,12 @@ const LoginPage = () => {
     setIsLoading(false);
 };
 
+  /*  
+    Description: Redirects the user to the sign-up page when the "Create One Here" button is clicked.
+    Parameters: None.
+    Returns: void.
+    Purpose: To provide a navigation option for users who do not have an account.
+  */
   const handleSignUpRedirect = () => {
     navigate('/signup');
   };

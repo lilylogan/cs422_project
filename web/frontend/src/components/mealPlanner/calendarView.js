@@ -14,24 +14,45 @@ import LearnMoreContainer from '../../containers/learnMoreContainer';
 import ReactDOM from 'react-dom';
 import {useAuth} from '../../context/AuthContext';
 
-// Main CalendarView component that renders a drag-and-drop meal planner calendar view
+/*
+Description: Main CalendarView component that renders a drag-and-drop meal planner calendar view
+*/
 const CalendarView = ({ meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
   const {user} = useAuth();
   const[lastTap, setLastTap] = useState(null);
+  
   // Array representing full names of the days of the week
   const fullDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-  // Prevent default behavior during drag-over to allow for drop action
+  /* 
+  Description: Prevents the default drag-and-drop behavior to allow custom drop handling
+  Parameters: 
+    - e (Event): The drag over event object
+  Returns: void
+  Purpose: Enables dropping of meals by preventing the default browser drag-and-drop behavior
+  */
   const handleDragOver = (e) => e.preventDefault();
 
-  // Handles the drop action, invoking onMealDrop with data of the dragged meal and target day
+  /* 
+  Description: Handles the dropping of a meal onto a specific day in the calendar
+  Parameters: 
+    - day (string): The target day to drop the meal onto
+  Returns: Function that handles the drop event
+  Purpose: Processes meal drag-and-drop by parsing the dragged meal data and calling the onMealDrop callback
+  */
   const handleDrop = (day) => (e) => {
     e.preventDefault();
     const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
     onMealDrop(dragData, day);
   };
   
-  // Handles double tap to bring up learn more container
+  /* 
+  Description: Handles double-tap interaction to show more details about a meal
+  Parameters: 
+    - meal (Object): The meal object to show more details for
+  Returns: void
+  Purpose: Creates a temporary DOM element to render the LearnMoreContainer when a meal is double-tapped
+  */
   const handleMealClick = (meal) => {
     const now = new Date().getTime();
     if (lastTap && now - lastTap < 500) {

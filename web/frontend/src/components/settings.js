@@ -180,14 +180,21 @@ const styles = {
 
 };
 
+/*  
+    Description: Component to display the settings page with all buttons and functionality.
+*/
 function Settings() {
   const [isLogoutHovered, setLogoutHovered] = useState(false);
   const [isDeleteHovered, setDeleteHovered] = useState(false);
   const [isEditHovered, setEditHovered] = useState(false);
   const { user, logout } = useAuth();
 
-  /* Function to handle changing a users name, requests entries for first and last name, sends to backend, and displays updated
-  first and last name */
+  /* 
+  Description: Prompts the user to update their first and last name through a modal dialog and sends the updated data to the backend API.
+  Parameters: None
+  Returns: None
+  Purpose: Allows users to edit their name and updates the backend database.
+  */
   const handleEditName = async () => {
     const { value: formValues } = await Swal.fire({
       title: 'Edit Your Name',
@@ -259,7 +266,13 @@ function Settings() {
       }
     }
   };
-  /* Function to handle a user switching to a different profile */
+
+  /* 
+  Description: Opens a modal displaying available profile images. Users can select an image, and the selection is sent to the backend API for update.
+  Parameters: None
+  Returns: None
+  Purpose: Lets users choose and update their profile image.
+  */
   const handleEditProfileImage = async () => {
     const { value: selectedTag } = await Swal.fire({
       title: 'Choose Your Profile Image',

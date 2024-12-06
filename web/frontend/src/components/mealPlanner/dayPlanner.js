@@ -14,18 +14,49 @@ import LearnMoreContainer from '../../containers/learnMoreContainer';
 import ReactDOM from 'react-dom';
 import {useAuth} from '../../context/AuthContext';
 
+
+/*
+Description: DayPlanner component for managing meals on a specific day in a meal planner interface
+This component handles drag and drop functionality, meal interactions, and provides UI for meal management
+*/
 export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
   const {user} = useAuth();
+  
+  /* 
+  Description: Prevents default browser behavior during drag over to enable custom drop functionality
+  Parameters: 
+    - e (Event): The dragover event object
+  Returns: void
+  Purpose: Allows dropping by preventing the default drag over behavior
+  */
   const handleDragOver = (e) => e.preventDefault();
+  
+  /* 
+  Description: Handles the drop event when a meal is dragged and dropped to a new day
+  Parameters: 
+    - e (Event): The drop event object containing dragged meal data
+  Returns: void
+  Purpose: Extracts dragged meal data and calls onMealDrop to update meal placement
+  */
   const handleDrop = (e) => {
     e.preventDefault();
     const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
     onMealDrop(dragData, day);
   };
 
-  // double click handler
+  /* 
+  Description: State to track the timing of taps for double-tap functionality
+  Purpose: Enables double-tap to open learn more details for a meal
+  */
   const [lastTap, setLastTap] = useState(null);
 
+  /* 
+  Description: Handles meal click events, implementing double-tap to open learn more functionality
+  Parameters: 
+    - meal (Object): The meal object clicked by the user
+  Returns: void
+  Purpose: Creates a temporary portal to render LearnMoreContainer when a meal is double-tapped
+  */
   const handleMealClick = (meal) => {
     const now = new Date().getTime();
     if (lastTap && now - lastTap < 500) {
@@ -58,7 +89,13 @@ export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal 
     setLastTap(now);
   };
 
-  // Custom handler for each heart
+  /* 
+  Description: Handles toggling the like/favorite status of a meal
+  Parameters: 
+    - mealId (String/Number): Unique identifier of the meal to toggle
+  Returns: void
+  Purpose: Calls the onToggleLike callback to update the meal's liked status for the specific day
+  */
   const handleHeartClick = (mealId) => {
     onToggleLike(day, mealId);
   };

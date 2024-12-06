@@ -112,6 +112,10 @@ const styles = {
     }
 };
 
+/* 
+Description: Main component for the sign-up page.
+Handles user input, form validation, and communicates with the backend API.
+*/
 const SignUp = () => {
     const [formData, setFormData] = useState({
         email: '',
@@ -124,11 +128,26 @@ const SignUp = () => {
     const navigate = useNavigate();
     const { login } = useAuth(); // Get login function from auth context
 
+    /*  
+    Description: Handles changes to form inputs and resets any displayed error message.
+    Parameters: 
+      - e (Object): The event object triggered by user interaction with form fields.
+    Returns: void
+    Purpose: Updates formData state when user types into input fields.
+    */
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setError('');
     };
 
+    /*  
+    Description: Handles form submission to create a new user account.
+    Parameters: 
+      - e (Object): The event object triggered when the form is submitted.
+    Returns: void
+    Purpose: Validates user input, sends data to the backend for account creation, 
+             and automatically logs the user in if successful.
+    */
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -183,6 +202,12 @@ const SignUp = () => {
         }
     };
 
+    /*  
+    Description: Redirects the user to the login page.
+    Parameters: None
+    Returns: void
+    Purpose: Handles navigation to the login page when the "Already have an account?" link is clicked.
+    */
     const handleLoginRedirect = () => {
         navigate('/login');
     };
