@@ -63,7 +63,7 @@ function Liked() {
   return (
     <div>
         <div>
-            <SearchBarContainer />
+            {/*<SearchBarContainer />*/}
             {/*data ? ( data.length === 0 ? (<h1>Add a recipe to Liked list to see here!</h1>) : (<pre>{JSON.stringify(data, null, 2)}</pre>)) : (<div>loading...</div>) */}
             {data ? ( data.length === 0 ? (<h1>Add a recipe to Liked list to see here!</h1>) : (data.map((recipe) => (<RecipeList key={recipe.recipeID} title={recipe.name} user={user} time={recipe.total_time} data={recipe} cuisine={recipe.cuisine} setGenerate={setGenerate}/>)))) : (<div>loading...</div>)}
             {/*data ? (<RecipeList title={data.name} time = {data.totalTime} data={data} cuisine={data.cuisine} />) : (<div>loading...</div>)*/}
