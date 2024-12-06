@@ -315,7 +315,7 @@ def send_liked_random_recipe():
 
 @app.route('/getShoppingList', methods=['POST'])
 def get_shopping_list():
-    """get the shoppinglist"""
+    """Get the user's shoppinglist"""
 
     data = request.get_json()
     if not data or 'user_id' not in data:
@@ -333,6 +333,7 @@ def get_shopping_list():
 
 @app.route('/addItemToShoppingList', methods=['POST'])
 def add_item_to_shopping_list():
+    """Adding item to user's shopping list"""
     data = request.get_json()
     
     # Make sure you extract the `item` after getting the `data`
@@ -355,6 +356,7 @@ def add_item_to_shopping_list():
 
 @app.route('/removeItemFromShoppingList', methods=['POST'])
 def remove_item_from_shopping_list():
+    """Removing item from user's shopping list"""
     data = request.get_json()
     if not data or 'user_id' not in data:
         return jsonify({"status": "failure", "message": "Invalid data"}), 400
@@ -373,6 +375,7 @@ def remove_item_from_shopping_list():
 
 @app.route('/checkItemInShoppingList', methods=['POST'])
 def check_item_in_shopping_list():
+    """Checking item is in the user's shopping list"""
     data = request.get_json()
     
     # Validate the input
@@ -395,6 +398,7 @@ def check_item_in_shopping_list():
 @app.route('/api/protected-route', methods=['GET'])
 @login_required
 def protected_route():
+    """Ensures protected route"""
     return jsonify({'message': 'This is a protected route'})
 
 # Custom error handlers
@@ -629,6 +633,7 @@ def delete_account():
 @app.route('/api/update-profile', methods=['POST'])
 @login_required
 def update_profile():
+    """Updating user profile"""
     data = request.json
     user_id = data.get('userId')
     first_name = data.get('fname')

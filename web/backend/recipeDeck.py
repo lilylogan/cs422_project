@@ -1,8 +1,8 @@
 """
 recipeDeck.py
 Description: 
-Date: 
-Inital Author: 
+Date: November 5th, 2024
+Inital Author: Amanda Hoelting
 Modified By: Lily Logan
 """
 recipe_ids = [   1,    3,    4,    7,   10,   11,   14,   15,   16,   17,   18,

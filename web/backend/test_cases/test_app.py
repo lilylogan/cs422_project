@@ -1,7 +1,7 @@
 """
 test_app.py
 Description: Test suite for the app creation, homepage, login, logout, and liked recipes.
-Date: 11/12/2024
+Date: November 12th, 2024
 Inital Author: Amanda Hoelting
 Modified By: 
 """
