@@ -221,7 +221,7 @@ def login():
         
         if success:
             return jsonify({ 'message': 'Login successful', 'user': 
-                            {'email': result.email,'userID': result.userID, 'lname': result.lname, 'fname': result.fname}}), 200
+                            {'email': result.email,'userID': result.userID, 'lname': result.lname, 'fname': result.fname, 'image_path': result.image_path}}), 200
         else:
             return jsonify({'error': result}), 401
             
@@ -281,11 +281,8 @@ def hello(path):
 @app.route('/getRandRecipe', methods=['POST'])
 def add_user_profile():
     """Route to add a new user profile"""
-    #data = request.get_json()
-    # new_Recipe = recipeDeck(Recipe)
 
-    # Just generating the first recipe
-    # exRecipe = new_Recipe.genRecipe()
+    # Generating the first recipe
     data = request.get_json()
     if not data or 'user_id' not in data:
         return jsonify({"status": "failure", "message": "Invalid data"}), 400
@@ -296,11 +293,8 @@ def add_user_profile():
 @app.route('/getRandLikedRecipe', methods=['POST'])
 def send_liked_random_recipe():
     """Route to add a new user profile"""
-    #data = request.get_json()
-    # new_Recipe = recipeDeck(Recipe)
 
-    # Just generating the first recipe
-    # exRecipe = new_Recipe.genRecipe()
+    # Generating the first recipe
     data = request.get_json()
     if not data or 'user_id' not in data:
         print(data)
@@ -704,5 +698,6 @@ def update_profile_image():
         # Catch any unexpected errors
         app.logger.error(f"Unexpected error in update_profile_image: {e}")
         return jsonify({"status": "error", "message": "An unexpected error occurred"}), 500
+    
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

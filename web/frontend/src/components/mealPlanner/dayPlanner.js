@@ -15,7 +15,6 @@ import ReactDOM from 'react-dom';
 import {useAuth} from '../../context/AuthContext';
 
 export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal }) => {
-  // Drag and drop handlers
   const {user} = useAuth();
   const handleDragOver = (e) => e.preventDefault();
   const handleDrop = (e) => {
@@ -26,6 +25,7 @@ export const DayPlanner = ({ day, meals, onMealDrop, onToggleLike, onRemoveMeal 
 
   // double click handler
   const [lastTap, setLastTap] = useState(null);
+
   const handleMealClick = (meal) => {
     const now = new Date().getTime();
     if (lastTap && now - lastTap < 500) {

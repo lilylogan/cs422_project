@@ -16,6 +16,11 @@ import {useAuth} from '../../context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+/*  
+    Description: Fetches the shopping list for a specific user from the backend.
+    Parameters: userID (string) - The unique identifier of the user
+    Returns: An array of shopping list items or null if the fetch fails
+*/
 const fetchShoppingList = async (userID) => {
   try {
     const response = await fetch(`${BACKEND_URL}/getShoppingList`, {
@@ -74,6 +79,16 @@ const fetchUserMeals = async () => {
   }
 };
 
+/*  
+    Description: Manages weekly meal planning and shopping list.
+    Features:
+    - Drag-and-drop meal scheduling
+    - Day-based meal tracking
+    - Shopping list management
+    - Responsive design for different screen sizes
+
+    Returns: Interactive meal planner component
+*/
 const MealPlanner = () => {
   // State to control the expanded/collapsed state of the meal planner
   const [isExpanded, setIsExpanded] = useState(true);
@@ -96,11 +111,15 @@ const MealPlanner = () => {
 
   const[liked, setLiked] = useState("unheart");
 
+  /*  
+    Description: Triggers a re-render of the shopping list by incrementing a key.
+    Returns: void
+    Purpose: Forces the ShoppingList component to reload its data
+  */
   const regenerateShoppingList = () => {
     setShoppingListKey(prevKey => prevKey + 1);
   };
 
-  // Fetch meal data when component mounts
   useEffect(() => {
     const loadMealPlans = async () => {
       const userMeals = await fetchUserMeals();
@@ -112,7 +131,6 @@ const MealPlanner = () => {
     loadMealPlans();
   }, []);
 
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setIsWideScreen(window.innerWidth >= 1024);
@@ -122,7 +140,17 @@ const MealPlanner = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Function to handle meal drag and drop between days
+  /*  
+    Description: Moves a meal from one day to another in the meal planner.
+    Parameters: 
+    - dragData (object): Contains information about the meal being moved
+      - day (string): Original day of the meal
+      - meal (object): The meal being moved
+    - targetDay (string): The day the meal is being moved to
+    Returns: void
+    Purpose: Updates both the frontend state and backend database when 
+             a meal is dragged to a new day
+  */
   const handleMealDrop = async (dragData, targetDay) => {
     if (dragData.day === targetDay) return;
   
@@ -162,7 +190,14 @@ const MealPlanner = () => {
     }
   };
 
-  // Function to toggle the "liked" status of a meal
+  /*  
+      Description: Toggles the 'liked' status of a specific meal on a given day.
+      Parameters: 
+      - day (string): The day of the week
+      - mealId (number/string): The unique identifier of the meal
+      Returns: void
+      Purpose: Updates the liked status of a meal in the meal planner state
+  */
   const handleToggleLike = (day, mealId) => {
     setMeals(prev => ({
       ...prev,
@@ -172,7 +207,16 @@ const MealPlanner = () => {
     }));
   };
   const [generateAfterRemoveMeal, setGenerate] = useState(null);
-  // Function to remove a meal from a specific day
+  
+  /*  
+    Description: Removes a specific meal from a given day in the meal planner.
+    Parameters: 
+    - day (string): The day of the week
+    - mealId (number/string): The unique identifier of the meal to remove
+    Returns: void
+    Purpose: Removes a meal from the backend and updates local state, 
+             also refreshes the shopping list after meal removal
+  */
   const handleRemoveMeal = async (day, mealId) => {
     try {
       // Update UI optimistically
@@ -219,7 +263,13 @@ const MealPlanner = () => {
     }
   };
 
-  // Shopping List Functions
+  /*  
+    Description: Toggles the checked status of a shopping list item.
+    Parameters: 
+    - id (number/string): The unique identifier of the shopping list item
+    Returns: void
+    Purpose: Updates the checked state of a shopping list item
+  */  
   const handleToggleItem = (id) => {
     setShoppingItems(prev =>
       prev.map(item =>
@@ -228,8 +278,13 @@ const MealPlanner = () => {
     );
   };
 
-  
-
+  /*  
+    Description: Removes one or more items from the shopping list.
+    Parameters: 
+    - item (object): An object containing item IDs to be removed
+    Returns: Removed item data or undefined if removal fails
+    Purpose: Sends a request to backend to remove shopping list items
+  */
   const handleRemoveItem = async (item) => {
     for (const id of item.ids) {
       try {
@@ -253,6 +308,13 @@ const MealPlanner = () => {
     }
   };
 
+  /*  
+    Description: Adds a new item to the shopping list.
+    Parameters: 
+    - name (string): The name of the item to be added
+    Returns: void
+    Purpose: Adds a new, unchecked item to the local shopping list state
+  */
   const handleAddItem = (name) => {
     if (!name.trim()) return;
     

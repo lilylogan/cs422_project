@@ -149,53 +149,6 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
   }, [user, generate, items]); // Added items as a dependency
 
 
-
-  // const handleToggle = (id) => {
-  //   // Update the checked state locally (you may need to sync with backend)
-  //   setData((prevData) => ({
-  //     ...prevData,
-  //     [id]: {
-  //       ...prevData[id],
-  //       checked: !prevData[id].checked,
-  //     },
-  //   }));
-  //   setGenerate(true);
-  // };
-
-  // const handleToggle = (id) => {
-  //   setData((prevData) => {
-  //     // Step 1: Get the display item
-  //     const displayItem = prevData[id];
-      
-  //     if (!displayItem || !displayItem.ids) {
-  //       console.error(`No display item or ids found for id: ${id}`);
-  //       return prevData;
-  //     }
-  
-  //     // Step 2: Create a copy of the existing data
-  //     const updatedData = { ...prevData };
-  
-  //     // Step 3: Loop through the ids in the display item
-  //     displayItem.ids.forEach((itemId) => {
-  //       if (updatedData[itemId]) {
-  //         // Toggle the `checked` attribute of the matching items
-  //         updatedData[itemId] = {
-  //           ...updatedData[itemId],
-  //           checked: !updatedData[itemId].checked,
-  //         };
-  //       }
-  //     });
-  
-  //     // Step 4: Toggle the `checked` attribute of the display item itself
-  //     updatedData[id] = {
-  //       ...displayItem,
-  //       checked: !displayItem.checked,
-  //     };  
-  //     return updatedData;
-  //   });
-  //   setGenerate(true);
-  // };
-
   const handleToggle = (id) => {
     setData((prevData) => {
       const updatedData = { ...prevData };
@@ -242,7 +195,6 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
       return updatedData;
     });
   
-    // Optional: Update `display` state for UI consistency
     setDisplay((prevDisplay) => ({
       ...prevDisplay,
       [id]: {
@@ -313,84 +265,6 @@ export const ShoppingList = ({ items, onToggleItem, onRemoveItem, onAddItem }) =
     }
   };
 
-  // return (
-  //   <div style={{ ...styles.section, backgroundColor: THEME.background, padding: '1.5rem' }}>
-  //     <h2
-  //       style={{
-  //         borderBottom: `1px solid ${THEME.border}`,
-  //         paddingBottom: '1rem',
-  //         marginBottom: '1.5rem',
-  //       }}
-  //     >
-  //       Shopping List
-  //     </h2>
-
-  //     {display && Object.entries(display).length > 0 ? (
-  //       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-  //         {Object.entries(display).map(([id, item]) => (
-  //           <div key={id} style={{ display: 'flex', justifyContent: 'space-between' }}>
-  //             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-  //               <input
-  //                 type="checkbox"
-  //                 checked={item.checked || false}
-  //                 onChange={() => handleToggle(id)}
-  //               />
-  //               <span style={{ textDecoration: item.checked ? 'line-through' : 'none' }}>
-  //                 {item.name} - {item.quantity} {item.unit}
-  //               </span>
-  //             </div>
-  //             <button
-  //               onClick={() => handleRemoveItem(item)}
-  //               style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-  //             >
-  //               ✕
-  //             </button>
-  //           </div>
-  //         ))}
-  //       </div>
-  //     ) : (
-  //       <div>Loading...</div>
-  //     )}
-
-  //     <form onSubmit={handleSubmit} style={{ display: 'flex', marginTop: '1.5rem' }}>
-  //       <input
-  //         type="text"
-  //         value={newItem}
-  //         onChange={(e) => setNewItem(e.target.value)}
-  //         placeholder="Add new item..."
-  //         style={{
-  //           flex: 1,
-  //           padding: '0.5rem',
-  //           border: `1px solid ${THEME.border}`,
-  //           borderRadius: '0.375rem 0 0 0.375rem',
-  //         }}
-  //       />
-  //       <button
-  //         type="submit"
-  //         style={{
-  //           backgroundColor: `${THEME.secondary}`,
-  //           color: 'white',
-  //           padding: '0.5rem',
-  //           width: '40px',
-  //           border: 'none',
-  //           borderRadius: '0 0.375rem 0.375rem 0',
-  //         }}
-  //       >
-  //         +
-  //       </button>
-  //     </form>
-  //     {/* Debug output display */}
-  //   <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}>
-  //     <h3>Debug Output</h3>
-  //     <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', maxHeight: '200px', overflow: 'auto' }}>
-  //       {debugOutput}
-  //     </pre>
-  //   </div>
-  //   {/* {Object.entries(display)} */}
-  //   </div>
-  // );
-
-  // Within your return statement, add this debug visualization:
   return (
     <div style={{ ...styles.section, backgroundColor: THEME.background, padding: '1.5rem' }}>
       <h2 style={{ borderBottom: `1px solid ${THEME.border}`, paddingBottom: '1rem', marginBottom: '1.5rem' }}>
