@@ -51,10 +51,6 @@ Supposing everything went smoothly, your web application should now be up and ru
 * SRS.pdf: The Software Requirements Specifications of the "Let's Cook!" project in greater detail including the Concept of Operations (ConOps).
 * Technologies Used.pdf: A list of what technologies this project uses and some detail on how.
 
-  
-### recipe_data
-* images: a folder containing all the images corresponding to the recipes in the database.
-* recipe_dataset_vis.ipynb, recipe_db.py, recipes.csv, recipes.db, recipes_clean.csv, final_final_recipes.csv: contains various files relating to the imported recipe dataset and the process by which it was cleaned, as well as a copy of the cleaned, uncleaned, and final version of the set.
 
 ### web
 * backend: stores backend files
