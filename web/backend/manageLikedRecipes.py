@@ -3,7 +3,7 @@ manageLikedRecipes.py
 Description: 
 Date: 
 Inital Author: 
-Modified By: 
+Modified By: Lily Logan
 """
 from models import db
 from sqlalchemy import func, desc
