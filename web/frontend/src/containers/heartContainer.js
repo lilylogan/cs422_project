@@ -22,7 +22,6 @@ function HeartContainer({ cname, data, user, start, id }) {
 
     const handleLike = async (action) => {
         try {
-            //console.log("like")
             // send request
             console.log("Sending request to backend");
             const response = await fetch(`${BACKEND_URL}/sendNewRecipe`, {

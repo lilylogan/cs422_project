@@ -11,8 +11,6 @@ Modified By:
 import React from 'react'
 import LearnMore from '../components/learnMore'
 import Swal from 'sweetalert2'
-import Tag from '../components/tag'
-import ReactDOM from 'react-dom'
 import wallyWale from '../assets/wally_wale.jpg'
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;

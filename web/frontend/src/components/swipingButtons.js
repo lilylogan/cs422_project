@@ -1,6 +1,6 @@
 /* 
 swipingButtons.js
-Description: 
+Description: Contains the buttons for the helper swipe buttons at the bottom of the home page.
 Date: December 2nd, 2024
 Inital Author: Will Marceau
 Modified By: 

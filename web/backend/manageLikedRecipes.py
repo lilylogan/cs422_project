@@ -1,8 +1,8 @@
 """
 manageLikedRecipes.py
-Description: 
-Date: 
-Inital Author: 
+Description: Manages the status of recipes in terms of liked or disliked. 
+Date: Novemeber 2nd, 2024
+Inital Author: Amanda Hoelting
 Modified By: Lily Logan
 """
 from models import db

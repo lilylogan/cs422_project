@@ -3,10 +3,10 @@ cardContainer.js
 Description: This container handles the swiping of users, and the displaying of the meal card to the user on the 
 home page
 Date: November 10th, 2024
-Inital Author: 
+Inital Author: Will Maeceau
 Modified By:
 */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef} from 'react'
 import RecipeCard from '../components/card';
 import TinderCard from 'react-tinder-card'
 import SwipingButton from '../components/swipingButtons';

@@ -25,10 +25,7 @@ def get_user_planned_meals(user_id):
         user = User.query.filter_by(userID=user_id).first()
         if not user:
             return None  # User does not exist
-        
-        # Add debug logging
-        print(f"Found {len(meal_plans)} meal plans for user {user_id}")
-        
+                
         # Create a dictionary to store meals by day
         meals_by_day = {
             'Sunday': [], 'Monday': [], 'Tuesday': [], 'Wednesday': [],
@@ -44,8 +41,6 @@ def get_user_planned_meals(user_id):
                 toggle = "heart"
             else:
                 toggle = "unHeart"
-
-            print(f"Processing meal plan: Day={meal.dayOfWeek}, Recipe={recipe.name}")
             
             meal_data = {
                 'id': recipe.recipeID,
@@ -61,10 +56,6 @@ def get_user_planned_meals(user_id):
                 'toggle': toggle,
             }
             meals_by_day[meal.dayOfWeek].append(meal_data)
-            
-        # Add debug logging for final result
-        for day, meals in meals_by_day.items():
-            print(f"{day}: {len(meals)} meals")
             
         return meals_by_day, 200
         

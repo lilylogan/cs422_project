@@ -1,6 +1,6 @@
 /* 
 tag.js
-Description: 
+Description: A component for tags (such as cusine, time, etc.) to be added to the meal card.
 Date: November 2nd, 2024
 Inital Author: Will Marceau
 Modified By: 

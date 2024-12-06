@@ -1,12 +1,11 @@
 /*
 likedUserExample.js
-Description: 
+Description: Example for a liked recipe for a given user.
 Date: October 28th, 2024
-Inital Author: 
+Inital Author: Amanda Hoelting
 Modified By: 
 */
 import React, { useEffect, useState } from 'react';
-import HeartContainer from '../containers/heartContainer';
 import SearchBarContainer from '../containers/searchContainer';
 import RecipeList from './likedRecipeList';
 import { useAuth } from '../context/AuthContext';
@@ -41,7 +40,6 @@ function Liked() {
     return (
         <div>
             <div>
-                <SearchBarContainer />
                  {user && (
                     <div className="user-info">
                         <p>Welcome, {user.email}</p>

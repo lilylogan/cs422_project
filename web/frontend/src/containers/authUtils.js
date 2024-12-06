@@ -7,7 +7,6 @@ Inital Author: Will Marceau
 Modified By: Ellison Largent
 */
 import Swal from 'sweetalert2';
-import { useAuth } from '../context/AuthContext';
 
 export const handleLogout = async (logoutFunction) => {
   try {

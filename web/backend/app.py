@@ -288,7 +288,6 @@ def add_user_profile():
     # exRecipe = new_Recipe.genRecipe()
     data = request.get_json()
     if not data or 'user_id' not in data:
-        print(data)
         return jsonify({"status": "failure", "message": "Invalid data"}), 400
     new_Recipe = recipeDeck(Recipe, User)
     exRecipe = new_Recipe.genRecipe(int(data["user_id"]))
@@ -317,16 +316,10 @@ def send_liked_random_recipe():
 @app.route('/getShoppingList', methods=['POST'])
 def get_shopping_list():
     """get the shoppinglist"""
-    print("getting shopping list")
 
     data = request.get_json()
-    print(f"data: {data}")
     if not data or 'user_id' not in data:
-        print("HELLO")
-        print(f"data: {data}")
         return jsonify({"status": "failure", "message": "Invalid data"}), 400
-
-    print("Received data:", data)
 
     user_id = int(data["user_id"])  # This holds the current user object  # Access the current user's ID if needed
 
@@ -335,7 +328,6 @@ def get_shopping_list():
     # Fetch the shopping list from the manager
     shopping_list = shopping_list_manager.getShoppingList(user_id)
 
-    print(f"SHOPPING LIST {shopping_list}")
     return jsonify(shopping_list), 200
   
 
@@ -365,15 +357,11 @@ def add_item_to_shopping_list():
 def remove_item_from_shopping_list():
     data = request.get_json()
     if not data or 'user_id' not in data:
-        print(f"data: {data}")
         return jsonify({"status": "failure", "message": "Invalid data"}), 400
-
-    print("Received data:", data)
 
     user_id = int(data["user_id"]) 
     
     item_id = data.get('item_id')
-    print(f"REMOVING KEY: {item_id}")
     
     if not user_id or not item_id:
         return jsonify({'error': 'User ID and item ID are required'}), 400
@@ -535,8 +523,6 @@ def getLikedRecipes():
         for recipe in user.liked_recipes
     ]
 
-    print(liked_recipes)
-
     return jsonify(liked_recipes)
 
 @app.route('/api/remove-meal', methods=['DELETE'])
@@ -550,7 +536,6 @@ def remove_meal():
             return jsonify({'error': 'Missing required fields: mealId and day'}), 400
 
         meal_id = data['mealId']
-        print(meal_id)
         day = data['day']
 
         # Find the meal plan entry
@@ -578,14 +563,10 @@ def remove_meal():
                     listID=shopping_list.listID,
                     ingredientID=ingredient.ingredientID
                 ).first()
-                print(shopping_list_entry)
 
                 if shopping_list_entry:
                     # Reduce the quantity or delete the entry if it's no longer needed
                     if shopping_list_entry.quantity and ingredient.quantity:
-                        print("Deleting entry")
-                        print(shopping_list_entry.quantity)
-                        print(ingredient.quantity)
                         if shopping_list_entry.quantity > ingredient.quantity:
                             shopping_list_entry.quantity -= ingredient.quantity
                         if shopping_list_entry.quantity == ingredient.quantity:
