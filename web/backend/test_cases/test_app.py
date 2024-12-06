@@ -1,7 +1,7 @@
 """
 test_app.py
 Description: Test suite for the app creation, homepage, login, logout, and liked recipes.
-Date: 
+Date: 11/12/2024
 Inital Author: Amanda Hoelting
 Modified By: 
 """
@@ -48,7 +48,6 @@ class AppTestCase(unittest.TestCase):
         """Test the homepage route."""
         response = self.client.get('/')
         self.assertEqual(response.status_code, 404)
-        #self.assertIn(b'Welcome', response.data)  # Adjust text based on your homepage content
 
     def test_signup_post_route(self):
         """Test the signup POST route."""
@@ -85,7 +84,101 @@ class AppTestCase(unittest.TestCase):
             liked_recipe_ids = [recipe.recipeID for recipe in user.liked_recipes]
             for recipe_id in test_recipesIDs:
                 self.assertIn(recipe_id, liked_recipe_ids)
-        
+
+    def test_add_recipe_to_disliked_post_route(self):
+        """Test adding recipes to disliked recipes."""
+        test_recipesIDs = [767,  768,  769,  771]
+        for recipe_id in test_recipesIDs:
+            response = self.client.post(
+                '/sendNewRecipe',
+                json={'user_id': self.user_id, 'recipe_id': str(recipe_id), "user_action": "dislike"}
+            )
+            self.assertEqual(response.status_code, 200)  # Adjust based on your route logic
+            data = json.loads(response.data)
+            self.assertIsNotNone(data)
+
+        # Verify liked recipes
+        with app.app_context():
+            user = User.query.get(self.user_id)
+            disliked_recipe_ids = [recipe.recipeID for recipe in user.disliked_recipes]
+            for recipe_id in test_recipesIDs:
+                self.assertIn(recipe_id, disliked_recipe_ids)
+    
+    def test_add_liked_recipe_to_meal_planner_post_route(self):
+        """Test adding liked recipes to weekly meal planner."""
+        test_recipesIDs = [470, 472, 474, 475]
+        for recipe_id in test_recipesIDs:
+            response = self.client.post(
+                '/sendNewRecipe',
+                json={'user_id': self.user_id, 'recipe_id': str(recipe_id), "user_action": "add"}
+            )
+            self.assertEqual(response.status_code, 200)  # Adjust based on your route logic
+            data = json.loads(response.data)
+            self.assertIsNotNone(data)
+
+        # Verify added recipes
+        with app.app_context():
+            user = User.query.get(self.user_id)
+            meal_plan_recipe_ids = [recipe.recipeID for recipe in user.meal_plans]
+            for recipe_id in test_recipesIDs:
+                self.assertIn(recipe_id, meal_plan_recipe_ids)
+
+    def test_add_recipe_to_meal_planner_post_route(self):
+        """Test adding recipes to weekly meal planner."""
+        test_recipesIDs = [321,  322,  324]
+        for recipe_id in test_recipesIDs:
+            response = self.client.post(
+                '/sendNewRecipe',
+                json={'user_id': self.user_id, 'recipe_id': str(recipe_id), "user_action": "add"}
+            )
+            self.assertEqual(response.status_code, 200)  # Adjust based on your route logic
+            data = json.loads(response.data)
+            self.assertIsNotNone(data)
+
+        # Verify added recipes
+        with app.app_context():
+            user = User.query.get(self.user_id)
+            meal_plan_recipe_ids = [recipe.recipeID for recipe in user.meal_plans]
+            for recipe_id in test_recipesIDs:
+                self.assertIn(recipe_id, meal_plan_recipe_ids)
+
+    def test_get_shopping_list_post_route(self):
+        """Test adding recipes to weekly meal planner."""
+        # Test data
+        test_recipe_ids = [879, 880, 882]
+
+        # Add recipes to the meal planner
+        for recipe_id in test_recipe_ids:
+            response = self.client.post(
+                '/sendNewRecipe',
+                json={'user_id': self.user_id, 'recipe_id': str(recipe_id), "user_action": "add"}
+            )
+            self.assertEqual(response.status_code, 200)  # Check if the request was successful
+            data = json.loads(response.data)
+            self.assertIsNotNone(data)
+
+        # Verify recipes are added to the meal planner
+        with app.app_context():
+            user = User.query.get(self.user_id)
+            meal_plan_recipe_ids = [recipe.recipeID for recipe in user.meal_plans]
+            for recipe_id in test_recipe_ids:
+                self.assertIn(recipe_id, meal_plan_recipe_ids)
+
+            # Verify shopping list contains ingredients of the recipes in the meal planner
+            shopping_list_ingredients = [
+                (item.ingredient.name, float(item.quantity), item.unit)
+                for item in user.shopping_list.ingredients
+            ]
+
+            for recipe_id in test_recipe_ids:
+                recipe = Recipe.query.get(recipe_id)
+                for ingredient in recipe.ingredients:
+                    ingredient_details = (
+                        ingredient.ingredient.name,
+                        float(ingredient.quantity) if ingredient.quantity else None,
+                        ingredient.unit,
+                    )
+                    self.assertIn(ingredient_details, shopping_list_ingredients)
 if __name__ == '__main__':
 
     unittest.main()
