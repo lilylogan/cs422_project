@@ -1,8 +1,8 @@
 """
 manageShoppingList.py
-Description:  
-Date: 
-Inital Author: 
+Description: This class controls the shoppinglist with removing, adding, and retreving the list. 
+Date: November 20th, 2024
+Inital Author: Lily Logan
 Modified By: 
 """
 from models import db

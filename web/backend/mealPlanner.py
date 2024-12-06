@@ -3,7 +3,7 @@ mealPlanner.py
 Description: Contains functionality for fetching meals from meal planner tied to user
 Inital Author: Ellison Largent
 Date: November 15th, 2024
-Modified By: 
+Modified By: Lily Logan
 """
 from flask import jsonify
 from models import MealInPlan, User
