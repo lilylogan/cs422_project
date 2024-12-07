@@ -14,7 +14,11 @@ import help2Image from '../assets/help2.png'
 
 
 function HelpButtonContainer() {
+    // this function holds the logic for the help button 
+    // and the html for the help component
+
     const clickHandler = () => {
+        // this function fires the help alert when the button is clicked
         Swal.fire({
             title: "How to Use",
               html: `<div>

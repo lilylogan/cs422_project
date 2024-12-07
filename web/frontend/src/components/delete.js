@@ -9,6 +9,7 @@ import React from 'react'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 function DeleteButton({ onClick }) {
+    // this function holds the html for the delete button
     return (
         <div>
             <DeleteForeverIcon onClick={onClick} className="delete" sx = {{fontSize: 60}} />

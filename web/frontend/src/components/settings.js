@@ -4,7 +4,7 @@ Description: Component for displaying and handling the settings page. Allows use
 switch their user profile image to one of the eight available options.
 Date: December 2nd, 2024
 Inital Author: Ellison Largent
-Modified By: 
+Modified By: Will Marceau
 */
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';

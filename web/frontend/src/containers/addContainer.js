@@ -12,9 +12,13 @@ import Swal from 'sweetalert2'
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function AddContainer({ data, user }) {
+    // this function contains all the logic for the addContainer and passes it to the Add Component
+
     const [error, setError] = useState('');
 
     const handleSubmit = async (action) => {
+        // this function handles adding a meal to a users meal plan
+        // through the add button
         
         try {
             console.log("Sending request to backend");
@@ -43,7 +47,8 @@ function AddContainer({ data, user }) {
     };
 
     const clickHandler = () => {
-        // at to meal planner
+        // This function sets of the confirmation alert and sends the add to the backend
+
 
         // fire alert on success
         Swal.fire({
@@ -62,6 +67,8 @@ function AddContainer({ data, user }) {
                 popup: 'addAlert',
               },
         })
+
+        // submit the add to the backend
         handleSubmit("add")
     }
 

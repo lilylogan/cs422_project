@@ -12,6 +12,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 function SwipingButton({ text, cname, clickHandler, swiping, toggle }) {
+    // this function holds the html for the Swipe buttons / arrows
     return (
         <>
         {cname === 'right' && (

@@ -14,6 +14,7 @@ import HelpButtonContainer from '../containers/helpContainer';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const fetchRandData = async (userID) => {
+    // this function gets the random recipe for the discovery deck
     try {
         const response = await fetch(`${BACKEND_URL}/getRandRecipe`, {
             method: 'POST',
@@ -34,7 +35,9 @@ const fetchRandData = async (userID) => {
         console.error("Error fetching data from the backend:", error);
     }
 };
+
 const fetchLikedData = async (userID) => {
+    // this function gets a liked recipe for the liked deck
     try {
         const response = await fetch(`${BACKEND_URL}/getRandLikedRecipe`, {
             method: 'POST',
@@ -59,12 +62,17 @@ const fetchLikedData = async (userID) => {
 
 
 function Home() {
+    // holds the html for the homepage and all its components / containers
+
+    // use states
     const [toggle, setToggle] = useState(false);
     const {user} = useAuth();
     const [generate, setGenerate] = useState(true);
     const [homeData, setData] = useState(null);
 
     useEffect(() => {
+        // This function generates a new liked recipe or random recipe when 
+        //triggered by generate
         if (generate === true) {
             setGenerate(false);
             console.log("fetching data!");
@@ -83,6 +91,9 @@ function Home() {
     }, [generate, user, toggle]);
 
     const handleToggle = () => {
+        // this funciton handles switching the toggle
+        // from liked deck and recipe deck
+
         setToggle((prev) => !prev);
         setGenerate(true); // Trigger data regeneration
     };

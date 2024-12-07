@@ -15,6 +15,8 @@ import {useAuth} from '../context/AuthContext';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function RecipeCardContainer({ toggle, homeData, setGenerate }) {
+    // This function contains swiping logic for both the buttons and manual swipe plus the html
+    // for the card and swipe buttons containers
 
     const {user} = useAuth();
     const [index, setIndex] = useState(1);
@@ -28,6 +30,7 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
 
     const onSwipe = (direction) => {
         //cardRef.current.style.transitionDuration = '0.3s';
+        // sends the users interaction to the backend based on the users swipe
         if (!swiping) {
             setSwiping(true)
             if (direction === 'left') {
@@ -36,11 +39,11 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
             }
             else if (direction === 'right') {
                 setSwipe('right')
-                handleSubmit("add") // Pass 'dislike' as the action to handleSubmit
+                handleSubmit("add") // Pass 'add' as the action to handleSubmit
                 console.log("adding to meal plan")
             }
             else if (direction === 'down') {
-                handleSubmit("pass"); // Pass 'dislike' as the action to handleSubmit
+                handleSubmit("pass"); // Pass 'pass' as the action to handleSubmit
                 setSwipe('down')
                 console.log("Passing on Card")
             }
@@ -48,6 +51,8 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
     }
 
     const onCardLeftScreen = (direction) => {
+        // this function resets the states once the card leaves the screen
+        // to generate a new card and allow the user to swipe again
         setGenerate(true);
         setSwiping(false)
         setIndex((prev)=> {
@@ -56,24 +61,28 @@ function RecipeCardContainer({ toggle, homeData, setGenerate }) {
     }
 
     const swipeLeft = () => {
+        // swipes the card left on button click
         if (cardRef.current) {
             cardRef.current.swipe('left')
         }
     }
 
     const swipeDown = () => {
+        // swipes the card down on button click
         if (cardRef.current) {
             cardRef.current.swipe('down')
         }
     }
 
     const swipeRight = () => {
+        // swipes the card right on button click
         if (cardRef.current) {
             cardRef.current.swipe('right')
         }
     }
 
     const handleSubmit = async (action) => {
+        // this function sends the users action to the backend so that it can handle it
         
         try {
             console.log("Sending request to backend");

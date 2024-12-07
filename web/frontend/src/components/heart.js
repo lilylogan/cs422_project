@@ -8,6 +8,7 @@ Modified By:
 import React from 'react'
 
 function Heart({ onClick, liked, cname }) {
+    // this function holds the html for the heart button
     return (
         <button onClick={onClick} className={`${cname} ${liked === "heart" ? 'liked' : ''}`}>♥</button>
     )

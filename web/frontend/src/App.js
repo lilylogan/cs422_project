@@ -18,6 +18,8 @@ import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
+  // this function sets up the all the routing between the pages of the website
+  // it also renders the page based on the path provided
   return (
     <AuthProvider>
       <Router>

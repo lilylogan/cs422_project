@@ -8,8 +8,10 @@ Modified By:
 import DeckSwap from '../components/deckSwap'
 
 function DeckSwapContainer({ toggle, setToggle }) {
+    // this funciton holds the logic for the deck toggle and holds the deckswap component html
 
     const handleToggle = () => {
+        // toggles the deck to the other form either discovery or liked
         setToggle(!toggle);
     };
 

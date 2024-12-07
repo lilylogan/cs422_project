@@ -15,6 +15,7 @@ import wallyWale from '../assets/wally_wale.jpg'
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function RecipeCard({ user, title, cookTime, prepTime, servings, cuisine, data, image_path, toggle}) {
+    // This function holds the html and related containers for the recipe card
     
     const fullImagePath = image_path ? `${BACKEND_URL}/${image_path}` : wallyWale;
     return (

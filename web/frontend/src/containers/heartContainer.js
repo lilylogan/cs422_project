@@ -13,14 +13,18 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 
 function HeartContainer({ cname, data, user, start, id }) {
+    // this funciton holds the logic for the hearts accross the website and liking / disliking recipes
+    // it also holds the heart component html
     const [error, setError] = useState('');
     
     useEffect(() => {
+        // sets the state of liked to match if the recipe is already liked or not
         setLiked(start);
       }, [start]);
 
 
     const handleLike = async (action) => {
+        // this function sends the info to the backend 
         try {
             // send request
             console.log("Sending request to backend");
@@ -50,6 +54,8 @@ function HeartContainer({ cname, data, user, start, id }) {
     const[liked, setLiked] = useState(start);
 
     const handleClick = () => {
+        // this function changes the hearts appearence on click and sends the appropriate information to the
+        // back end to reflect this change
         setLiked((prevLiked) => {
             let newLiked;
             if (prevLiked === "unheart") {

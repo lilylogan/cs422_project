@@ -14,6 +14,8 @@ import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 
 
 function RecipeList( { title, time, cuisine, data, user, setGenerate } ) {
+    // This function holds the html for the listing of a recipe in the liked list
+    // and all the containers it holds
 
 
     return (

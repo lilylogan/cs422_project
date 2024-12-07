@@ -9,6 +9,8 @@ import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 function NavBar() {
+  // this function holds the html for the navbar and all associtated links
+  // to other pages of the app
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {

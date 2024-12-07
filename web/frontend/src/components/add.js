@@ -9,6 +9,7 @@ import React from "react";
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 function Add({ onClick }) {
+    // This function holds the add button html
 
     return (
         <div>

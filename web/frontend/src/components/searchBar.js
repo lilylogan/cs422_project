@@ -9,6 +9,8 @@ import React from 'react'
 import {ReactComponent as MagnifyingGlass } from '../assets/magnifying-glass-svgrepo-com.svg'
 
 function SearchBar({ item, handleChange }) {
+    // This function is not being used anymore
+    // but it holds the html for the scrapped searchBar
     return (
         <div className="searchBarContainer">
         <div className="searchBar">

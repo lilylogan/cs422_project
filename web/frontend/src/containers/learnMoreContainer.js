@@ -16,12 +16,15 @@ import wallyWale from '../assets/wally_wale.jpg'
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function LearnMoreContainer({ cname, data }) {
+    // this function holds the logic for the learn more button and the html
+    // for the learn more component
 
     const fullImagePath = data.image_path ? `${BACKEND_URL}/${data.image_path}` : wallyWale;
     const ingredientList = Array.isArray(data.ingredients) ? data.ingredients.map((item) => `<li>${item}</li>`).join('') : '<li>No ingredients</li>';
     
 
     const clickHandler = () => {
+        // this funciton fires the learn more alert with all of the recipes data populated
         Swal.fire({
             title: data.recipe_name,
             html: 

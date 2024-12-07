@@ -6,6 +6,8 @@ Inital Author: Will Marceau
 Modified By: 
 */
 function DeckSwap({ toggle, handleToggle }) {
+    // This function holds the html for the Deck toggle
+
     return (
         <div className="toggleContainer">
             <h5 className="recipeNameCard">Discovery Deck</h5>

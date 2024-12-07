@@ -8,6 +8,7 @@ Modified By:
 import React from 'react'
 
 function Tag( {text} ) {
+    // this function holds the html for the info tags (cuisine, cook time)
     return (<div className="tagCard">
         {text}
     </div>);

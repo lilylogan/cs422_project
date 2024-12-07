@@ -21,6 +21,8 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
     Parameters: userID (string) - The unique identifier of the user
     Returns: An array of shopping list items or null if the fetch fails
 */
+
+
 const fetchShoppingList = async (userID) => {
   try {
     const response = await fetch(`${BACKEND_URL}/getShoppingList`, {
@@ -270,6 +272,7 @@ const MealPlanner = () => {
     Returns: void
     Purpose: Updates the checked state of a shopping list item
   */  
+
   const handleToggleItem = (id) => {
     setShoppingItems(prev =>
       prev.map(item =>
@@ -285,6 +288,8 @@ const MealPlanner = () => {
     Returns: Removed item data or undefined if removal fails
     Purpose: Sends a request to backend to remove shopping list items
   */
+
+
   const handleRemoveItem = async (item) => {
     for (const id of item.ids) {
       try {
@@ -315,6 +320,8 @@ const MealPlanner = () => {
     Returns: void
     Purpose: Adds a new, unchecked item to the local shopping list state
   */
+ 
+
   const handleAddItem = (name) => {
     if (!name.trim()) return;
     

@@ -4,7 +4,7 @@ Description: The front end of the calendar view of the meal planner works in con
 to handle the meal planner on wider screens, including things such as moving meals, displaying meals, and removing meals.
 Date: October 29th, 2024
 Inital Author: Ellison Largent
-Modified By: 
+Modified By: Will Marceau
 */
 import React, { useState } from 'react';
 import { THEME } from '../../constants/theme';

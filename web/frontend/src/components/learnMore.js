@@ -8,7 +8,7 @@ Modified By:
 import React from 'react'
 
 function LearnMore({ onClick, cname }) {
-
+// this function holds the html for the LearnMore button
     return (
         <div>
             <button onClick={onClick} className={ cname }>Learn More</button>

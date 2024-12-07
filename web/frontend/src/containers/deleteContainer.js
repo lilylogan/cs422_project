@@ -14,6 +14,9 @@ import Swal from 'sweetalert2'
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function DeleteButtonContainer({ data, user, setGenerate }) {
+  // this function holds the logic for deleting the recipe from the liked list
+  // and the deleteButton component html
+
   const [error, setError] = useState('');
 
   const handleLike = async (action) => {
@@ -44,6 +47,9 @@ function DeleteButtonContainer({ data, user, setGenerate }) {
   };
 
     const clickHandler = async () => {
+      // fires the delete confirmation alert and its user feedback alert,
+      // sends the unlike to the backend and regenertaes the liked list to
+      // reflect the change
         try {
             const result = await Swal.fire({
               title: "Are you sure you want to delete Recipe Name",

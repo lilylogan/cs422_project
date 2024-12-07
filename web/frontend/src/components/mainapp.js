@@ -13,6 +13,7 @@ import Banner from "./banner"
 import NavBar from "./navbar"
 
 function MainApp() {
+    // this function starts the main portion of the app
     return (
         <>
             <Banner />

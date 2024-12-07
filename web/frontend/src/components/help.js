@@ -9,6 +9,7 @@ import React from 'react'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 function help({ onClick }) {
+    // this function holds the html for the help button
     return (
         <div className="helpContainer">
             <HelpOutlineIcon onClick={onClick} className="help" sx = {{fontSize: 60}} />
